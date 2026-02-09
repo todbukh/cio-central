@@ -69,6 +69,7 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
+    "helloworld.apps.HelloWorldConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
