@@ -1,3 +1,24 @@
+## Dev & Deployment
+
+### 1. Requirements/Deps
+```bash
+pip install -r requirements.txt # Install
+pip freeze > requirements.txt   # Update
+```
+
+### 2. Local Development
+Runs at [http://localhost:5006/](http://localhost:5006/) Use following commands for dev/prod parity:
+
+* **Mac/Linux:** `heroku local --port 5006`
+* **Windows:** `heroku local --port 5006 -f Procfile.windows`
+
+### 3. Deployment
+```bash
+git push heroku main
+```
+
+**You cannot commit directly to main. It is disallowed by the GitHub. Make sure to commit to a non-protected branch and PR + get at least one other team member's approval to modify main.**
+
 ## Team Expectations:
 * **Communicate in advance** when you will be unable to make meetings, engagements, or deadlines for assigned tasks.
   * Things happen, but if this becomes a habit, it will be important to have a conversation.
