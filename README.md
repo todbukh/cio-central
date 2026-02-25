@@ -1,21 +1,45 @@
-## Dev & Deployment
+# Dev & Deployment
 
-### 1. Requirements/Deps
+## 1. Requirements/Deps
+### Python Deps:
+
+**Install dependencies (when another teammate adds new packages)**
 ```bash
-pip install -r requirements.txt # Install
-pip freeze > requirements.txt   # Update
+pip install -r requirements.txt
+```
+**Update dependencies (when you add a new package so other teammates can install them)**
+```bash
+pip freeze > requirements.txt
 ```
 
-### 2. Local Development
-Runs at [http://localhost:5006/](http://localhost:5006/) Use following commands for dev/prod parity:
+### JS Deps:
 
-* **Mac/Linux:** `heroku local --port 5006`
-* **Windows:** `heroku local --port 5006 -f Procfile.windows`
-
-### 3. Deployment
+**Install dependencies**
 ```bash
-git push heroku main
+npm install
 ```
+
+## 2. Local Development
+First, run the following to compile the bootstrap theme override file:
+```bash
+npm run dev
+```
+
+Then, in a new terminal tab, run the following to start the development environment.
+Locally, this runs at [http://localhost:5006/](http://localhost:5006/):
+
+**Mac/Linux:**
+```bash
+heroku local --port 5006
+```
+**Windows:**
+```bash
+heroku local --port 5006 -f Procfile.windows
+```
+Note: these heroku commands are used so local development matches that of the server.
+
+## 3. Deployment
+Deployment will happen automatically from `main`, so ensure PRs to main are fully working MVPs.
 
 **You cannot commit directly to main. It is disallowed by the GitHub. Make sure to commit to a non-protected branch and PR + get at least one other team member's approval to modify main.**
 
