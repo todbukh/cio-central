@@ -259,3 +259,5 @@ BOOTSTRAP5 = {
         'default': 'django_bootstrap5.renderers.FieldRenderer',
     },
 }
+
+AUTH_USER_MODEL = 'core.User'
