@@ -53,3 +53,11 @@ Desktop.ini
 # --- Heroku ---
 # Ignore accidentally created Procfile for locally testing with non-standard names
 .heroku/
+
+# --- Node ---
+node_modules
+
+# This ignores the compiled css files (we don't want horrific merge conflicts with these)
+static/css/*
+# this gitkeep file ensures that this folder is still committed
+static/css/.gitkeep

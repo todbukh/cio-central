@@ -1,0 +1,30 @@
+{
+  "name": "project-a-17",
+  "version": "1.0.0",
+  "description": "Team A-17 SWE Project",
+  "main": "index.js",
+  "scripts": {
+    "dev": "sass --watch assets/sass/custom.scss static/css/custom.css --quiet-deps",
+    "build": "sass assets/sass/custom.scss static/css/custom.css --style=compressed --no-source-map --quiet-deps",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uva-cs3240-s26/project-a-17.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/uva-cs3240-s26/project-a-17/issues"
+  },
+  "homepage": "https://github.com/uva-cs3240-s26/project-a-17#readme",
+  "devDependencies": {
+    "bootstrap": "^5.3.8",
+    "sass": "^1.97.3"
+  },
+  "engines": {
+    "node": "24.7.0"
+  }
+}
