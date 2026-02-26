@@ -70,7 +70,7 @@ else:
 
 INSTALLED_APPS = [
     "core.apps.CoreConfig",
-    'django_bootstrap5',
+    "django_bootstrap5",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -227,7 +227,7 @@ BOOTSTRAP5 = {
     # Field class to use in horizontal forms.
     'horizontal_field_class': 'col-sm-10',
 
-    # Field class used for horizontal fields withut a label.
+    # Field class used for horizontal fields without a label.
     'horizontal_field_offset_class': 'offset-sm-2',
 
     # HTML attributes with any of these prefixes will have underscores converted to hyphens.
