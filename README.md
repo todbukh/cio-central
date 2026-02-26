@@ -1,47 +1,94 @@
-# Dev & Deployment
+## Getting Started
 
-## 1. Requirements/Deps
-### Python Deps:
+### Prerequisites
 
-**Install dependencies (when another teammate adds new packages)**
+- **Python 3.14.0rc2** (see `.python-version`) — install via `pyenv install 3.14.0rc2`
+- **Heroku CLI** — [Install guide](https://devcenter.heroku.com/articles/heroku-cli)
+- **Git**
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/uva-cs3240-s26/project-a-17.git
+cd project-a-17
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .env
+source .env/bin/activate        # Mac/Linux
+# .env\Scripts\activate         # Windows
+```
+
+### 3. Install dependencies
+
+Python Deps:
+
 ```bash
 pip install -r requirements.txt
 ```
-**Update dependencies (when you add a new package so other teammates can install them)**
-```bash
-pip freeze > requirements.txt
-```
 
-### JS Deps:
+JS Deps:
 
-**Install dependencies**
 ```bash
 npm install
 ```
 
-## 2. Local Development
-First, run the following to compile the bootstrap theme override file:
+### 4. Set up your `.env` file
+
+Create a `.env` file in the project root (it is gitignored). This file is loaded automatically by `heroku local`:
+
+```
+ENVIRONMENT=development
+DJANGO_SECRET_KEY=any-random-string-for-local-dev
+```
+
+`ENVIRONMENT=development` enables Django's debug mode and gunicorn auto-reload. `DJANGO_SECRET_KEY` is required by Django — use any random value locally.
+
+### 5. Run database migrations
+
+The local dev setup uses SQLite, so no Postgres install is needed:
+
+```bash
+python manage.py migrate
+```
+
+### 6. Run npm to compile bootstrap theme override
 ```bash
 npm run dev
 ```
 
-Then, in a new terminal tab, run the following to start the development environment.
-Locally, this runs at [http://localhost:5006/](http://localhost:5006/):
+### 7. Run the development server
+
+Keeping the npm development sass watcher running, open a new terminal tab and run the dev server:
+
+Runs at [http://localhost:5006/](http://localhost:5006/):
 
 **Mac/Linux:**
 ```bash
 heroku local --port 5006
 ```
+
 **Windows:**
 ```bash
 heroku local --port 5006 -f Procfile.windows
 ```
-Note: these heroku commands are used so local development matches that of the server.
 
-## 3. Deployment
-Deployment will happen automatically from `main`, so ensure PRs to main are fully working MVPs.
+### Adding dependencies
 
-**You cannot commit directly to main. It is disallowed by the GitHub. Make sure to commit to a non-protected branch and PR + get at least one other team member's approval to modify main.**
+```bash
+pip install <package>
+pip freeze > requirements.txt   # Update the lockfile before committing
+```
+
+---
+
+## Deployment
+
+Deployment happens automatically when you push to main, so ensure that PRs to main are fully functional
+
+**You cannot commit directly to main. It is disallowed by GitHub. Make sure to commit to a non-protected branch and PR + get at least one other team member's approval to modify main.**
 
 ## Team Expectations:
 * **Communicate in advance** when you will be unable to make meetings, engagements, or deadlines for assigned tasks.
