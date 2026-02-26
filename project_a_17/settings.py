@@ -187,11 +187,7 @@ BOOTSTRAP5 = {
     # Note that a URL can be either a string
     # ("https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"),
     # or a dict with keys `url`, `integrity` and `crossorigin` like the default value below.
-    "css_url": {
-        "url": None,
-        "integrity": "sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx",
-        "crossorigin": "anonymous",
-    },
+    "css_url": None,
 
     # The complete URL to the Bootstrap bundle JavaScript file.
     "javascript_url": {
