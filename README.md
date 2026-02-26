@@ -5,6 +5,8 @@
 - **Python 3.14.0rc2** (see `.python-version`) — install via `pyenv install 3.14.0rc2`
 - **Heroku CLI** — [Install guide](https://devcenter.heroku.com/articles/heroku-cli)
 - **Git**
+- **Node** - install nvm via `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash`
+  - Then, run `nvm install --lts` and `nvm use --lts` (node version 24.14.0)
 
 ### 1. Clone the repo
 
