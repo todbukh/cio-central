@@ -5,6 +5,8 @@
 - **Python 3.14.0rc2** (see `.python-version`) — install via `pyenv install 3.14.0rc2`
 - **Heroku CLI** — [Install guide](https://devcenter.heroku.com/articles/heroku-cli)
 - **Git**
+- **Node** - install nvm via `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash`
+  - Then, run `nvm install --lts` and `nvm use --lts` (node version 24.14.0)
 
 ### 1. Clone the repo
 
@@ -23,8 +25,16 @@ source .env/bin/activate        # Mac/Linux
 
 ### 3. Install dependencies
 
+Python Deps:
+
 ```bash
 pip install -r requirements.txt
+```
+
+JS Deps:
+
+```bash
+npm install
 ```
 
 ### 4. Set up your `.env` file
@@ -46,12 +56,26 @@ The local dev setup uses SQLite, so no Postgres install is needed:
 python manage.py migrate
 ```
 
-### 6. Run the development server
+### 6. Run npm to compile bootstrap theme override
+```bash
+npm run dev
+```
+
+### 7. Run the development server
+
+Keeping the npm development sass watcher running, open a new terminal tab and run the dev server:
 
 Runs at [http://localhost:5006/](http://localhost:5006/):
 
-* **Mac/Linux:** `heroku local --port 5006`
-* **Windows:** `heroku local --port 5006 -f Procfile.windows`
+**Mac/Linux:**
+```bash
+heroku local --port 5006
+```
+
+**Windows:**
+```bash
+heroku local --port 5006 -f Procfile.windows
+```
 
 ### Adding dependencies
 
@@ -64,9 +88,7 @@ pip freeze > requirements.txt   # Update the lockfile before committing
 
 ## Deployment
 
-```bash
-git push heroku main
-```
+Deployment happens automatically when you push to main, so ensure that PRs to main are fully functional
 
 **You cannot commit directly to main. It is disallowed by GitHub. Make sure to commit to a non-protected branch and PR + get at least one other team member's approval to modify main.**
 
