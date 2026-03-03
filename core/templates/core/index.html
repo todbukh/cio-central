@@ -3,23 +3,6 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <nav class="navbar navbar-expand-lg bg-body-secondary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">CIO Central</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="btn btn-outline-info" href="#" type="button">Exec Panel</a>
-                </li>
-            </ul>
-            <a href="/accounts/logout" class="btn btn-outline-danger" type="button">Logout</a>
-        </div>
-        </div>
-    </nav>
-
     <div class="ms-3 mt-3">
         <h1>Welcome, {{ user.first_name }} {{ user.last_name }}</h1>
         <p>The following fields can be accessed from the user model on the request object</p>
@@ -30,5 +13,4 @@
             <li><b>Email:</b> <span class="text-info">{{ user.email }}</span></li>
         </ul>
     </div>
-
 {% endblock %}
