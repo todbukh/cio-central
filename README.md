@@ -65,16 +65,16 @@ npm run dev
 
 Keeping the npm development sass watcher running, open a new terminal tab and run the dev server:
 
-Runs at [http://localhost:5006/](http://localhost:5006/):
+Runs at [http://localhost:8000/](http://localhost:8000/):
 
 **Mac/Linux:**
 ```bash
-heroku local --port 5006
+heroku local --port 8000
 ```
 
 **Windows:**
 ```bash
-heroku local --port 5006 -f Procfile.windows
+heroku local --port 8000 -f Procfile.windows
 ```
 
 ### Adding dependencies
