@@ -323,6 +323,9 @@ SOCIALACCOUNT_PROVIDERS = {
 # allauth will generate a unique 'username' for the user so the user model field is filled
 # this is the simplest way to accomplish this so the admin account is still easy to make and user, but
 # actual regular users will not need to provide a username
+
+# Changing these defaults is not necessary as social accounts just get auto-generated usernames
+# But if we decide later to add regular accounts, this can allow them to line up with the social accounts
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # this setting is necessary since ACCOUNT_LOGIN_METHODS must match this
 ACCOUNT_LOGIN_METHODS = {"email"}
 
@@ -335,3 +338,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Set to none as we are not going to send email verifications (there is not even a configured email server)
 ACCOUNT_EMAIL_VERIFICATION = "none"
+
+# This bypasses the additional form to fill in details related to the user model (it creates a unique username, for instance)
+# This is the default setting
+SOCIALACCOUNT_AUTO_SIGNUP = True

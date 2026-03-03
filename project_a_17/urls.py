@@ -20,8 +20,10 @@ from django.urls import path
 from django.urls.conf import include
 from django.views.generic import TemplateView
 
+from core.views import home
+
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="core/index.html")),
+    path("", home, name="home"),
     path("admin/", admin.site.urls),
 
     # allauth urls:

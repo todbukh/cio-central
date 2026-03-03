@@ -3,7 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg bg-body-secondary">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">CIO Central</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,5 +20,15 @@
         </div>
     </nav>
 
+    <div class="ms-3 mt-3">
+        <h1>Welcome, {{ user.first_name }} {{ user.last_name }}</h1>
+        <p>The following fields can be accessed from the user model on the request object</p>
+        <ul>
+            <li><b>First name:</b> <span class="text-info">{{ user.first_name }}</span></li>
+            <li><b>Last name:</b> <span class="text-info">{{ user.last_name }}</span></li>
+            <li><b>Username (auto-generated):</b> <span class="text-info">{{ user.username }}</span></li>
+            <li><b>Email:</b> <span class="text-info">{{ user.email }}</span></li>
+        </ul>
+    </div>
 
 {% endblock %}
