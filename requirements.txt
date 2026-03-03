@@ -1,6 +1,7 @@
 asgiref==3.11.1
 dj-database-url==3.1.0
 Django==6.0.2
+django-allauth==65.14.3
 django-bootstrap5==26.2
 gunicorn==25.0.3
 packaging==26.0
