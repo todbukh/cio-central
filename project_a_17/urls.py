@@ -23,7 +23,7 @@ from django.views.generic import TemplateView
 from core.views import home
 
 urlpatterns = [
-    path("", home, name="home"),
+    path("", include('core.urls')),
     path("admin/", admin.site.urls),
 
     # allauth urls:

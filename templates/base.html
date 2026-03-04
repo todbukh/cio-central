@@ -26,7 +26,12 @@
                         <a class="btn btn-outline-info" href="#" type="button">Exec Panel</a>
                     </li>
                 </ul>
-                <a href="/accounts/logout" class="btn btn-outline-danger" type="button">Logout</a>
+                <form method="post" action="/accounts/logout/">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-danger" type="submit">
+                        Logout
+                    </button>
+                </form>
             </div>
             </div>
         </nav>

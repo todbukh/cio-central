@@ -44,7 +44,7 @@ $uva-orange-25:   #F9DCBF;
 // ----------------------------------------------------------------------------
 // Instead of flat black, we mix UVA Blue with Black.
 // This creates a rich "Midnight" tone that feels premium.
-$dark-bg-base:    mix($uva-blue, #000, 15%); // #05070b - Deepest Navy (Body BG)
+$dark-bg-base:    mix($uva-blue, #000, 25%); // #05070b - Deepest Navy (Body BG)
 $dark-bg-surface: mix($uva-blue, #000, 40%); // #090b13 - Lighter Navy (Cards/Inputs)
 
 // ----------------------------------------------------------------------------
