@@ -18,7 +18,7 @@
                 <h1 class="h3 mb-2 text-body">CIO Central</h1>
                 <p class="text-body-secondary mb-4">For all your CIO management needs.</p>
 
-                <form method="post" action="{% provider_login_url "google" process="login" %}">
+                <form method="post" action="{% provider_login_url "google" process="login" next=request.GET.next|default:'/post-login/' %}">
                     {% csrf_token %}
                     <button class="btn btn-primary" type="submit">
                         <i class="bi bi-google"></i>

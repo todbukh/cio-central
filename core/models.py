@@ -3,4 +3,4 @@ from django.db import models
 
 # Create your models here.
 class User(AbstractUser):
-    pass
+    is_exec = models.BooleanField(default=False)

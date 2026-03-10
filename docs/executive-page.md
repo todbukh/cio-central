@@ -4,16 +4,16 @@
 
 ## Overview
 
-The app uses Django's built-in `is_staff` flag to distinguish executive (admin) users from standard users. No custom role field or migration is needed.
+The app uses a custom `is_exec` field on the User model to distinguish executive users from standard users. This is separate from Django's `is_staff` (which controls `/admin/` access).
 
 ## How It Works
 
 1. **Login** — Users log in via Google OAuth (allauth).
-2. **Redirect** — A custom allauth adapter (`core/adapters.py`) checks `is_staff`:
-   - `is_staff=True` → redirected to `/executive/`
-   - `is_staff=False` → redirected to `/`
-3. **Access control** — The `/executive/` view is protected by `@login_required` and `@user_passes_test(is_staff)`. Non-staff users are redirected to `/`.
-4. **Navigation** — The "Exec Panel" nav link in `base.html` is only rendered for authenticated staff users.
+2. **Redirect** — A custom allauth adapter (`core/adapters.py`) checks `is_exec`:
+   - `is_exec=True` → redirected to `/executive/`
+   - `is_exec=False` → redirected to `/`
+3. **Access control** — The `/executive/` view is protected by `@login_required` and `@user_passes_test(is_exec)`. Non-exec users are redirected to `/`.
+4. **Navigation** — The "Exec Panel" nav link in `base.html` is only rendered for authenticated exec users.
 
 ## Key Files
 
@@ -32,4 +32,4 @@ See the [README](../README.md#promoting-a-user-to-executive-staff) for instructi
 
 ## Deep Linking
 
-Because the redirect logic lives in an allauth adapter (not a hardcoded `next` parameter), deep linking is preserved. If a user visits a protected page while logged out, they'll be returned to that page after login — not forced to the default landing page.
+Because the login flow preserves the incoming `next` destination, deep linking is preserved. If a user visits a protected page while logged out, they'll be returned to that page after login instead of being forced to the default landing page.

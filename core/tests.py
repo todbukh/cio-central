@@ -8,7 +8,9 @@ class PostLoginRedirectTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.normal_user = User.objects.create_user(username="normaluser", password="testpass123")
-        self.staff_user = User.objects.create_user(username="staffuser", password="testpass123", is_staff=True)
+        self.exec_user = User.objects.create_user(username="execuser", password="testpass123")
+        self.exec_user.is_exec = True
+        self.exec_user.save()
 
     def test_anonymous_home_redirects_to_login(self):
         response = self.client.get(reverse("home"))
@@ -20,13 +22,18 @@ class PostLoginRedirectTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn("/login/", response.url)
 
+    def test_login_page_preserves_requested_destination(self):
+        response = self.client.get(f"{reverse('login')}?next=/executive/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "next=%2Fexecutive%2F")
+
     def test_normal_user_post_login_redirects_home(self):
         self.client.login(username="normaluser", password="testpass123")
         response = self.client.get(reverse("post_login_redirect"))
         self.assertRedirects(response, reverse("home"))
 
-    def test_staff_user_post_login_redirects_executive(self):
-        self.client.login(username="staffuser", password="testpass123")
+    def test_exec_user_post_login_redirects_executive(self):
+        self.client.login(username="execuser", password="testpass123")
         response = self.client.get(reverse("post_login_redirect"))
         self.assertRedirects(response, reverse("executive"))
 
@@ -36,8 +43,8 @@ class PostLoginRedirectTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn("/", response.url)
 
-    def test_staff_user_can_access_executive(self):
-        self.client.login(username="staffuser", password="testpass123")
+    def test_exec_user_can_access_executive(self):
+        self.client.login(username="execuser", password="testpass123")
         response = self.client.get(reverse("executive"))
         self.assertEqual(response.status_code, 200)
 
@@ -46,14 +53,16 @@ class NavVisibilityTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.normal_user = User.objects.create_user(username="normaluser", password="testpass123")
-        self.staff_user = User.objects.create_user(username="staffuser", password="testpass123", is_staff=True)
+        self.exec_user = User.objects.create_user(username="execuser", password="testpass123")
+        self.exec_user.is_exec = True
+        self.exec_user.save()
 
     def test_exec_panel_hidden_for_normal_user(self):
         self.client.login(username="normaluser", password="testpass123")
         response = self.client.get(reverse("home"))
         self.assertNotContains(response, "Exec Panel")
 
-    def test_exec_panel_visible_for_staff_user(self):
-        self.client.login(username="staffuser", password="testpass123")
+    def test_exec_panel_visible_for_exec_user(self):
+        self.client.login(username="execuser", password="testpass123")
         response = self.client.get(reverse("home"))
         self.assertContains(response, "Exec Panel")

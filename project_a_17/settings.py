@@ -333,7 +333,7 @@ ACCOUNT_LOGIN_METHODS = {"email"}
 SOCIALACCOUNT_ONLY = True
 
 # specifies where to redirect users on login and logout
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/post-login/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Set to none as we are not going to send email verifications (there is not even a configured email server)

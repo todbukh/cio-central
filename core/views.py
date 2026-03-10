@@ -20,12 +20,12 @@ def login(request):
 
 @login_required(login_url="/login/")
 def post_login_redirect(request):
-    if request.user.is_staff:
+    if request.user.is_exec:
         return redirect("executive")
     return redirect("home")
 
 
 @login_required(login_url="/login/")
-@user_passes_test(lambda u: u.is_staff, login_url="/")
+@user_passes_test(lambda u: u.is_exec, login_url="/")
 def executive_home(request):
     return render(request, "core/executive.html", {"user": request.user})
