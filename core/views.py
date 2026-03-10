@@ -10,7 +10,7 @@ def home(request):
     membership = Membership.objects.filter(user=request.user).first()
 
     if membership.status == Membership.status.PENDING:
-        return render(request, 'core/pending-approval.html')
+        return render(request, 'core/pending.html')
     if membership.status == Membership.status.REJECTED:
         return render(request, "core/rejected.html", )
     if membership.status == Membership.status.BANNED:
