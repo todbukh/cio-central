@@ -15,6 +15,4 @@ def home(request):
         return render(request, "core/rejected.html", )
     if membership.status == Membership.status.BANNED:
         return render(request, "core/banned.html")
-    if membership.status == Membership.status.APPROVED:
-        return render(request, "/")
     return render(request, 'core/org-page.html')
