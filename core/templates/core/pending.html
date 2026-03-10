@@ -1,10 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Pending Approval</title>
-</head>
-<body>
-    Your application is pending approval.
-</body>
-</html>
+<!-- Generated with Claude Sonnet 4.6 -->
+{% extends 'base.html' %}
+
+{% block title %}Application Pending Approval{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+
+      <div class="bg-body-secondary border rounded-3 p-4 p-md-5 text-center">
+
+        <div class="mb-4">
+          <i class="bi bi-hourglass-split text-warning" style="font-size: 3.5rem;"></i>
+        </div>
+
+        <h1 class="h3 text-body mb-2">Your Application is Pending</h1>
+        <p class="text-body-secondary mb-4">
+          Thanks for signing up! Your request to join the organization has been submitted
+          and is awaiting review by an administrator.
+        </p>
+
+        <div class="mb-4">
+          <span class="badge text-bg-warning fs-6 px-3 py-2">
+            <i class="bi bi-clock me-1"></i> Pending Approval
+          </span>
+        </div>
+
+        <hr class="border-warning-subtle my-4">
+
+        <div class="text-start bg-body-tertiary rounded-3 p-3 mb-4">
+          <p class="text-body-secondary mb-3 fw-semibold">
+            <i class="bi bi-info-circle me-1 text-info"></i> What happens next?
+          </p>
+          <ul class="list-unstyled text-body-secondary mb-0">
+            <li class="mb-2">
+              <i class="bi bi-check2 text-success me-2"></i>
+              An admin will review your request shortly.
+            </li>
+            <li class="mb-2">
+              <i class="bi bi-check2 text-success me-2"></i>
+              You'll receive an email notification once a decision is made.
+            </li>
+            <li>
+              <i class="bi bi-check2 text-success me-2"></i>
+              Once approved, you'll have full access to the platform.
+            </li>
+          </ul>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="text-start bg-body-tertiary rounded-3 p-3 mb-4">
+          <p class="text-body-secondary mb-2 fw-semibold">
+            <i class="bi bi-person-circle me-1 text-info"></i> Submitted as
+          </p>
+          <p class="text-body mb-0">{{ user.get_full_name|default:user.username }}</p>
+          <p class="text-body-secondary small mb-0">{{ user.email }}</p>
+        </div>
+        {% endif %}
+
+        <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+          <a href="{% url 'account_logout' %}" class="btn btn-outline-primary">
+            <i class="bi bi-box-arrow-right me-1"></i> Sign Out
+          </a>
+          <a href="mailto:support@example.com" class="btn btn-primary">
+            <i class="bi bi-envelope me-1"></i> Contact Support
+          </a>
+        </div>
+
+      </div>
+
+      <p class="text-center text-body-secondary small mt-4">
+        Submitted the wrong details?
+        <a href="{% url 'account_logout' %}" class="link-primary text-decoration-underline">Sign out</a>
+        and create a new account.
+      </p>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
