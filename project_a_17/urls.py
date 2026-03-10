@@ -18,8 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
+from core import views
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="core/index.html")),
     path("admin/", admin.site.urls),
+    path("home/", views.home, name="home"),
+    path("executive_page/", views.executive_page, name="executive_page"),
 ]
