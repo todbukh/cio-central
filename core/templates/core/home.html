@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    This is the Organization page.
+    {% if is_exec %}
+        <a href="{% url 'executive_page' %}">Go to Executive Page</a>
+    {% endif %}
+</body>
+</html>

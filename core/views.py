@@ -15,4 +15,11 @@ def home(request):
         return render(request, "core/rejected.html", )
     if membership.status == Membership.status.BANNED:
         return render(request, "core/banned.html")
-    return render(request, 'core/org-page.html')
+
+    is_exec = membership.role in [Membership.Role.OWNER, Membership.Role.ADMIN]
+
+    return render(request, 'core/home.html', {'is_exec': is_exec})
+
+@login_required(login_url="/login/")
+def executive_page(request):
+    pass
