@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
 
 from core.models import Membership
 
@@ -15,11 +16,20 @@ def home(request):
         return render(request, "core/rejected.html", )
     if membership.status == Membership.status.BANNED:
         return render(request, "core/banned.html")
-
     is_exec = membership.role in [Membership.Role.OWNER, Membership.Role.ADMIN]
-
-    return render(request, 'core/home.html', {'is_exec': is_exec})
+    context = {
+        "authenticated": True,
+        "user": request.user,
+        "is_exec": is_exec,
+    }
+    return render(request, 'core/home.html', context)
 
 @login_required(login_url="/login/")
 def executive_page(request):
     pass
+    return render(request, "core/index.html", context)
+
+def login(request):
+    if request.user.is_authenticated: return redirect("/")
+
+    return render(request, "core/login.html")

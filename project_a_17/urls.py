@@ -19,10 +19,15 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 from core import views
+from django.urls.conf import include
+
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="core/index.html")),
+    path("", include('core.urls')),
     path("admin/", admin.site.urls),
+
+    # allauth urls:
+    path('accounts/', include('allauth.urls')),
     path("home/", views.home, name="home"),
     path("executive_page/", views.executive_page, name="executive_page"),
 ]

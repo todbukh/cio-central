@@ -77,6 +77,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # The following apps are required for allauth + allauth with social accounts:
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # allauth provider (Google)
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +95,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # allauth account middleware:
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "project_a_17.urls"
@@ -95,7 +104,7 @@ ROOT_URLCONF = "project_a_17.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -257,3 +266,79 @@ BOOTSTRAP5 = {
 }
 
 AUTH_USER_MODEL = 'core.User'
+
+
+# Django allauth settings:
+
+# Sources:
+# Setup and config:
+# https://docs.allauth.org/en/latest/installation/quickstart.html
+# https://docs.allauth.org/en/latest/account/configuration.html
+# https://docs.allauth.org/en/latest/socialaccount/configuration.html
+# https://docs.allauth.org/en/latest/socialaccount/provider_configuration.html
+
+# Good walkthrough (though a bit dated so some stuff is done differently)
+# https://www.youtube.com/watch?v=D1B_BkGHbqs
+
+# Views:
+# https://docs.allauth.org/en/latest/account/views.html
+# https://docs.allauth.org/en/latest/socialaccount/views.html
+
+# How to override the templates:
+# https://docs.allauth.org/en/latest/common/templates.html
+
+# Note that this is a general Django setting, but this
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Provider specific settings - TODO: finalize
+# https://docs.allauth.org/en/latest/socialaccount/providers/google.html
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        # NOTE: listing here is preferred since we can store credentials in the environment variables
+        'APPS': [
+            {
+                'client_id': os.environ.get('GOOGLE_CLIENT_ID'),
+                'secret': os.environ.get('GOOGLE_CLIENT_SECRET'),
+            },
+        ],
+        'SCOPE': [
+            'profile',  # gets basic profile info (name, etc.)
+            'email',  # gets the email for the user model
+        ],
+        'OAUTH_PKCE_ENABLED': True,  # this is set to true for added security
+    }
+}
+
+# Changed this to only require the email to sign-in (no username needed for Google login)
+# This will allow us to bypass the user having to pick a username
+# allauth will generate a unique 'username' for the user so the user model field is filled
+# this is the simplest way to accomplish this so the admin account is still easy to make and user, but
+# actual regular users will not need to provide a username
+
+# Changing these defaults is not necessary as social accounts just get auto-generated usernames
+# But if we decide later to add regular accounts, this can allow them to line up with the social accounts
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # this setting is necessary since ACCOUNT_LOGIN_METHODS must match this
+ACCOUNT_LOGIN_METHODS = {"email"}
+
+# This is set to true as it will disable the normal account functionality since we *only* need Google login
+SOCIALACCOUNT_ONLY = True
+
+# specifies where to redirect users on login and logout
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# Set to none as we are not going to send email verifications (there is not even a configured email server)
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+# This bypasses the additional form to fill in details related to the user model (it creates a unique username, for instance)
+# This is the default setting
+SOCIALACCOUNT_AUTO_SIGNUP = True
