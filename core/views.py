@@ -5,7 +5,7 @@ from core.models import Membership
 
 
 # Create your views here.
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def home(request):
     membership = Membership.objects.filter(user=request.user).first()
 
@@ -20,6 +20,6 @@ def home(request):
 
     return render(request, 'core/home.html', {'is_exec': is_exec})
 
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def executive_page(request):
     pass
