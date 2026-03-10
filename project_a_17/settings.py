@@ -70,6 +70,7 @@ else:
 
 INSTALLED_APPS = [
     "core.apps.CoreConfig",
+    "profiles.apps.ProfilesConfig",
     "django_bootstrap5",
     "django.contrib.admin",
     "django.contrib.auth",
