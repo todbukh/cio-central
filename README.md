@@ -39,14 +39,28 @@ npm install
 
 ### 4. Set up your `.env` file
 
-Create a `.env` file in the project root (it is gitignored). This file is loaded automatically by `heroku local`:
+Copy `.env.example` to `.env` in the project root (`.env` is gitignored). This file is loaded automatically by `heroku local`:
+
+```bash
+cp .env.example .env
+```
+
+At minimum, set these values in `.env`:
 
 ```
 ENVIRONMENT=development
 DJANGO_SECRET_KEY=any-random-string-for-local-dev
+GOOGLE_CLIENT_ID=your-google-oauth-client-id
+GOOGLE_CLIENT_SECRET=your-google-oauth-client-secret
 ```
 
-`ENVIRONMENT=development` enables Django's debug mode and gunicorn auto-reload. `DJANGO_SECRET_KEY` is required by Django — use any random value locally.
+`ENVIRONMENT=development` enables Django's debug mode and gunicorn auto-reload. `DJANGO_SECRET_KEY` is required by Django, and the Google OAuth values are required for the login flow on this branch.
+
+Before local Google login will work, configure a Google OAuth app and add this redirect URI in the Google Cloud console:
+
+```text
+http://localhost:8000/accounts/google/login/callback/
+```
 
 ### 5. Run database migrations
 
