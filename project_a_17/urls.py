@@ -25,9 +25,9 @@ from django.urls.conf import include
 urlpatterns = [
     path("", include('core.urls')),
     path("admin/", admin.site.urls),
+    path("home/", views.home, name="home"),
+    path("executive_page/", views.executive_page, name="executive_page"),
 
     # allauth urls:
     path('accounts/', include('allauth.urls')),
-    path("home/", views.home, name="home"),
-    path("executive_page/", views.executive_page, name="executive_page"),
 ]
