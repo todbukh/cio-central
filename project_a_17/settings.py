@@ -342,3 +342,6 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 # This bypasses the additional form to fill in details related to the user model (it creates a unique username, for instance)
 # This is the default setting
 SOCIALACCOUNT_AUTO_SIGNUP = True
+
+# Custom adapter for role-based post-login redirects (staff -> /executive/, others -> /)
+ACCOUNT_ADAPTER = 'core.adapters.RoleBasedRedirectAdapter'

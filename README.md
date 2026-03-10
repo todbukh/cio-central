@@ -117,3 +117,31 @@ Deployment happens automatically when you push to main, so ensure that PRs to ma
 * **Don’t be afraid to ask for help.** It is better to get help than to fail silently, and we are a team that all want to help each other out.
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/F1hjDb63)
+
+## User Roles & Executive Panel
+
+The application implements role-based access control with a dedicated landing page for executives. For full details, see [docs/executive-page.md](docs/executive-page.md).
+
+### Roles
+- **Standard User**: Default role for new users. Redirected to the Home dashboard upon login.
+- **Executive (Staff)**: Users with the `is_staff` flag. Redirected to the Executive Panel upon login.
+
+### Accessing the Executive Panel
+The Executive Panel is located at `/executive/`. It is restricted to staff users only. The "Exec Panel" navigation link is only visible to staff users.
+
+### Promoting a User to Executive (Staff)
+
+**Option 1: Via Django Admin**
+1. Ensure you have a superuser: `python manage.py createsuperuser`
+2. Log in to the admin interface at `/admin/`
+3. Navigate to **Users**, select the user, and check the **Staff status** box.
+
+**Option 2: Via Django Shell (one-liner)**
+```bash
+python manage.py shell -c "from core.models import User; u = User.objects.get(email='user@example.com'); u.is_staff = True; u.save(); print(f'{u.email} is now staff')"
+```
+
+**Option 3: Make a user a full superuser**
+```bash
+python manage.py shell -c "from core.models import User; u = User.objects.get(email='user@example.com'); u.is_staff = True; u.is_superuser = True; u.save(); print(f'{u.email} is now superuser')"
+```
