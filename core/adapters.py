@@ -4,6 +4,6 @@ from allauth.account.adapter import DefaultAccountAdapter
 
 class RoleBasedRedirectAdapter(DefaultAccountAdapter):
     def get_login_redirect_url(self, request):
-        if request.user.is_exec:
+        if request.user.can_access_executive_panel():
             return '/executive/'
         return '/'

@@ -124,7 +124,7 @@ The application implements role-based access control with a dedicated landing pa
 
 ### Roles
 - **Standard User**: Default role for new users. Redirected to the Home dashboard upon login.
-- **Executive**: Users with the `is_exec` flag. Redirected to the Executive Panel upon login.
+- **Executive**: Users with the `OWNER` or `EXEC` role. Redirected to the Executive Panel upon login.
 
 ### Accessing the Executive Panel
 The Executive Panel is located at `/executive/`. It is restricted to executive users only. The "Exec Panel" navigation link is only visible to executive users.
@@ -134,9 +134,9 @@ The Executive Panel is located at `/executive/`. It is restricted to executive u
 **Option 1: Via Django Admin**
 1. Ensure you have a superuser: `python manage.py createsuperuser`
 2. Log in to the admin interface at `/admin/`
-3. Navigate to **Users**, select the user, and check the **Executive status** (`is_exec`) box.
+3. Navigate to **Users**, select the user, and set the **Role** to `EXEC` or `OWNER`.
 
 **Option 2: Via Django Shell (one-liner)**
 ```bash
-python manage.py shell -c "from core.models import User; u = User.objects.get(email='user@example.com'); u.is_exec = True; u.save(); print(f'{u.email} is now exec')"
+python manage.py shell -c "from core.models import User; u = User.objects.get(email='user@example.com'); u.role = User.Role.EXEC; u.save(); print(f'{u.email} is now exec')"
 ```

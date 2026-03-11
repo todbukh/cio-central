@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    This is the Organization page.
+    {% if is_exec %}
+        <a href="{% url 'executive' %}">Go to Executive Page</a>
+    {% endif %}
+{% endblock %}
