@@ -1,45 +1,36 @@
-{% extends "core/base.html" %}
-{% load django_bootstrap5 %}
+{% extends 'core/base.html' %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}{{ profile_user.username }}'s Profile{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <div class="container py-5">
 
-  <!-- Top bar: Home button on left, Settings icon on right -->
+  <!-- Top bar -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <a href="/" class="btn btn-outline-secondary">
-      &#8592; Home
+    <a href="/" class="btn btn-outline-primary">
+      <i class="bi bi-arrow-left"></i> Home
     </a>
-    <a href="#" class="btn btn-outline-secondary" title="Settings (coming soon)">
-      &#9881;
-    </a>
+    {% if is_owner %}
+      <a href="#" class="btn btn-outline-primary" title="Edit Profile">
+        <i class="bi bi-pencil-square"></i> Edit Profile
+      </a>
+    {% endif %}
   </div>
 
-  <!-- Profile picture placeholder -->
+  <!-- Profile picture and username -->
   <div class="text-center mb-4">
-    <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center"
-         style="width: 120px; height: 120px; font-size: 3rem;">
-      &#128100;
-    </div>
-    <h2 class="mt-3">{{ username }}</h2>
+    <img src="https://placehold.co/120x120" alt="Profile picture" class="rounded-circle mb-3">
+    <h2 class="text-body">{{ profile_user.username }}</h2>
   </div>
 
   <!-- Bio section -->
-  <div class="card mx-auto" style="max-width: 600px;">
-    <div class="card-body">
-      <h5 class="card-title">About Me</h5>
-      <p class="card-text">{{ bio }}</p>
-    </div>
+  <div class="bg-body-secondary rounded p-4 mx-auto" style="max-width: 600px;">
+    <h5 class="text-body mb-2">
+      <i class="bi bi-person-lines-fill me-2"></i>About Me
+    </h5>
+    <p class="text-body-secondary mb-0">{{ profile_user.profile.bio }}</p>
   </div>
-
-  <!-- Placeholder for future features -->
-  <!--
-    Future features can go here:
-    - Friend list
-    - Posts
-    - Activity feed
-  -->
 
 </div>
 {% endblock %}

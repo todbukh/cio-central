@@ -9,7 +9,7 @@ class Profile(models.Model):
         related_name="profile",
     )
     bio = models.TextField(blank=True)
-    # profile_picture = ...  ← add later when ready for file uploads
+    # profile_picture = ...  add later when ready for file uploads
 
     def __str__(self):
         return f"Profile of {self.user.username}"
