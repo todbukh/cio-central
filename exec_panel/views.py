@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 def is_exec(user):
     if user.is_anonymous: return False
-    return user.has_exec_access()
+    return user.is_exec()
 
 @login_required(login_url="/login/")
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
