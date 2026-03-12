@@ -4,7 +4,7 @@ from .models import User
 
 
 def is_exec(user):
-    return user.can_access_executive_panel()
+    return user.has_exec_access()
 
 
 # Create your views here.

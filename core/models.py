@@ -17,11 +17,11 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.MEMBER)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
 
-    def has_executive_role(self):
+    def is_exec(self):
         return self.role in {self.Role.OWNER, self.Role.EXEC}
 
-    def can_access_executive_panel(self):
-        return self.has_executive_role() and self.status == self.Status.APPROVED
+    def has_exec_access(self):
+        return self.is_exec() and self.status == self.Status.APPROVED
 
     def __str__(self):
         return self.username
