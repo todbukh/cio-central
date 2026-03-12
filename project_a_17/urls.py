@@ -18,9 +18,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from django.urls.conf import include
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="core/index.html")),
+    path("", include('core.urls')),
     path("admin/", admin.site.urls),
     path("profile/", include("profiles.urls")),
+    # allauth urls:
+    path('accounts/', include('allauth.urls')),
 ]
