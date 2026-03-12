@@ -5,7 +5,6 @@ from .forms import ProfileEditForm
 
 User = get_user_model()
 
-
 @login_required
 def profile_redirect(request):
     return redirect("profiles:profile", username=request.user.username)
@@ -20,7 +19,7 @@ def profile_view(request, username):
     }
     return render(request, "profiles/profile.html", context)
 
-
+# login_required(login_url="/auth/login/")
 @login_required
 def profile_edit_view(request, username):
     if request.user.username != username:
