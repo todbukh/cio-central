@@ -1,0 +1,49 @@
+{# Template generated with Claude Sonnet 4.6 #}
+{% extends 'base.html' %}
+
+{% block title %}Account Suspended{% endblock %}
+
+{% block content %}
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-body py-5">
+  <div class="text-center" style="max-width: 480px;">
+
+    {# Icon #}
+    <div class="mb-4">
+      <i class="bi bi-slash-circle text-danger" style="font-size: 4rem;"></i>
+    </div>
+
+    {# Heading #}
+    <h1 class="h3 fw-semibold text-body mb-2">Your account has been suspended</h1>
+    <p class="text-body-secondary mb-4">
+      Your access to <strong class="text-body">{{ organization.name|default:"this organization" }}</strong>
+      has been revoked.
+    </p>
+
+    {# Detail card #}
+    <div class="rounded border border-danger-subtle bg-danger-subtle p-4 text-start mb-4">
+      <p class="fw-semibold text-danger-emphasis mb-3">
+        <i class="bi bi-info-circle me-2"></i>Suspension details
+      </p>
+
+      <dl class="mb-0 d-flex flex-column gap-2">
+
+        <div class="d-flex align-items-start gap-2">
+          <dt class="text-body-secondary small mb-0" style="min-width: 6rem;">Account</dt>
+          <dd class="text-body small mb-0 text-truncate">
+            {{ request.user.email }}
+          </dd>
+        </div>
+
+        <div class="d-flex align-items-start gap-2">
+          <dt class="text-body-secondary small mb-0" style="min-width: 6rem;">Organization</dt>
+          <dd class="text-body small mb-0">
+            {{ organization.name|default:"—" }}
+          </dd>
+        </div>
+
+      </dl>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
