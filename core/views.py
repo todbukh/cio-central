@@ -1,11 +1,6 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import User
-
-
-def is_exec(user):
-    if user.is_anonymous: return False
-    return user.has_exec_access()
 
 
 # Create your views here.
@@ -25,12 +20,6 @@ def home(request):
         "is_exec": False,
     }
     return render(request, 'core/home.html', context)
-
-
-@login_required(login_url="/login/")
-@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
-def executive_home(request):
-    return render(request, "core/executive.html", {"user": request.user})
 
 
 def login(request):

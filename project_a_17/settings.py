@@ -70,6 +70,7 @@ else:
 
 INSTALLED_APPS = [
     "core.apps.CoreConfig",
+    "exec_panel.apps.ExecPanelConfig",
     "django_bootstrap5",
     "django.contrib.admin",
     "django.contrib.auth",

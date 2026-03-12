@@ -26,4 +26,5 @@ urlpatterns = [
 
     # allauth urls:
     path('accounts/', include('allauth.urls')),
+    path("executive/", include('exec_panel.urls')),
 ]
