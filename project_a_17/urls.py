@@ -22,9 +22,9 @@ from django.urls.conf import include
 
 urlpatterns = [
     path("", include('core.urls')),
+    path("executive/", include('exec_panel.urls')),
     path("admin/", admin.site.urls),
 
     # allauth urls:
     path('accounts/', include('allauth.urls')),
-    path("executive/", include('exec_panel.urls')),
 ]
