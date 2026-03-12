@@ -9,7 +9,7 @@ def is_exec(user):
 
 
 # Create your views here.
-@login_required(login_url="/login/")
+@login_required(login_url="login/")
 def home(request):
 
     if request.user.status == User.Status.PENDING:
@@ -19,9 +19,6 @@ def home(request):
     if request.user.status == User.Status.BANNED:
         return render(request, "core/banned.html")
 
-    if is_exec(request.user):
-        return redirect("executive")
-
     context = {
         "authenticated": True,
         "user": request.user,
@@ -30,14 +27,7 @@ def home(request):
     return render(request, 'core/home.html', context)
 
 
-@login_required(login_url="/login/")
-def post_login_redirect(request):
-    if is_exec(request.user):
-        return redirect("executive")
-    return redirect("home")
-
-
-@login_required(login_url="/login/")
+@login_required(login_url="login/")
 @user_passes_test(is_exec, login_url="/")
 def executive_home(request):
     return render(request, "core/executive.html", {"user": request.user})
