@@ -20,8 +20,6 @@ def executive(request, tab):
     if tab not in defined_tabs: raise Http404()
 
     exec_context = {
-        "active_tab_classes": "bg-body shadow-sm text-body",
-        "inactive_tab_classes": "text-body-secondary",
         "active_tab": tab
     }
 
