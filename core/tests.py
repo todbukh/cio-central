@@ -110,7 +110,7 @@ class NavVisibilityTests(TestCase):
     def test_exec_panel_visible_for_exec_user(self):
         self.client.login(username="execuser", password="testpass123")
         response = self.client.get(reverse("executive"))
-        self.assertContains(response, "Exec Panel")
+        self.assertContains(response, "Executive Panel")
 
     def test_exec_panel_hidden_for_pending_owner(self):
         self.client.login(username="pendingowner", password="testpass123")
