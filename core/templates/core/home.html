@@ -51,30 +51,6 @@
               <span>announcements</span>
             </a>
           </li>
-          <li>
-            <a href="#" class="d-flex align-items-center gap-2 px-2 py-1 rounded text-body text-decoration-none">
-              <i class="bi bi-hash"></i>
-              <span>polls</span>
-            </a>
-          </li>
-        </ul>
-
-        <p class="text-body-secondary text-uppercase small fw-semibold px-2 mt-3 mb-1">
-          Direct Messages
-        </p>
-        <ul class="list-unstyled mb-0">
-          <li>
-            <a href="#" class="d-flex align-items-center gap-2 px-2 py-1 rounded text-body text-decoration-none">
-              <i class="bi bi-circle-fill text-success" style="font-size: .5rem;"></i>
-              <span>Todd Burged</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="d-flex align-items-center gap-2 px-2 py-1 rounded text-body text-decoration-none">
-              <i class="bi bi-circle-fill text-body-secondary" style="font-size: .5rem;"></i>
-              <span>Frodo Baggins</span>
-            </a>
-          </li>
         </ul>
 
       </nav>
@@ -115,9 +91,7 @@
               <span class="badge text-bg-info">
                 <i class="bi bi-people-fill me-1"></i>Coming Soon
               </span>
-              <button class="btn btn-outline-primary btn-sm" disabled>
-                <i class="bi bi-search me-1"></i>Search
-              </button>
+
               {# Toggle button — visible only on xl+ where the panel is inline #}
               <button
                 class="btn btn-outline-primary btn-sm d-none d-xl-inline-flex align-items-center gap-1"
@@ -141,32 +115,15 @@
               </div>
               <h2 class="h5 fw-semibold text-body mb-2">Messaging is on its way</h2>
               <p class="text-body-secondary mb-4">
-                Real-time messaging, threads, and file sharing are currently in development.
+                Messaging is currently in development.
                 You'll be able to collaborate with your team right here.
               </p>
-              <div class="d-flex flex-wrap gap-2 justify-content-center">
-                <div class="d-flex align-items-center gap-2 px-3 py-2 rounded bg-body-secondary">
-                  <i class="bi bi-lightning-charge-fill text-warning"></i>
-                  <span class="small text-body">Real-time messages</span>
-                </div>
-                <div class="d-flex align-items-center gap-2 px-3 py-2 rounded bg-body-secondary">
-                  <i class="bi bi-reply-fill text-info"></i>
-                  <span class="small text-body">Threaded replies</span>
-                </div>
-                <div class="d-flex align-items-center gap-2 px-3 py-2 rounded bg-body-secondary">
-                  <i class="bi bi-paperclip text-success"></i>
-                  <span class="small text-body">File sharing</span>
-                </div>
-              </div>
             </div>
           </section>
 
           {# Message composer placeholder #}
           <footer class="px-4 py-3 border-top bg-body">
             <div class="d-flex align-items-center gap-2 p-2 rounded border bg-body-secondary">
-              <button class="btn btn-sm text-body-secondary" disabled title="Attach file">
-                <i class="bi bi-paperclip"></i>
-              </button>
               <input
                 type="text"
                 class="form-control form-control-sm border-0 bg-transparent text-body shadow-none"
@@ -174,9 +131,6 @@
                 disabled
                 aria-label="Message input — not yet available"
               >
-              <button class="btn btn-sm text-body-secondary" disabled title="Emoji">
-                <i class="bi bi-emoji-smile"></i>
-              </button>
               <button class="btn btn-primary btn-sm" disabled>
                 <i class="bi bi-send-fill"></i>
               </button>
