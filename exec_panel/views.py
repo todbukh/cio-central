@@ -19,10 +19,21 @@ def executive(request, tab):
 
     if tab not in defined_tabs: raise Http404()
 
-    context = {
+    exec_context = {
         "active_tab_classes": "bg-body shadow-sm text-body",
         "inactive_tab_classes": "text-body-secondary",
         "active_tab": tab
     }
 
-    return render(request, "exec_panel/executive.html", context)
+    if tab == "roster":
+        roster_context = {}
+        return render(request, "exec_panel/roster.html", exec_context | roster_context)
+    elif tab == "attendance":
+        attendance_context = {}
+        return render(request, "exec_panel/attendance.html", exec_context | attendance_context)
+    elif tab == "analytics":
+        analytics_context = {}
+        return render(request, "exec_panel/analytics.html", exec_context | analytics_context)
+    else:
+        event_context = {}
+        return render(request, "exec_panel/events.html", exec_context | event_context)
