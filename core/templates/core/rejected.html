@@ -1,10 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Rejected</title>
-</head>
-<body>
-    Your application has been rejected.
-</body>
-</html>
+{# Template generated with Claude Sonnet 4.6 #}
+
+{% extends 'base.html' %}
+
+{% block title %}Application Not Approved{% endblock %}
+
+{% block content %}
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-body py-5">
+  <div class="text-center" style="max-width: 480px;">
+
+    {# Icon #}
+    <div class="mb-4">
+      <i class="bi bi-file-earmark-x text-warning" style="font-size: 4rem;"></i>
+    </div>
+
+    {# Heading #}
+    <h1 class="h3 fw-semibold text-body mb-2">Your application was not approved</h1>
+    <p class="text-body-secondary mb-4">
+      After review, your request to join
+      <strong class="text-body">{{ organization.name|default:"this organization" }}</strong>
+      was not accepted at this time. You are welcome to reapply or reach out for more information.
+    </p>
+
+    {# Detail card #}
+    <div class="rounded border border-warning-subtle bg-warning-subtle p-4 text-start mb-4">
+      <p class="fw-semibold text-warning-emphasis mb-3">
+        <i class="bi bi-info-circle me-2"></i>Application details
+      </p>
+
+      <dl class="mb-0 d-flex flex-column gap-2">
+
+        <div class="d-flex align-items-start gap-2">
+          <dt class="text-body-secondary small mb-0" style="min-width: 6rem;">Account</dt>
+          <dd class="text-body small mb-0 text-truncate">
+            {{ request.user.email }}
+          </dd>
+        </div>
+
+        <div class="d-flex align-items-start gap-2">
+          <dt class="text-body-secondary small mb-0" style="min-width: 6rem;">Organization</dt>
+          <dd class="text-body small mb-0">
+            {{ organization.name|default:"—" }}
+          </dd>
+        </div>
+
+        <div class="d-flex align-items-start gap-2">
+          <dt class="text-body-secondary small mb-0" style="min-width: 6rem;">Reviewed on</dt>
+          <dd class="text-body small mb-0">
+            {{ application.reviewed_at|date:"N j, Y"|default:"—" }}
+          </dd>
+        </div>
+
+        {% if application.rejection_reason %}
+        <div class="d-flex align-items-start gap-2">
+          <dt class="text-body-secondary small mb-0" style="min-width: 6rem;">Feedback</dt>
+          <dd class="text-body small mb-0">{{ application.rejection_reason }}</dd>
+        </div>
+        {% endif %}
+
+      </dl>
+    </div>
+
+    {# Actions #}
+    <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+      <a
+         class="btn btn-primary">
+        <i class="bi bi-send me-2"></i>Reapply
+      </a>
+    </div>
+
+    {# Footer note #}
+    <p class="text-body-secondary small mt-4 mb-0">
+      <i class="bi bi-arrow-repeat me-1"></i>
+      Reapplying does not guarantee approval. For questions, contact
+      <a href="mailto:toddburged+cs3240@gmail.com" class="link-primary">toddburged@gmail.com</a>.
+    </p>
+
+  </div>
+</div>
+{% endblock %}
