@@ -123,11 +123,12 @@ Deployment happens automatically when you push to main, so ensure that PRs to ma
 The application implements role-based access control with a dedicated landing page for executives. For full details, see [docs/executive-page.md](docs/executive-page.md).
 
 ### Roles
-- **Standard User**: Default role for new users. Redirected to the Home dashboard upon login.
-- **Executive**: Users with the `OWNER` or `EXEC` role. Redirected to the Executive Panel upon login.
+- **Standard User**: Default role for new users.
+- **Executive**: Users with the `OWNER` or `EXEC` role.
 
 ### Accessing the Executive Panel
 The Executive Panel is located at `/executive/`. It is restricted to executive users only. The "Exec Panel" navigation link is only visible to executive users.
+Each tab on it is available at `/executive/<str:tab>/`. Hitting `/executive/` redirects to `/executive/roster/`
 
 ### Promoting a User to Executive
 
