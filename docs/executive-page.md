@@ -7,28 +7,26 @@ The app uses `role` and `status` fields on the User model. Executive access is g
 ## How It Works
 
 1. **Login** — Users log in via Google OAuth (allauth).
-2. **Redirect** — A custom allauth adapter (`core/adapters.py`) checks the user's role:
-   - `OWNER` or `EXEC` → redirected to `/executive/`
-   - `MEMBER` → redirected to `/`
-3. **Status gating** — The home view checks `status` before rendering content:
+2. **Status gating** — The home view checks `status` before rendering content:
    - `PENDING` → pending approval page
    - `REJECTED` → rejected page
    - `BANNED` → banned page
    - `APPROVED` → normal home page
-4. **Access control** — The `/executive/` view is protected by `@login_required` and `@user_passes_test(is_exec)`. Non-exec users are redirected to `/`.
-5. **Navigation** — The "Exec Panel" nav link in `base.html` is only rendered for authenticated exec users.
+3. **Access control** — The `/executive/` view is protected by `@login_required` and `@user_passes_test(is_exec)`. Non-exec users are redirected to `/`.
+4. **Navigation** — The "Exec Panel" nav link in `base.html` is only rendered for authenticated exec users.
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `core/models.py` | `User` model with `Role` and `Status` choices |
-| `core/adapters.py` | Custom allauth adapter for role-based post-login redirect |
-| `core/views.py` | `home` (status-gated), `executive_home`, `post_login_redirect`, `login` views |
-| `core/urls.py` | Routes for `/`, `/login/`, `/post-login/`, `/executive/` |
-| `core/templates/core/executive.html` | Executive landing page template |
-| `templates/base.html` | Conditional "Exec Panel" nav link |
-| `project_a_17/settings.py` | `ACCOUNT_ADAPTER` setting |
+| File                                                  | Purpose                                                                                                                                                                       |
+|-------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `core/models.py`                                      | `User` model with `Role` and `Status` choices                                                                                                                                 |
+| `core/views.py`                                       | `home` (status-gated) and `login` views                                                                                                                                       |
+| `exec_panel/views.py`                                 | `executive_redirect` and `executive` (status-gated) - the first redirects to `/executive/roster/` and the second is of the form `/executive/<str:tab>/`                       |
+| `core/urls.py`                                        | Routes for `/` and `/login/`                                                                                                                                                  |
+| `exec_panel/urls.py`                                  | Routes for `/executive/` and `/executive/<str:tab>/`                                                                                                                          |
+| `exec_panel/templates/exec_panel/executive-base.html` | Base executive page template. The individual executive tab pages will extend this in order for all of them to have the same tab nav bar                                       |
+| `exec_panel/templates/exec_panel/tabname.html`        | Each of these is the template for the focused tab. They each extend `executive-base.html`. They include `roster.html`, `attendance.html`, `analytics.html`, and `events.html` |
+| `templates/base.html`                                 | Conditional "Exec Panel" nav link                                                                                                                                             |
 
 ## Assigning Roles
 
