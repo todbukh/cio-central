@@ -28,7 +28,7 @@ def home(request):
 
 
 @login_required(login_url="/login/")
-@user_passes_test(is_exec, login_url="/")
+@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
 def executive_home(request):
     return render(request, "core/executive.html", {"user": request.user})
 
