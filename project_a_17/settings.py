@@ -333,7 +333,7 @@ ACCOUNT_LOGIN_METHODS = {"email"}
 SOCIALACCOUNT_ONLY = True
 
 # specifies where to redirect users on login and logout
-LOGIN_REDIRECT_URL = '/post-login/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Set to none as we are not going to send email verifications (there is not even a configured email server)
@@ -342,6 +342,3 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 # This bypasses the additional form to fill in details related to the user model (it creates a unique username, for instance)
 # This is the default setting
 SOCIALACCOUNT_AUTO_SIGNUP = True
-
-# Custom adapter for role-based post-login redirects (staff -> /executive/, others -> /)
-ACCOUNT_ADAPTER = 'core.adapters.RoleBasedRedirectAdapter'
