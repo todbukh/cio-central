@@ -9,7 +9,7 @@ def is_exec(user):
 
 
 # Create your views here.
-@login_required(login_url="login/")
+@login_required(login_url="/login/")
 def home(request):
 
     if request.user.status == User.Status.PENDING:
@@ -27,7 +27,7 @@ def home(request):
     return render(request, 'core/home.html', context)
 
 
-@login_required(login_url="login/")
+@login_required(login_url="/login/")
 @user_passes_test(is_exec, login_url="/")
 def executive_home(request):
     return render(request, "core/executive.html", {"user": request.user})
