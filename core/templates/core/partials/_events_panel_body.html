@@ -30,8 +30,9 @@
   {% endfor %}
 </div>
 
+{% if user.is_exec %}
 <div class="px-4 py-3 border-top">
-  <button class="btn btn-outline-primary btn-sm w-100" disabled>
+  <button class="btn btn-outline-primary btn-sm w-100">
     <i class="bi bi-calendar-plus me-1"></i>Create Event
   </button>
   <p class="text-body-secondary small mb-0 mt-2 text-center">
@@ -39,3 +40,4 @@
     Event management is under development.
   </p>
 </div>
+{% endif %}

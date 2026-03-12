@@ -26,9 +26,11 @@
           <p class="fw-semibold text-body mb-0 text-truncate">
             {{ organization.name|default:"My Organization" }}
           </p>
-          <p class="text-body-secondary small mb-0 text-truncate">
-            <i class="bi bi-people-fill me-1"></i>Members
-          </p>
+            {% if request.user.is_exec %}
+              <a href="{% url 'exec_panel:executive' tab='roster' %}" class="text-body-secondary small mb-0 text-truncate link-info text-decoration-none">
+                <i class="bi bi-people-fill me-1"></i>Members
+              </a>
+            {% endif %}
         </div>
       </div>
 
@@ -56,20 +58,17 @@
       </nav>
 
       {# Member footer #}
-      <div class="p-3 border-top d-flex align-items-center gap-2 bg-body-secondary">
-        <i class="bi bi-person-circle fs-4 text-body-secondary"></i>
+      <a href="" class="p-3 border-top d-flex align-items-center gap-2 bg-body-secondary text-decoration-none text-body link-info">
+        <i class="bi bi-person-circle fs-4"></i>
         <div class="overflow-hidden flex-grow-1">
-          <p class="mb-0 small fw-semibold text-body text-truncate">
+          <p class="mb-0 small fw-semibold text-truncate">
             {{ request.user.get_full_name|default:request.user.username }}
           </p>
-          <p class="mb-0 small text-body-secondary text-truncate">
+          <p class="mb-0 small text-truncate">
             {{ request.user.email }}
           </p>
         </div>
-        <a href="#" class="text-body-secondary" title="Settings">
-          <i class="bi bi-gear"></i>
-        </a>
-      </div>
+      </a>
 
     </aside>
 
@@ -165,7 +164,7 @@
 
         {# Mobile collapsible wrapper #}
         <div class="collapse d-xl-none" id="events-panel-mobile">
-          {% include "core/partials/_events_panel_body.html" with panel_id="events-mobile" %}
+          {% include "core/partials/_events_panel_body.html" with panel_id="events-mobile" user=request.user%}
         </div>
 
         {# Desktop inline panel — hidden on smaller screens #}
@@ -174,7 +173,7 @@
           id="events-panel"
           aria-label="Upcoming events"
         >
-          {% include "core/partials/_events_panel_body.html" with panel_id="events-desktop" %}
+          {% include "core/partials/_events_panel_body.html" with panel_id="events-desktop" user=request.user %}
         </aside>
 
       </div>
