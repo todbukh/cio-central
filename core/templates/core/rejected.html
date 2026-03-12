@@ -18,7 +18,7 @@
     <p class="text-body-secondary mb-4">
       After review, your request to join
       <strong class="text-body">{{ organization.name|default:"this organization" }}</strong>
-      was not accepted at this time. You are welcome to reapply or reach out for more information.
+      was not accepted.
     </p>
 
     {# Detail card #}
@@ -43,20 +43,6 @@
           </dd>
         </div>
 
-        <div class="d-flex align-items-start gap-2">
-          <dt class="text-body-secondary small mb-0" style="min-width: 6rem;">Reviewed on</dt>
-          <dd class="text-body small mb-0">
-            {{ application.reviewed_at|date:"N j, Y"|default:"—" }}
-          </dd>
-        </div>
-
-        {% if application.rejection_reason %}
-        <div class="d-flex align-items-start gap-2">
-          <dt class="text-body-secondary small mb-0" style="min-width: 6rem;">Feedback</dt>
-          <dd class="text-body small mb-0">{{ application.rejection_reason }}</dd>
-        </div>
-        {% endif %}
-
       </dl>
     </div>
 
@@ -67,13 +53,6 @@
         <i class="bi bi-send me-2"></i>Reapply
       </a>
     </div>
-
-    {# Footer note #}
-    <p class="text-body-secondary small mt-4 mb-0">
-      <i class="bi bi-arrow-repeat me-1"></i>
-      Reapplying does not guarantee approval. For questions, contact
-      <a href="mailto:toddburged+cs3240@gmail.com" class="link-primary">toddburged@gmail.com</a>.
-    </p>
 
   </div>
 </div>
