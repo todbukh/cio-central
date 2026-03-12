@@ -4,6 +4,7 @@ from .models import User
 
 
 def is_exec(user):
+    if user.is_anonymous: return False
     return user.has_exec_access()
 
 
