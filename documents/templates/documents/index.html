@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Documents{% endblock %}
 
+
 {% block content %}
 <div class="container py-4">
 
@@ -10,7 +11,7 @@
     </p>
 
     <div class="bg-body-secondary rounded p-3 mb-4">
-        
+
         <h5>Upload Document</h5>
 
         <form method="post" enctype="multipart/form-data" class="d-flex gap-2">
@@ -25,18 +26,11 @@
         <h5>All Documents</h5>
 
         <form method="get" class="d-flex gap-2 mb-3">
-            <input
-                type="text"
-                name="q"
-                value="{{ query }}"
-                class="form-control"
-                placeholder="Search by file name"
-            >
+            <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by file name">
             <button type="submit" class="btn btn-outline-primary">
                 Search
             </button>
         </form>
-
 
         {% if files %}
         <div class="table-responsive">
@@ -50,7 +44,12 @@
                 <tbody>
                     {% for file in files %}
                     <tr>
-                        <td>{{ file }}</td>
+                        <td>
+                     <!-- opens the file in a new tab when the name is clicked -->
+                            <a href="{% url 'documents:view_document' file %}" target ="_blank">
+                                {{ file }}
+                            </a>
+                        </td>
                         <td>
                             <form method="post" action="{% url 'documents:delete_file' file %}">
                                 {% csrf_token %}
@@ -66,7 +65,7 @@
 
         </div>
         {% else %}
-            <p class="text-body-secondary mb-0">No documents found.</p>
+        <p class="text-body-secondary mb-0">No documents found.</p>
         {% endif %}
 
     </div>
