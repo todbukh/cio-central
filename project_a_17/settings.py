@@ -70,6 +70,7 @@ else:
 
 INSTALLED_APPS = [
     "core.apps.CoreConfig",
+    "profiles.apps.ProfilesConfig",
     "exec_panel.apps.ExecPanelConfig",
     "django_bootstrap5",
     "django.contrib.admin",
