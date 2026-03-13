@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Documents{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <h1>Documents</h1>
+    <p class="text-body-secondary">
+        Upload and view organization documents
+    </p>
+
+    <div class="bg-body-secondary rounded p-3 mb-4">
+        
+        <h5>Upload Document</h5>
+
+        <form method="post" enctype="multipart/form-data" class="d-flex gap-2">
+            {% csrf_token %}
+            <input type="file" name="document_file" class="form-control" required>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+
+    <div class="bg-body-secondary rounded p-3">
+
+        <h5>All Documents</h5>
+
+        <form method="get" class="d-flex gap-2 mb-3">
+            <input
+                type="text"
+                name="q"
+                value="{{ query }}"
+                class="form-control"
+                placeholder="Search by file name"
+            >
+            <button type="submit" class="btn btn-outline-primary">
+                Search
+            </button>
+        </form>
+
+
+        {% if files %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in files %}
+                    <tr>
+                        <td>{{ file }}</td>
+                        <td>
+                            <form method="post" action="{% url 'documents:delete_file' file %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        {% else %}
+            <p class="text-body-secondary mb-0">No documents found.</p>
+        {% endif %}
+
+    </div>
+
+
+
+</div>
+{% endblock %}
