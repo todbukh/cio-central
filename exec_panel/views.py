@@ -7,12 +7,17 @@ def is_exec(user):
     if user.is_anonymous: return False
     return user.is_exec()
 
+def is_approved(user):
+    return not user.is_anonymous and user.status == "APPROVED"
+
 @login_required(login_url="/login/")
+@user_passes_test(is_approved, login_url="/", redirect_field_name=None)
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
 def executive_redirect(request):
     return redirect("exec_panel:executive", tab="roster")
 
 @login_required(login_url="/login/")
+@user_passes_test(is_approved, login_url="/", redirect_field_name=None)
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
 def executive(request, tab):
     defined_tabs = ["roster", "attendance", "analytics", "events"]
