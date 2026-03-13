@@ -22,6 +22,7 @@ from django.urls.conf import include
 
 urlpatterns = [
     path("", include('core.urls')),
+    path("executive/", include('exec_panel.urls')),
     path("admin/", admin.site.urls),
     path("profile/", include("profiles.urls")),
     # allauth urls:

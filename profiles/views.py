@@ -7,10 +7,14 @@ User = get_user_model()
 
 @login_required(login_url="/login/")
 def profile_redirect(request):
+    if request.user.status != "APPROVED":
+        return redirect("core:home")
     return redirect("profiles:profile", username=request.user.username)
 
 
 def profile_view(request, username):
+    if request.user.is_authenticated and request.user.status != "APPROVED":
+        return redirect("core:home")
     profile_user = get_object_or_404(User, username=username)
     is_owner = request.user.is_authenticated and request.user == profile_user
     context = {
@@ -21,6 +25,8 @@ def profile_view(request, username):
 
 @login_required(login_url="/login/")
 def profile_edit_view(request, username):
+    if request.user.status != "APPROVED":
+        return redirect("core:home")
     if request.user.username != username:
         return redirect("profiles:profile", username=username)
 
