@@ -14,7 +14,7 @@ def is_approved(user):
 @user_passes_test(is_approved, login_url="/", redirect_field_name=None)
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
 def executive_redirect(request):
-    return redirect("exec_panel:executive", tab="roster")
+    return redirect("exec_panel:executive", tab="events")
 
 @login_required(login_url="/login/")
 @user_passes_test(is_approved, login_url="/", redirect_field_name=None)
