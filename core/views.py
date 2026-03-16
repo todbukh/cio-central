@@ -1,23 +1,24 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import User
+from core.permissions import is_banned, is_executive, is_pending, is_rejected
 
 
 # Create your views here.
 @login_required(login_url="/login/")
 def home(request):
 
-    if request.user.status == User.Status.PENDING:
+    if is_pending(request.user):
         return render(request, 'core/pending.html')
-    if request.user.status == User.Status.REJECTED:
+    if is_rejected(request.user):
         return render(request, "core/rejected.html")
-    if request.user.status == User.Status.BANNED:
+    if is_banned(request.user):
         return render(request, "core/banned.html")
 
     context = {
         "authenticated": True,
         "user": request.user,
-        "is_exec": False,
+        "is_exec": is_executive(request.user),
     }
     return render(request, 'core/home.html', context)
 

@@ -13,6 +13,7 @@
 #       ...
 
 # Return True if the user is logged in (not anonymous).
+# For now I think we can stick to using Django's built-in is_authenticated, but this function is here if we want to add any extra logic to it down the line.
 def is_authenticated_user(user):
     return bool(user and user.is_authenticated)
 

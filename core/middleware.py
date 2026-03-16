@@ -20,7 +20,8 @@ from core.permissions import is_approved, is_banned, is_pending, is_rejected
 class ApprovalStatusMiddleware(MiddlewareMixin):
 
     # Paths matched by its prefix - bypassed entirely regardless of user status.
-    # Critical for avoiding redirect loops and keeping auth flows accessible.
+    # Basically, these are all the URL prefixes that need to be accessible regardless of approval status.
+    # Note that these are prefixes, so e.g. /accounts/ matches allauth's /accounts/login/, /accounts/signup/, etc.
     EXEMPT_PATHS = [
         "/accounts/",       # allauth login, logout, signup routes
         "/admin/",          # Django admin
@@ -28,6 +29,7 @@ class ApprovalStatusMiddleware(MiddlewareMixin):
 
     # Paths matched exactly — home is exempt because it renders the status
     # pages itself; exempting it prevents an infinite redirect loop.
+    # Basically, these are all the EXACT paths that need to be accessible regardless of approval status.
     EXEMPT_EXACT_PATHS = [
         "/",                # core:home — handles pending/rejected/banned rendering
         "/login/",          # core:login

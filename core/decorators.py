@@ -30,13 +30,15 @@ from core.permissions import is_approved, is_executive
 #   @executive_required(redirect_url="core:home") # redirects to named URL
 def executive_required(view_func=None, *, redirect_url=None):
     def decorator(func):
+        # using functools.wraps to preserve original function's metadata (e.g. name, docstring) in the wrapper
+        # don't totally understand why this is necessary but it's a common best practice for decorators so we'll do it just in case
         @functools.wraps(func)
         def wrapper(request, *args, **kwargs):
             if not is_approved(request.user) or not is_executive(request.user):
                 if redirect_url:
                     return redirect(reverse(redirect_url))
                 raise PermissionDenied
-            return func(request, *args, **kwargs)
+            return func(request, *args, **kwargs) # call original view function if check passes 
         return wrapper
 
     # allows use as @executive_required (no parentheses) or @executive_required(redirect_url="...")
