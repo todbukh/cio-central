@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
+from core.models import User
 
 # Create your views here.
 def is_exec(user):
@@ -12,9 +13,15 @@ def is_approved(user):
 @login_required(login_url="/login/")
 @user_passes_test(is_approved, login_url="/", redirect_field_name=None)
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
-def roster(request):
+def roster(request, tab):
     context = {
-        "active_tab": "roster"
+        "active_tab": tab
     }
+    if tab == "roster":
+         context["members"] = User.objects.filter(status="APPROVED")
+    elif tab == "applications":
+         context["members"] = User.objects.filter(status="PENDING")
+    elif tab == "banned/rejected":
+        context["members"] = User.objects.filter(status__in=["BANNED", "REJECTED"])
 
     return render(request, "roster/roster.html", context)
