@@ -5,7 +5,14 @@ from core.models import User
 # Create your views here.
 def is_exec(user):
     if user.is_anonymous: return False
-    return user.is_exec()
+    if not user.is_exec(): return False
+    return user.status == User.Status.APPROVED
+
+def is_owner(user):
+    if not is_exec(user):
+        return False
+    return user.role == User.Role.OWNER
+
 
 def is_approved(user):
     return not user.is_anonymous and user.status == "APPROVED"
