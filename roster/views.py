@@ -25,8 +25,6 @@ def roster(request, tab):
          context["members"] = User.objects.filter(status="APPROVED")
     elif tab == "applications":
          context["members"] = User.objects.filter(status="PENDING")
-    elif tab == "banned/rejected":
-        context["members"] = User.objects.filter(status__in=["BANNED", "REJECTED"])
 
     return render(request, "roster/roster.html", context)
 
@@ -41,8 +39,18 @@ def accept(request, pk):
 
 @login_required(login_url="/login/")
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@require_POST
 def reject(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.status = User.Status.REJECTED
+    member.save()
+    return redirect("roster:roster", tab="roster")
+
+@login_required(login_url="/login/")
+@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@require_POST
+def ban(request, pk):
+    member = get_object_or_404(User, pk=pk)
+    member.status = User.Status.BANNED
     member.save()
     return redirect("roster:roster", tab="roster")
