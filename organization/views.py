@@ -13,10 +13,4 @@ def home(request):
         return render(request, "organization/rejected.html")
     if request.user.status == User.Status.BANNED:
         return render(request, "organization/banned.html")
-
-    context = {
-        "authenticated": True,
-        "user": request.user,
-        "is_exec": False,
-    }
-    return render(request, 'organization/home.html', context)
+    return render(request, 'organization/home.html')

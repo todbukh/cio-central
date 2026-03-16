@@ -2,7 +2,7 @@
 
 {% extends 'base.html' %}
 
-{% block title %}{{ organization.name|default:"Your Organization" }} — Home{% endblock %}
+{% block title %}{{ org_name |default:"CIO Central" }} — Home{% endblock %}
 
 {% block content %}
 <div class="container-fluid px-0 h-100">
@@ -16,7 +16,7 @@
         <div class="flex-shrink-0">
           <img
             src="https://placehold.co/48x48/png"
-            alt="{{ organization.name|default:'Organization' }} logo"
+            alt="{{ org_name|default:'Organization' }} logo"
             class="rounded"
             width="48"
             height="48"
@@ -24,9 +24,9 @@
         </div>
         <div class="overflow-hidden">
           <p class="fw-semibold text-body mb-0 text-truncate">
-            {{ organization.name|default:"My Organization" }}
+            {{ org_name |default:"My Organization" }}
           </p>
-            {% if request.user.is_exec %}
+            {% if user.is_exec %}
               <a href="{% url 'exec_panel:executive' tab='roster' %}" class="text-body-secondary small mb-0 text-truncate link-info text-decoration-none">
                 <i class="bi bi-people-fill me-1"></i>Members
               </a>
@@ -62,10 +62,10 @@
         <i class="bi bi-person-circle fs-4"></i>
         <div class="overflow-hidden flex-grow-1">
           <p class="mb-0 small fw-semibold text-truncate">
-            {{ request.user.get_full_name|default:request.user.username }}
+            {{ user.get_full_name|default:user.username }}
           </p>
           <p class="mb-0 small text-truncate">
-            {{ request.user.email }}
+            {{ user.email }}
           </p>
         </div>
       </a>
@@ -114,10 +114,9 @@
                 type="text"
                 class="form-control form-control-sm border-0 bg-transparent text-body shadow-none"
                 placeholder="Messaging coming soon…"
-                disabled
                 aria-label="Message input — not yet available"
               >
-              <button class="btn btn-primary btn-sm" disabled>
+              <button class="btn btn-primary btn-sm">
                 <i class="bi bi-send-fill"></i>
               </button>
             </div>
@@ -134,7 +133,7 @@
 
         {# Mobile events panel #}
         <div class="d-xl-none border-top">
-          {% include "organization/partials/_events_panel_body.html" with panel_id="events-mobile" user=request.user %}
+          {% include "organization/partials/_events_panel_body.html"%}
         </div>
 
         {# Desktop inline panel — hidden on smaller screens #}
@@ -143,7 +142,7 @@
           style="width: 320px; min-width: 320px;"
           aria-label="Upcoming events"
         >
-          {% include "organization/partials/_events_panel_body.html" with panel_id="events-desktop" user=request.user %}
+          {% include "organization/partials/_events_panel_body.html"%}
         </aside>
 
       </div>
