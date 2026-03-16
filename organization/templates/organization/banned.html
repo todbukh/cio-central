@@ -15,7 +15,7 @@
     {# Heading #}
     <h1 class="h3 fw-semibold text-body mb-2">Your account has been suspended</h1>
     <p class="text-body-secondary mb-4">
-      Your access to <strong class="text-body">{{ organization.name|default:"this organization" }}</strong>
+      Your access to <strong class="text-body">{{ org_name|default:"this organization" }}</strong>
       has been revoked.
     </p>
 
@@ -28,16 +28,16 @@
       <dl class="mb-0 d-flex flex-column gap-2">
 
         <div class="d-flex align-items-start gap-2">
-          <dt class="text-body-secondary small mb-0" style="min-width: 6rem;">Account</dt>
+          <dt class="text-body-secondary small mb-0" style="min-width: 10rem;">Account</dt>
           <dd class="text-body small mb-0 text-truncate">
-            {{ request.user.email }}
+            {{ user.email }}
           </dd>
         </div>
 
         <div class="d-flex align-items-start gap-2">
-          <dt class="text-body-secondary small mb-0" style="min-width: 6rem;">Organization</dt>
+          <dt class="text-body-secondary small mb-0" style="min-width: 10rem;">Registered Name</dt>
           <dd class="text-body small mb-0">
-            {{ organization.name|default:"—" }}
+            {{ user.get_full_name|default:"—" }}
           </dd>
         </div>
 
