@@ -1,24 +1,21 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_POST
+
 from core.models import User
 
 # Create your views here.
 def is_exec(user):
     if user.is_anonymous: return False
-    if not user.is_exec(): return False
-    return user.status == User.Status.APPROVED
+    if user.status != User.Status.APPROVED: return False
+    return user.is_exec()
 
 def is_owner(user):
     if not is_exec(user):
         return False
     return user.role == User.Role.OWNER
 
-
-def is_approved(user):
-    return not user.is_anonymous and user.status == "APPROVED"
-
 @login_required(login_url="/login/")
-@user_passes_test(is_approved, login_url="/", redirect_field_name=None)
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
 def roster(request, tab):
     context = {
@@ -32,3 +29,20 @@ def roster(request, tab):
         context["members"] = User.objects.filter(status__in=["BANNED", "REJECTED"])
 
     return render(request, "roster/roster.html", context)
+
+@login_required(login_url="/login/")
+@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@require_POST
+def accept(request, pk):
+    member = get_object_or_404(User, pk=pk)
+    member.status = User.Status.APPROVED
+    member.save()
+    return redirect("roster:roster", tab="applications")
+
+@login_required(login_url="/login/")
+@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+def reject(request, pk):
+    member = get_object_or_404(User, pk=pk)
+    member.status = User.Status.REJECTED
+    member.save()
+    return redirect("roster:roster", tab="roster")
