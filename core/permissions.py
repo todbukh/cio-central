@@ -1,0 +1,42 @@
+# core/permissions.py
+#
+# Reusable, stateless permission helpers for the project.
+#
+# These are plain functions that accept a User object and return a boolean.
+# They do NOT handle redirects, raise exceptions, or touch the request object —
+# that responsibility belongs to middleware (core/middleware.py) and decorators
+# (core/decorators.py), both of which import from here.
+#
+# Usage example:
+#   from core.permissions import is_approved
+#   if is_approved(request.user):
+#       ...
+
+# Return True if the user is logged in (not anonymous).
+def is_authenticated_user(user):
+    return bool(user and user.is_authenticated)
+
+# Return True if the user's status is APPROVED.
+# Uses getattr so this is safe even if the User model is later swapped
+# or the 'status' field is temporarily missing.
+def is_approved(user):
+    return getattr(user, "status", None) == "APPROVED"
+
+# Return True if the user's status is PENDING (awaiting approval).
+def is_pending(user):
+    return getattr(user, "status", None) == "PENDING"
+
+# Return True if the user's status is REJECTED.
+def is_rejected(user):
+    return getattr(user, "status", None) == "REJECTED"
+
+# Return True if the user's status is BANNED.
+def is_banned(user):
+    return getattr(user, "status", None) == "BANNED"
+
+# Return True if the user holds an executive-level role (EXEC or OWNER).
+# This is the single source of truth for executive access logic.
+def is_executive(user):
+    return getattr(user, "role", None) in {"EXEC", "OWNER"}
+
+# Add more helper functions here down the line as needed.

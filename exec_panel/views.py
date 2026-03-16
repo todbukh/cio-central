@@ -1,24 +1,15 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
+from core.decorators import executive_required
 from django.http.response import Http404
 from django.shortcuts import render, redirect
 
-# Create your views here.
-def is_exec(user):
-    if user.is_anonymous: return False
-    return user.is_exec()
-
-def is_approved(user):
-    return not user.is_anonymous and user.status == "APPROVED"
-
 @login_required(login_url="/login/")
-@user_passes_test(is_approved, login_url="/", redirect_field_name=None)
-@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@executive_required(redirect_url="core:home")
 def executive_redirect(request):
     return redirect("exec_panel:executive", tab="roster")
 
 @login_required(login_url="/login/")
-@user_passes_test(is_approved, login_url="/", redirect_field_name=None)
-@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@executive_required(redirect_url="core:home")
 def executive(request, tab):
     defined_tabs = ["roster", "attendance", "analytics", "events"]
 

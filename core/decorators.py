@@ -1,0 +1,47 @@
+# core/decorators.py
+#
+# View level access control decorators.
+#
+# Apply these directly to the individual views across any app in the project.
+# Works alongside the project-wide middleware in core/middleware.py. Middleware
+# runs on every request, while these decorators enforce more narrow rules on
+# specific views only.
+#
+# Usage example:
+#   from core.decorators import approved_required, executive_required
+#
+#   @approved_required
+#   def my_view(request):
+#       ...
+
+import functools
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
+from django.urls import reverse
+from core.permissions import is_approved, is_executive
+
+# NOTE: Just a reminder that approval status is checked globally in core/middleware.py
+
+# Checks for approved executives or owners.
+# Raises PermissionDenied (HTTP 403) by default, or redirects to redirect_url if provided.
+#
+# Usage:
+#   @executive_required                           # raises 403 (PermissionDenied)
+#   @executive_required(redirect_url="core:home") # redirects to named URL
+def executive_required(view_func=None, *, redirect_url=None):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            if not is_approved(request.user) or not is_executive(request.user):
+                if redirect_url:
+                    return redirect(reverse(redirect_url))
+                raise PermissionDenied
+            return func(request, *args, **kwargs)
+        return wrapper
+
+    # allows use as @executive_required (no parentheses) or @executive_required(redirect_url="...")
+    if view_func is not None:
+        return decorator(view_func)
+    return decorator
+
+# Add more decorators down here as needed
