@@ -1,5 +1,3 @@
-# core/permissions.py
-#
 # Reusable, stateless permission helpers for the project.
 #
 # These are plain functions that accept a User object and return a boolean.

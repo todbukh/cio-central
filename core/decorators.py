@@ -1,5 +1,3 @@
-# core/decorators.py
-#
 # View level access control decorators.
 #
 # Apply these directly to the individual views across any app in the project.

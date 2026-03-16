@@ -1,20 +1,15 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
+from core.decorators import executive_required
+from core.permissions import is_executive
 from django.shortcuts import render
 
-# Create your views here.
-def is_exec(user):
-    if user.is_anonymous: return False
-    return user.is_exec()
-
-def is_approved(user):
-    return not user.is_anonymous and user.status == "APPROVED"
 
 @login_required(login_url="/login/")
-@user_passes_test(is_approved, login_url="/", redirect_field_name=None)
-@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@executive_required(redirect_url="organization:home")
 def events(request):
     context = {
-        "active_tab": "events"
+        "active_tab": "events",
+        "is_exec": is_executive(request.user)
     }
 
     return render(request, "events/events.html", context)

@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     "attendance.apps.AttendanceConfig",
     "analytics.apps.AnalyticsConfig",
     "roster.apps.RosterConfig",
+    "organization.apps.OrganizationConfig",
     "django_bootstrap5",
     "django.contrib.admin",
     "django.contrib.auth",

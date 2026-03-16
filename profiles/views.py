@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from core.permissions import is_executive
 from .forms import ProfileEditForm
 
 User = get_user_model()
@@ -16,6 +17,7 @@ def profile_view(request, username):
     context = {
         "profile_user": profile_user,
         "is_owner": is_owner,
+        "is_exec": is_executive(request.user)
     }
     return render(request, "profiles/profile.html", context)
 
@@ -34,4 +36,4 @@ def profile_edit_view(request, username):
     else:                       # user just wants to view the edit page
         form = ProfileEditForm(instance=profile)
 
-    return render(request, "profiles/profile_edit.html", {"form": form})
+    return render(request, "profiles/profile_edit.html", {"form": form, "is_exec": is_executive(request.user)})

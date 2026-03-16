@@ -1,14 +1,8 @@
-# core/middleware.py
-#
 # Project-wide middleware for inspecting user approval status on every request.
 #
 # Middleware runs before every view, use it for rules that
 # should apply across the entire site (e.g. "banned users can never proceed").
 # For more specific, per-view rules use the decorators in core/decorators.py instead.
-#
-# HOW TO WIRE THIS IN (when you're ready):
-#   In settings.py, add to MIDDLEWARE (after AuthenticationMiddleware):
-#       'core.middleware.ApprovalStatusMiddleware',
 
 from django.shortcuts import redirect
 from django.utils.deprecation import MiddlewareMixin
@@ -21,7 +15,6 @@ class ApprovalStatusMiddleware(MiddlewareMixin):
 
     # Paths matched by its prefix - bypassed entirely regardless of user status.
     # Basically, these are all the URL prefixes that need to be accessible regardless of approval status.
-    # Note that these are prefixes, so e.g. /accounts/ matches allauth's /accounts/login/, /accounts/signup/, etc.
     EXEMPT_PATHS = [
         "/accounts/",       # allauth login, logout, signup routes
         "/admin/",          # Django admin
@@ -29,7 +22,6 @@ class ApprovalStatusMiddleware(MiddlewareMixin):
 
     # Paths matched exactly — home is exempt because it renders the status
     # pages itself; exempting it prevents an infinite redirect loop.
-    # Basically, these are all the EXACT paths that need to be accessible regardless of approval status.
     EXEMPT_EXACT_PATHS = [
         "/",                # core:home — handles pending/rejected/banned rendering
         "/login/",          # core:login
@@ -53,13 +45,13 @@ class ApprovalStatusMiddleware(MiddlewareMixin):
             return None
 
         if is_banned(user):
-            return redirect("core:home")
+            return redirect("organization:home")
 
         if is_rejected(user):
-            return redirect("core:home")
+            return redirect("organization:home")
 
         if is_pending(user):
-            return redirect("core:home")
+            return redirect("organization:home")
 
         if is_approved(user):
             # This is the valid user state to gain access to most apps, so allow through.

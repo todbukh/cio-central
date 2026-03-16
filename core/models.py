@@ -17,8 +17,5 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.MEMBER)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
 
-    def is_exec(self):
-        return self.role in {self.Role.OWNER, self.Role.EXEC}
-
     def __str__(self):
         return self.username

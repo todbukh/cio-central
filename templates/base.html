@@ -1,10 +1,11 @@
 {# Used example code from bootstrap docs as a base: https://getbootstrap.com/docs/5.3/components/navbar/ #}
 {% extends 'base-no-nav.html' %}
+{% load static %}
 
 {% block navbar %}
     <nav class="navbar navbar-expand-lg bg-body-secondary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">CIO Central</a>
+            <a class="navbar-brand" href="/"><img height="54" src="{% static 'images/logo-small.png' %}" alt="CIO Central Logo" /></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
