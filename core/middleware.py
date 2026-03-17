@@ -43,21 +43,12 @@ class ApprovalStatusMiddleware(MiddlewareMixin):
         # Skip exempt paths so auth flows and status pages always work.
         if self._is_exempt(request.path):
             return None
-
-        if is_banned(user):
+        
+        # if user has any status other than approved, redirect to home which will show the appropriate status page.
+        if not is_approved(user):
             return redirect("organization:home")
 
-        if is_rejected(user):
-            return redirect("organization:home")
-
-        if is_pending(user):
-            return redirect("organization:home")
-
-        if is_approved(user):
-            # This is the valid user state to gain access to most apps, so allow through.
-            return None
-
-        # Fallback: unknown status — allow through. Shouldn't happen
+        # user is approved and path is not exempt, so let the request continue to the view.
         return None
 
     # ---------------------------------------------------------------------- #
