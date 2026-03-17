@@ -15,42 +15,58 @@ def is_owner(user):
         return False
     return user.role == User.Role.OWNER
 
+@login_required(login_url='/login/')
+@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+def roster_default(request):
+    return redirect("exec_panel:roster:roster", tab="members")
+
 @login_required(login_url="/login/")
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
-def roster(request, tab):
+def roster(request, tab="members"):
     context = {
         "active_tab": tab
     }
-    if tab == "roster":
-         context["members"] = User.objects.filter(status="APPROVED")
+    if tab == "members":
+         context["members"] = User.objects.filter(status=User.Status.APPROVED)
     elif tab == "applications":
-         context["members"] = User.objects.filter(status="PENDING")
+         context["members"] = User.objects.filter(status=User.Status.PENDING)
+    elif tab == "banned-rejected":
+        context["members"] = User.objects.filter(status__in=[User.Status.BANNED, User.Status.REJECTED])
 
     return render(request, "roster/roster.html", context)
 
+@require_POST
 @login_required(login_url="/login/")
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
-@require_POST
 def accept(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.status = User.Status.APPROVED
     member.save()
-    return redirect("roster:roster", tab="applications")
+    return redirect("exec_panel:roster:roster", tab="applications")
 
+@require_POST
 @login_required(login_url="/login/")
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
-@require_POST
 def reject(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.status = User.Status.REJECTED
     member.save()
-    return redirect("roster:roster", tab="roster")
+    return redirect("exec_panel:roster:roster", tab="applications")
 
+@require_POST
 @login_required(login_url="/login/")
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
-@require_POST
 def ban(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.status = User.Status.BANNED
     member.save()
-    return redirect("roster:roster", tab="roster")
+    return redirect("exec_panel:roster:roster", tab="members")
+
+@require_POST
+@login_required(login_url="/login/")
+@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+def renew_application(request, pk):
+    member = get_object_or_404(User, pk=pk)
+    member.status = User.Status.PENDING
+    member.save()
+    return redirect("exec_panel:roster:roster", tab="banned-rejected")

@@ -1,56 +1,55 @@
-{% extends 'exec_panel/executive-base.html' %}
+{% extends 'base.html' %}
 
-{% block tab %}
-    {% block title %}Roster{% endblock %}
+{% block title %}Roster{% endblock %}
 
-    {% block content %}
-    <div class="container py-4">
+{% block content %}
+<div class="container py-4">
 
-        <h1 class="h3 mb-4 text-body">Roster</h1>
+    <h1 class="h3 mb-4 text-body">Roster</h1>
 
-        {# Tab Navigation — active class is set server-side from active_tab context var #}
-        <ul class="nav nav-tabs mb-4">
-            <li class="nav-item">
-                <a class="nav-link {% if active_tab == 'roster' %}active{% endif %}"
-                   href="{% url 'roster:roster' 'roster' %}">
-                    <i class="bi bi-people me-1"></i>Members
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if active_tab == 'applications' %}active{% endif %}"
-                   href="{% url 'roster:roster' 'applications' %}">
-                    <i class="bi bi-person-plus me-1"></i>Applications
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if active_tab == 'banned/rejected' %}active{% endif %}"
-                   href="{% url 'roster:roster' 'banned/rejected' %}">
-                    <i class="bi bi-slash-circle me-1"></i>Banned / Rejected
-                </a>
-            </li>
-        </ul>
+    {# Tab Navigation #}
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link {% if active_tab == 'members_list' %}active{% endif %}"
+               href="{% url 'exec_panel:roster:roster' 'members' %}">
+                <i class="bi bi-people me-1"></i>Members
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if active_tab == 'applications' %}active{% endif %}"
+               href="{% url 'exec_panel:roster:roster' 'applications' %}">
+                <i class="bi bi-person-plus me-1"></i>Applications
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if active_tab == 'banned-rejected' %}active{% endif %}"
+               href="{% url 'exec_panel:roster:roster' 'banned-rejected' %}">
+                <i class="bi bi-slash-circle me-1"></i>Banned / Rejected
+            </a>
+        </li>
+    </ul>
 
-        {# Member List #}
-        {% if members %}
-            <div class="row g-3">
-                {% for member in members %}
-                <div class="col-12">
-                    <div class="card bg-body-secondary border-0">
-                        <div class="card-body d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3">
+    {% if members %}
+        <div class="row g-3">
+            {% for member in members %}
+            <div class="col-12">
+                <div class="card bg-body-secondary border-0">
+                    <div class="card-body d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3">
 
-                            {# Avatar #}
-                            <img
-                                src="https://placehold.co/56x56"
-                                class="rounded-circle flex-shrink-0"
-                                width="56"
-                                height="56"
-                                alt="{{ member.get_full_name }} avatar">
+                        {# Avatar #}
+                        <img
+                            src="https://placehold.co/56x56"
+                            class="rounded-circle flex-shrink-0"
+                            width="56"
+                            height="56"
+                            alt="{{ member.get_full_name }} avatar">
 
-                            {# Member Info #}
-                            <div class="flex-grow-1">
-                                <div class="fw-semibold text-body">{{ member.get_full_name }}</div>
-                                <div class="text-body-secondary small">{{ member.email }}</div>
-                                <div class="mt-1">
+                        {# Member info #}
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold text-body">{{ member.get_full_name }}</div>
+                            <div class="text-body-secondary small">{{ member.email }}</div>
+                            <div class="mt-1">
+                                {% if active_tab == 'members_list' %}
                                     {% if member.role == "OWNER" %}
                                         <span class="badge text-bg-warning">Owner</span>
                                     {% elif member.role == "EXEC" %}
@@ -58,83 +57,72 @@
                                     {% else %}
                                         <span class="badge text-bg-success">Member</span>
                                     {% endif %}
-
-                                    {# On banned/rejected tab, also show status #}
-                                    {% if active_tab == 'banned/rejected' %}
-                                        {% if member.status == 'BANNED' %}
-                                            <span class="badge text-bg-danger ms-1">Banned</span>
-                                        {% elif member.status == 'REJECTED' %}
-                                            <span class="badge text-bg-warning ms-1">Rejected</span>
-                                        {% endif %}
+                                {% elif active_tab == 'banned-rejected' %}
+                                    {% if member.status == "BANNED" %}
+                                        <span class="badge text-bg-danger">Banned</span>
+                                    {% elif member.status == "REJECTED" %}
+                                        <span class="badge text-bg-warning">Rejected</span>
                                     {% endif %}
-                                </div>
-                            </div>
-
-                            {# Actions — conditionally rendered based on active tab and requesting user's role #}
-                            <div class="d-flex flex-wrap gap-2 align-items-center">
-
-                                {% if active_tab == 'roster' %}
-                                    {# Owners can ban anyone except themselves; execs can only ban regular members #}
-                                    {% if member != request.user %}
-                                        {% if request.user.is_owner %}
-                                            <form method="post" action="{% url 'roster:ban' member.pk %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="bi bi-slash-circle me-1"></i>Ban
-                                                </button>
-                                            </form>
-                                        {% elif request.user.is_exec and member.role == 'MEMBER' %}
-                                            <form method="post" action="{% url 'roster:ban' member.pk %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="bi bi-slash-circle me-1"></i>Ban
-                                                </button>
-                                            </form>
-                                        {% endif %}
-                                    {% endif %}
-
-                                {% elif active_tab == 'applications' %}
-
-                                    {# Both exec and owner can accept or reject applicants #}
-                                    <form method="post" action="{% url 'roster:accept' member.pk %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-success">
-                                            <i class="bi bi-check-circle me-1"></i>Accept
-                                        </button>
-                                    </form>
-                                    <form method="post" action="{% url 'roster:reject' member.pk %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-x-circle me-1"></i>Reject
-                                        </button>
-                                    </form>
-
                                 {% endif %}
-                                {# No actions rendered on banned/rejected tab — status badges above suffice #}
-
                             </div>
                         </div>
+
+                        {# Actions #}
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+
+                            {% if active_tab == 'members_list' %}
+                                {% if member != request.user %}
+                                    <form method="post" action="{% url 'exec_panel:roster:ban' member.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-slash-circle me-1"></i>Ban
+                                        </button>
+                                    </form>
+                                {% endif %}
+
+                            {% elif active_tab == 'applications' %}
+                                <form method="post" action="{% url 'exec_panel:roster:accept' member.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="bi bi-check-circle me-1"></i>Accept
+                                    </button>
+                                </form>
+                                <form method="post" action="{% url 'exec_panel:roster:reject' member.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-x-circle me-1"></i>Reject
+                                    </button>
+                                </form>
+
+                            {% elif active_tab == 'banned-rejected' %}
+                                <form method="post" action="{% url 'exec_panel:roster:renew_application' member.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>Restore to Pending
+                                    </button>
+                                </form>
+
+                            {% endif %}
+                        </div>
+
                     </div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
+        </div>
 
-        {% else %}
+    {% else %}
+        <div class="text-center py-5 text-body-secondary">
+            <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+            {% if active_tab == 'members_list' %}
+                No approved members yet.
+            {% elif active_tab == 'applications' %}
+                No pending applications.
+            {% elif active_tab == 'banned-rejected' %}
+                No banned or rejected users.
+            {% endif %}
+        </div>
+    {% endif %}
 
-            {# Empty state #}
-            <div class="text-center py-5 text-body-secondary">
-                <i class="bi bi-inbox fs-1 d-block mb-3"></i>
-                {% if active_tab == 'roster' %}
-                    No approved members yet.
-                {% elif active_tab == 'applications' %}
-                    No pending applications.
-                {% else %}
-                    No banned or rejected users.
-                {% endif %}
-            </div>
-
-        {% endif %}
-
-    </div>
-    {% endblock %}
+</div>
 {% endblock %}
