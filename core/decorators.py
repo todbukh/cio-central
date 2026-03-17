@@ -24,8 +24,8 @@ from core.permissions import is_approved, is_executive
 # Raises PermissionDenied (HTTP 403) by default, or redirects to redirect_url if provided.
 #
 # Usage:
-#   @executive_required                           # raises 403 (PermissionDenied)
-#   @executive_required(redirect_url="core:home") # redirects to named URL
+#   @executive_required                                     # raises 403 (PermissionDenied)
+#   @executive_required(redirect_url="organization:home")   # redirects to named URL
 def executive_required(view_func=None, *, redirect_url=None):
     def decorator(func):
         # using functools.wraps to preserve original function's metadata (e.g. name, docstring) in the wrapper
