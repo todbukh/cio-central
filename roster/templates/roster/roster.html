@@ -1,33 +1,40 @@
-{% extends 'base.html' %}
-
-{% block title %}Roster{% endblock %}
-
-{% block content %}
+{% extends 'exec_panel/executive-base.html' %}
+{% block tab %}
 <div class="container py-4">
-
     <h1 class="h3 mb-4 text-body">Roster</h1>
 
-    {# Tab Navigation #}
-    <ul class="nav nav-tabs mb-4">
-        <li class="nav-item">
-            <a class="nav-link {% if active_tab == 'members_list' %}active{% endif %}"
-               href="{% url 'exec_panel:roster:roster' 'members' %}">
-                <i class="bi bi-people me-1"></i>Members
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {% if active_tab == 'applications' %}active{% endif %}"
-               href="{% url 'exec_panel:roster:roster' 'applications' %}">
-                <i class="bi bi-person-plus me-1"></i>Applications
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {% if active_tab == 'banned-rejected' %}active{% endif %}"
-               href="{% url 'exec_panel:roster:roster' 'banned-rejected' %}">
-                <i class="bi bi-slash-circle me-1"></i>Banned / Rejected
-            </a>
-        </li>
-    </ul>
+    {# Dropdown Navigation #}
+    <div class="dropdown mb-4" >
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+        {% if active_tab == 'members' %}
+            <i class="bi bi-people me-1"></i>Members
+        {% elif active_tab == 'applications' %}
+            <i class="bi bi-person-plus me-1"></i>Applications
+        {% elif active_tab == 'banned-rejected' %}
+            <i class="bi bi-slash-circle me-1"></i>Banned / Rejected
+        {% endif %}
+    </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item {% if active_tab == 'members' %}active{% endif %}"
+                   href="{% url 'exec_panel:roster:roster' 'members' %}">
+                    <i class="bi bi-people me-1"></i>Members
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {% if active_tab == 'applications' %}active{% endif %}"
+                   href="{% url 'exec_panel:roster:roster' 'applications' %}">
+                    <i class="bi bi-person-plus me-1"></i>Applications
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item {% if active_tab == 'banned-rejected' %}active{% endif %}"
+                   href="{% url 'exec_panel:roster:roster' 'banned-rejected' %}">
+                    <i class="bi bi-slash-circle me-1"></i>Banned / Rejected
+                </a>
+            </li>
+        </ul>
+    </div>
 
     {% if members %}
         <div class="row g-3">
@@ -49,7 +56,7 @@
                             <div class="fw-semibold text-body">{{ member.get_full_name }}</div>
                             <div class="text-body-secondary small">{{ member.email }}</div>
                             <div class="mt-1">
-                                {% if active_tab == 'members_list' %}
+                                {% if active_tab == 'members' %}
                                     {% if member.role == "OWNER" %}
                                         <span class="badge text-bg-warning">Owner</span>
                                     {% elif member.role == "EXEC" %}
@@ -70,14 +77,16 @@
                         {# Actions #}
                         <div class="d-flex flex-wrap gap-2 align-items-center">
 
-                            {% if active_tab == 'members_list' %}
-                                {% if member != request.user %}
-                                    <form method="post" action="{% url 'exec_panel:roster:ban' member.pk %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-slash-circle me-1"></i>Ban
-                                        </button>
-                                    </form>
+                            {% if active_tab == 'members' %}
+                                {% if member != user %}
+                                    {% if user.is_owner or not member.is_exec %}
+                                        <form method="post" action="{% url 'exec_panel:roster:ban' member.pk %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-slash-circle me-1"></i>Ban
+                                            </button>
+                                        </form>
+                                    {% endif %}
                                 {% endif %}
 
                             {% elif active_tab == 'applications' %}
@@ -111,10 +120,11 @@
             {% endfor %}
         </div>
 
+    {# Show a message if nothing to dispkay #}
     {% else %}
         <div class="text-center py-5 text-body-secondary">
             <i class="bi bi-inbox fs-1 d-block mb-3"></i>
-            {% if active_tab == 'members_list' %}
+            {% if active_tab == 'members' %}
                 No approved members yet.
             {% elif active_tab == 'applications' %}
                 No pending applications.
