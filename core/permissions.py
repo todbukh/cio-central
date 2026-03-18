@@ -15,27 +15,29 @@
 def is_authenticated_user(user):
     return bool(user and user.is_authenticated)
 
+# For all the following, is_authenticated_user(user) is checked first to avoid potentially
+# attempting to access unset fields on an anonymous user
+# Credit to Copilot for pointing out this lack of defensive programming
+
 # Return True if the user's status is APPROVED.
-# Uses getattr so this is safe even if the User model is later swapped
-# or the 'status' field is temporarily missing.
 def is_approved(user):
-    return user.status == user.Status.APPROVED
+    return is_authenticated_user(user) and user.status == user.Status.APPROVED
 
 # Return True if the user's status is PENDING (awaiting approval).
 def is_pending(user):
-    return user.status == user.Status.PENDING
+    return is_authenticated_user(user) and user.status == user.Status.PENDING
 
 # Return True if the user's status is REJECTED.
 def is_rejected(user):
-    return user.status == user.Status.REJECTED
+    return is_authenticated_user(user) and user.status == user.Status.REJECTED
 
 # Return True if the user's status is BANNED.
 def is_banned(user):
-    return user.status == user.Status.BANNED
+    return is_authenticated_user(user) and user.status == user.Status.BANNED
 
 # Return True if the user holds an executive-level role (EXEC or OWNER).
 # This is the single source of truth for executive access logic.
 def is_executive(user):
-    return user.role in {user.Role.OWNER, user.Role.EXEC}
+    return is_authenticated_user(user) and user.role in {user.Role.OWNER, user.Role.EXEC}
 
 # Add more helper functions here down the line as needed.
