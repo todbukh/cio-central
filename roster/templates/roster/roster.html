@@ -62,10 +62,44 @@
                                 {% if active_tab == 'members' %}
                                     {% if member.role == "OWNER" %}
                                         <span class="badge text-bg-warning">Owner</span>
-                                    {% elif member.role == "EXEC" %}
-                                        <span class="badge text-bg-info">Exec</span>
+                                    {% elif user.role == "EXEC" %}
+                                        {% if member.role == "EXEC" %}
+                                            <span class="badge text-bg-info">Exec</span>
+                                        {% else %}
+                                            <span class="badge text-bg-success">Member</span>
+                                        {% endif %}
                                     {% else %}
-                                        <span class="badge text-bg-success">Member</span>
+                                        <div class="dropdown d-inline">
+                                            <button class="btn btn-sm dropdown-toggle p-0 border-0"
+                                                    type="button"
+                                                    data-bs-toggle="dropdown">
+                                                {% if member.role == "EXEC" %}
+                                                    <span class="badge text-bg-info">Exec</span>
+                                                {% else %}
+                                                    <span class="badge text-bg-success">Member</span>
+                                                {% endif %}
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <form method="post" action="{% url 'exec_panel:roster:set_role' member.pk %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="role" value="EXEC">
+                                                        <button type="submit" class="dropdown-item">
+                                                            <span class="badge text-bg-info me-2">Exec</span>
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form method="post" action="{% url 'exec_panel:roster:set_role' member.pk %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="role" value="MEMBER">
+                                                        <button type="submit" class="dropdown-item">
+                                                            <span class="badge text-bg-success me-2">Member</span>
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     {% endif %}
                                 {% elif active_tab == 'banned-rejected' %}
                                     {% if member.status == "BANNED" %}
