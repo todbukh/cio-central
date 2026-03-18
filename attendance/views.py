@@ -50,4 +50,4 @@ def update_attendance(request, event_pk, member_pk):
     attendance = get_object_or_404(Attendance, event_id=event_pk, member_id=member_pk)
     attendance.status = request.POST["status"]
     attendance.save()
-    return redirect("exec_panel:attendance:attendance", event_id=event_pk)
+    return redirect("exec_panel:attendance:event_attendance", event_id=event_pk)
