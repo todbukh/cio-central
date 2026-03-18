@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from core.decorators import executive_required
-from core.permissions import is_executive
 from django.shortcuts import render
 
 
