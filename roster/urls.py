@@ -5,7 +5,7 @@ app_name = 'roster'
 
 urlpatterns = [
     path("", views.roster_default),
-    path("<str:tab>/", views.roster, name="roster"),
+    path("<str:active_roster>/", views.roster, name="roster"),
     path("action/accept/<int:pk>/", views.accept, name="accept"),
     path("action/reject/<int:pk>/", views.reject, name="reject"),
     path("action/ban/<int:pk>/", views.ban, name="ban"),
