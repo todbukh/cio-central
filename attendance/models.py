@@ -12,7 +12,7 @@ class Attendance(models.Model):
         ABSENT = "ABSENT"
         EXCUSED = "EXCUSED"
         UNSET = "UNSET"
-    member = models.OneToOneField(User, on_delete=models.CASCADE)
+    member = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE) #FIXME: Talk to Quintin. This is a dummy model for now
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.UNSET)
 
