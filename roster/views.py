@@ -74,7 +74,7 @@ def renew_application(request, pk):
 @require_POST
 @login_required(login_url="/login/")
 @user_passes_test(is_owner, login_url="/", redirect_field_name=None)
-def owner_set_role(request, pk):
+def set_role(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.role = request.POST.get("role")
     member.save()
