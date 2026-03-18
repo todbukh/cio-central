@@ -16,7 +16,7 @@ import functools
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import NoReverseMatch, reverse
-from core.permissions import is_approved, is_executive
+from core.permissions import is_executive
 
 # NOTE: Just a reminder that approval status is checked globally in core/middleware.py
 
