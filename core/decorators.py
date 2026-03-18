@@ -20,7 +20,7 @@ from core.permissions import is_executive
 
 # NOTE: Just a reminder that approval status is checked globally in core/middleware.py
 
-# Checks for approved executives or owners.
+# Checks for executives or owners.
 # Raises PermissionDenied (HTTP 403) by default, or redirects to redirect_url if provided.
 #
 # Usage:
