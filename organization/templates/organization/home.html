@@ -26,7 +26,7 @@
           <p class="fw-semibold text-body mb-0 text-truncate">
             {{ org_name |default:"My Organization" }}
           </p>
-            {% if is_exec %}
+            {% if user.is_exec %}
               <a href="{% url 'exec_panel:roster:roster' %}" class="text-body-secondary small mb-0 text-truncate link-info text-decoration-none">
                 <i class="bi bi-people-fill me-1"></i>Members
               </a>

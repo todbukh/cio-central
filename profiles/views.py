@@ -36,4 +36,4 @@ def profile_edit_view(request, username):
     else:                       # user just wants to view the edit page
         form = ProfileEditForm(instance=profile)
 
-    return render(request, "profiles/profile_edit.html", {"form": form, "is_exec": is_executive(request.user)})
+    return render(request, "profiles/profile_edit.html", {"form": form})

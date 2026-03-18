@@ -104,7 +104,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # allauth account middleware:
     "allauth.account.middleware.AccountMiddleware",
-    # redirects non-approved users to core:home on every request:
+    # redirects non-approved users to organization:home on every request:
     "core.middleware.ApprovalStatusMiddleware",
 ]
 

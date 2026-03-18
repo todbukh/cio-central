@@ -9,8 +9,7 @@ from django.shortcuts import render
 @executive_required(redirect_url="organization:home")
 def attendance(request):
     context = {
-        "active_tab": "attendance",
-        "is_exec": is_executive(request.user)
+        "active_tab": "attendance"
     }
 
     return render(request, "attendance/attendance.html", context)

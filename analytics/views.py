@@ -8,8 +8,7 @@ from django.shortcuts import render
 @executive_required(redirect_url="organization:home")
 def analytics(request):
     context = {
-        "active_tab": "analytics",
-        "is_exec": is_executive(request.user)
+        "active_tab": "analytics"
     }
 
     return render(request, "analytics/analytics.html", context)

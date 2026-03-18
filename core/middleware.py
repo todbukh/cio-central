@@ -4,14 +4,11 @@
 # should apply across the entire site (e.g. "banned users can never proceed").
 # For more specific, per-view rules use the decorators in core/decorators.py instead.
 
-from django.shortcuts import redirect
-from django.utils.deprecation import MiddlewareMixin
-from core.permissions import is_approved, is_banned, is_pending, is_rejected
+from django.shortcuts import render, redirect
+from core.permissions import is_approved, is_pending, is_rejected, is_banned
 
-# Redirects authenticated users to core:home based on their approval status.
-# core/views.py home() already renders the appropriate template (pending.html,
-# rejected.html, banned.html) so all three statuses share the same redirect target.
-class ApprovalStatusMiddleware(MiddlewareMixin):
+
+class ApprovalStatusMiddleware:
 
     # Paths matched by its prefix - bypassed entirely regardless of user status.
     # Basically, these are all the URL prefixes that need to be accessible regardless of approval status.
@@ -20,43 +17,53 @@ class ApprovalStatusMiddleware(MiddlewareMixin):
         "/admin/",          # Django admin
     ]
 
-    # Paths matched exactly — home is exempt because it renders the status
-    # pages itself; exempting it prevents an infinite redirect loop.
+    # Paths matched exactly.
     EXEMPT_EXACT_PATHS = [
-        "/",                # core:home — handles pending/rejected/banned rendering
-        "/login/",          # core:login
+        "/login/"          # core:login
     ]
 
-    def process_request(self, request):
-        # Called before the view on every request.
-        # Return None to let the request continue normally,
-        # or return an HttpResponse (e.g. a redirect) to short-circuit the view.
+    # Middleware owns these paths entirely - no URL patterns or views needed.
+    # Maps path → template. Used both to serve the page and as redirect targets.
+    STATUS_PAGES = {
+        "/pending/":  "organization/pending.html",
+        "/rejected/": "organization/rejected.html",
+        "/banned/":   "organization/banned.html",
+    }
 
-        user = request.user
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-        # Skip anonymous (not logged-in) users entirely.
-        # this should be handled by AuthenticationMiddleware
-        # checking this here just in case to avoid any issues with missing user objects in the status checks below.
-        if not user.is_authenticated:
-            return None
+    def __call__(self, request):
+        if not request.user.is_authenticated:
+            return self.get_response(request)
 
-        # Skip exempt paths so auth flows and status pages always work.
         if self._is_exempt(request.path):
-            return None
-        
-        # if user has any status other than approved, redirect to home which will show the appropriate status page.
-        if not is_approved(user):
-            return redirect("organization:home")
+            return self.get_response(request)
 
-        # user is approved and path is not exempt, so let the request continue to the view.
-        return None
+        status_path = self._status_path(request.user)
+        if status_path is not None:
+            # Render if already on the correct status page, otherwise redirect.
+            if request.path == status_path:
+                return render(request, self.STATUS_PAGES[status_path])
+            return redirect(status_path)
+        return self.get_response(request)
 
-    # ---------------------------------------------------------------------- #
-    # Private helpers                                                          #
-    # ---------------------------------------------------------------------- #
+    # --- helper functions ---
 
-    # Return true if the given path should bypass status checks
+    # handles exempt paths that should bypass middleware
     def _is_exempt(self, path):
         if path in self.EXEMPT_EXACT_PATHS:
             return True
         return any(path.startswith(prefix) for prefix in self.EXEMPT_PATHS)
+
+    # returns the redirect path based on user status, or None if no redirect is needed
+    def _status_path(self, user):
+        if is_approved(user):
+            return None
+        if is_pending(user):
+            return "/pending/"
+        if is_rejected(user):
+            return "/rejected/"
+        if is_banned(user):
+            return "/banned/"
+        return "/pending/"  # invalid status, treat as pending just in case
