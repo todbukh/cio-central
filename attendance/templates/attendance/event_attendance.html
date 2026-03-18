@@ -1,9 +1,8 @@
 {% extends 'exec_panel/executive-base.html' %}
 
 {% block tab %}
-    <h3>{{ event.name|default:"This Event" }}</h3>
     <div class="container py-4">
-
+      <h2 class="text-muted text-center">{{ event.name|default:"This Event" }}</h2>
       <div class="mb-4 d-flex align-items-center gap-3 flex-wrap">
         <a href="{% url 'exec_panel:attendance:attendance' %}"
            class="btn btn-outline-primary btn-sm">
