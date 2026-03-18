@@ -59,6 +59,7 @@ def reject(request, pk):
 def ban(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.status = User.Status.BANNED
+    member.role = User.Role.MEMBER
     member.save()
     return redirect("exec_panel:roster:roster", tab="members")
 
