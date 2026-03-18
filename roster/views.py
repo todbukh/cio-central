@@ -27,11 +27,14 @@ def roster(request, tab="members"):
         "active_tab": tab
     }
     if tab == "members":
-         context["members"] = User.objects.filter(status=User.Status.APPROVED)
+        members = User.objects.filter(status=User.Status.APPROVED)
+        sorted_members = [request.user]
+        sorted_members += list(members.exclude(pk=request.user.pk).order_by("first_name", "last_name"))
+        context['members'] = sorted_members
     elif tab == "applications":
-         context["members"] = User.objects.filter(status=User.Status.PENDING)
+         context["members"] = User.objects.filter(status=User.Status.PENDING).order_by("first_name", "last_name")
     elif tab == "banned-rejected":
-        context["members"] = User.objects.filter(status__in=[User.Status.BANNED, User.Status.REJECTED])
+        context["members"] = User.objects.filter(status__in=[User.Status.BANNED, User.Status.REJECTED]).order_by("first_name", "last_name")
 
     return render(request, "roster/roster.html", context)
 
