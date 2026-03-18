@@ -16,8 +16,7 @@ def profile_view(request, username):
     is_owner =  request.user == profile_user
     context = {
         "profile_user": profile_user,
-        "is_owner": is_owner,
-        "is_exec": is_executive(request.user)
+        "is_owner": is_owner
     }
     return render(request, "profiles/profile.html", context)
 
