@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
+from .models import Attendance
+from events.models import Event
 
 # Create your views here.
 def is_exec(user):
@@ -13,8 +15,10 @@ def is_approved(user):
 @user_passes_test(is_approved, login_url="/", redirect_field_name=None)
 @user_passes_test(is_exec, login_url="/", redirect_field_name=None)
 def attendance(request):
+    events = Event.objects.all().order_by("date")
     context = {
-        "active_tab": "attendance"
+        "active_tab": "attendance",
+        "events": events,
     }
 
     return render(request, "attendance/attendance.html", context)
