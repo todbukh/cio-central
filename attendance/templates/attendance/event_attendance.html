@@ -1,0 +1,107 @@
+{% extends 'exec_panel/executive-base.html' %}
+
+{% block tab %}
+    <h3>Attendance List for {{ event.name | default: "This Event" }}</h3>
+    <div class="container py-4">
+
+      <div class="mb-4 d-flex align-items-center gap-3 flex-wrap">
+        <a href="{% url 'exec_panel:attendance:attendance' %}"
+           class="btn btn-outline-primary btn-sm">
+          <i class="bi bi-arrow-left me-1"></i>All Events
+        </a>
+        <div>
+          <h2 class="text-body mb-0">Event Attendance</h2>
+          <p class="text-body-secondary mb-0 small">
+            {{ attendees.count }} member{{ attendees.count|pluralize }} listed
+          </p>
+        </div>
+      </div>
+
+      {% if attendees %}
+        <div class="bg-body-secondary rounded border overflow-hidden">
+          <div class="table-responsive">
+            <table class="table mb-0 align-middle">
+              <thead class="bg-body-tertiary">
+                <tr>
+                  <th class="text-body-secondary fw-semibold ps-3 py-2">Member</th>
+                  <th class="text-body-secondary fw-semibold py-2">Status</th>
+                  <th class="text-body-secondary fw-semibold py-2">Update</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for record in attendees %}
+                  <tr class="border-top">
+
+                    {# Member name #}
+                    <td class="ps-3 py-3">
+                      <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-person-circle text-body-secondary"></i>
+                        <span class="text-body">
+                          {{ record.member.last_name }}, {{ record.member.first_name }}
+                        </span>
+                      </div>
+                    </td>
+
+                    {# Current status badge #}
+                    <td class="py-3">
+                      {% if record.status == 'PRESENT' %}
+                        <span class="badge text-bg-success">Present</span>
+                      {% elif record.status == 'ABSENT' %}
+                        <span class="badge text-bg-danger">Absent</span>
+                      {% elif record.status == 'EXCUSED' %}
+                        <span class="badge text-bg-warning">Excused</span>
+                      {% else %}
+                        <span class="badge text-bg-info">Unset</span>
+                      {% endif %}
+                    </td>
+
+                    {# Update controls — one small form per status button #}
+                    <td class="py-3">
+                      <div class="d-flex flex-wrap gap-2">
+
+                        <form method="post"
+                              action="{% url 'exec_panel:attendance:update_attendance' event_pk=record.event_id member_pk=record.member_id %}">
+                          {% csrf_token %}
+                          <input type="hidden" name="status" value="PRESENT">
+                          <button type="submit" class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-check-lg me-1"></i>Present
+                          </button>
+                        </form>
+
+                        <form method="post"
+                              action="{% url 'exec_panel:attendance:update_attendance' event_pk=record.event_id member_pk=record.member_id %}">
+                          {% csrf_token %}
+                          <input type="hidden" name="status" value="ABSENT">
+                          <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-x-lg me-1"></i>Absent
+                          </button>
+                        </form>
+
+                        <form method="post"
+                              action="{% url 'exec_panel:attendance:update_attendance' event_pk=record.event_id member_pk=record.member_id %}">
+                          {% csrf_token %}
+                          <input type="hidden" name="status" value="EXCUSED">
+                          <button type="submit" class="btn btn-outline-warning btn-sm">
+                            <i class="bi bi-slash-circle me-1"></i>Excused
+                          </button>
+                        </form>
+
+                      </div>
+                    </td>
+
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      {% else %}
+        <div class="bg-body-secondary rounded p-5 text-center">
+          <i class="bi bi-people fs-1 text-body-secondary d-block mb-3"></i>
+          <p class="text-body-secondary mb-0">No members found for this event.</p>
+        </div>
+      {% endif %}
+
+    </div>
+{% endblock %}
