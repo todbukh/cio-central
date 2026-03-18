@@ -101,6 +101,9 @@
                                             </ul>
                                         </div>
                                     {% endif %}
+                                    {% if user == member %}
+                                        <span class="badge text-bg-secondary">Me</span>
+                                    {% endif %}
                                 {% elif active_tab == 'banned-rejected' %}
                                     {% if member.status == "BANNED" %}
                                         <span class="badge text-bg-danger">Banned</span>
@@ -110,6 +113,7 @@
                                 {% endif %}
                             </div>
                         </div>
+
 
                         {# Actions #}
                         <div class="d-flex flex-wrap gap-2 align-items-center">
