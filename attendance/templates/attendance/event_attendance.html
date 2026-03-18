@@ -1,7 +1,7 @@
 {% extends 'exec_panel/executive-base.html' %}
 
 {% block tab %}
-    <h3>Attendance List for {{ event.name|default:"This Event" }}</h3>
+    <h3>{{ event.name|default:"This Event" }}</h3>
     <div class="container py-4">
 
       <div class="mb-4 d-flex align-items-center gap-3 flex-wrap">
@@ -10,7 +10,7 @@
           <i class="bi bi-arrow-left me-1"></i>All Events
         </a>
         <div>
-          <h2 class="text-body mb-0">Event Attendance</h2>
+          <h4 class="text-body mb-0">Event Attendance</h4>
           <p class="text-body-secondary mb-0 small">
             {{ attendees.count }} member{{ attendees.count|pluralize }} listed
           </p>
@@ -22,12 +22,12 @@
           <div class="table-responsive">
             <table class="table mb-0 align-middle">
               <thead class="bg-body-tertiary">
-                <tr>
-                  <th class="text-body-secondary fw-semibold ps-3 py-2">Member</th>
-                  <th class="text-body-secondary fw-semibold py-2">Status</th>
-                  <th class="text-body-secondary fw-semibold py-2">Update</th>
-                </tr>
-              </thead>
+                  <tr>
+                    <th class="text-body-secondary fw-semibold ps-3 py-2 w-25">Member</th>
+                    <th class="text-body-secondary fw-semibold py-2 w-25">Status</th>
+                    <th class="text-body-secondary fw-semibold py-2 w-50">Update</th>
+                  </tr>
+                </thead>
               <tbody>
                 {% for record in attendees %}
                   <tr class="border-top">

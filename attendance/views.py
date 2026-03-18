@@ -40,6 +40,7 @@ def event_attendance(request, event_id):
     context = {
         "active_tab": "attendance",
         "attendees": Attendance.objects.filter(event=event).select_related("member").order_by("member__last_name"),
+        "event": event,
     }
     return render(request, "attendance/event_attendance.html", context)
 
