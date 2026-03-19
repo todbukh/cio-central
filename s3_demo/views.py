@@ -22,10 +22,14 @@ def s3_demo(request):
     }
 
     if request.method == "POST":
-        filled_form = S3Form(request.POST, request.FILES)
-        if filled_form.is_valid():
+        form = S3Form(request.POST, request.FILES)
+        if form.is_valid():
             upload_image_for_user(request.user, request.FILES["image"])
+            return redirect("s3_demo:s3_demo")  # refactored this to redirect from copilot's suggestion to avoid form resubmission
         else:
+            # passing the form with an error back into the template is best practices
+            # as it lets you get the error info off of it (I took this change from Copilot as well)
+            context["form"] = form
             context["error"] = True
 
     if hasattr(request.user, "my_s3_image"):
