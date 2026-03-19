@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
-
 from core.models import User
+from django.contrib.auth.decorators import login_required
+from core.decorators import executive_required
+from django.shortcuts import render
 
 # Create your views here.
 def is_exec(user):
@@ -21,7 +23,7 @@ def roster_default(request):
     return redirect("exec_panel:roster:roster", active_roster="members")
 
 @login_required(login_url="/login/")
-@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@executive_required(redirect_url="organization:home")
 def roster(request, active_roster="members"):
     context = {
         "active_tab": "roster",

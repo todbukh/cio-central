@@ -1,0 +1,51 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
+
+from s3_demo.forms import S3Form
+from s3_demo.models import MyS3Image
+
+
+# this function demonstrates how to upload an image
+# images passed-in are of type UploadedFile
+def upload_image_for_user(user, image):
+    if hasattr(user, "my_s3_image"):
+        user.my_s3_image.image.delete()
+        user.my_s3_image.image.save(name=image.name, content=image)
+    else:
+        user.my_s3_image = MyS3Image(user=user, image=image)
+        user.my_s3_image.save()
+
+
+@login_required(login_url="/login/")
+def s3_demo(request):
+    context = {
+        "form": S3Form(),
+        "error": False,
+    }
+
+    if request.method == "POST":
+        form = S3Form(request.POST, request.FILES)
+        if form.is_valid():
+            upload_image_for_user(request.user, request.FILES["image"])
+            return redirect("s3_demo:s3_demo")  # refactored this to redirect from copilot's suggestion to avoid form resubmission
+        else:
+            # passing the form with an error back into the template is best practices
+            # as it lets you get the error info off of it (I took this change from Copilot as well)
+            context["form"] = form
+            context["error"] = True
+
+    if hasattr(request.user, "my_s3_image"):
+        context["my_s3_image"] = request.user.my_s3_image.image
+
+    return render(request, "s3_demo/s3demo.html", context=context)
+
+# copilot suggested to use @require_POST instead of the if statement I used
+@require_POST
+@login_required(login_url="/login/")
+def s3_demo_delete(request):
+    if hasattr(request.user, "my_s3_image"):
+        request.user.my_s3_image.image.delete()  # deletes the image off of S3 and sets field in record to ""
+        # request.user.my_s3_image.delete()  # this would delete the actual record
+
+    return redirect("s3_demo:s3_demo")
