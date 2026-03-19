@@ -40,7 +40,9 @@ class AnalyticsViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["selected_view"], "users")
+        self.assertEqual(response.context["chart_title"], "User attendance overview")
         self.assertContains(response, "Per-user analytics")
+        self.assertContains(response, "User attendance overview")
         self.assertContains(response, "Ada Lovelace")
         self.assertContains(response, "Tracked members")
 
@@ -51,7 +53,9 @@ class AnalyticsViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["selected_view"], "events")
+        self.assertEqual(response.context["chart_title"], "Event turnout overview")
         self.assertContains(response, "Per-event analytics")
+        self.assertContains(response, "Event turnout overview")
         self.assertContains(response, "Spring Kickoff")
         self.assertNotContains(response, "Ada Lovelace")
 

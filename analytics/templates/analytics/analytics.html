@@ -25,6 +25,27 @@
         </nav>
 
         <section class="border rounded-4 p-3 bg-body">
+            <h4>{{ chart_title }}</h4>
+            <div class="d-flex flex-column gap-3">
+                {% for row in chart_rows %}
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-1 gap-3">
+                            <span class="fw-medium">{{ row.label }}</span>
+                            <span class="text-body-secondary">{{ row.value }}</span>
+                        </div>
+                        <div class="progress" role="img" aria-label="{{ row.label }} value {{ row.value }}">
+                            <div
+                                class="progress-bar bg-primary bg-opacity-75"
+                                style="width: {{ row.percent }}%;"
+                                aria-hidden="true"
+                            ></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="border rounded-4 p-3 bg-body">
             <h4>{{ table_title }}</h4>
             <div class="table-responsive">
                 <table class="table table-striped align-middle mb-0">
