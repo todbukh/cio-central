@@ -1,28 +1,17 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from core.models import User
-from django.contrib.auth.decorators import login_required
 from core.decorators import executive_required
-from django.shortcuts import render
 
 # Create your views here.
-def is_exec(user):
-    if user.is_anonymous: return False
-    if user.status != User.Status.APPROVED: return False
-    return user.is_exec()
-
 def is_owner(user):
-    if not is_exec(user):
-        return False
-    return user.role == User.Role.OWNER
+    return user.is_owner()
 
-@login_required(login_url='/login/')
-@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@executive_required(redirect_url="organization:home")
 def roster_default(request):
     return redirect("exec_panel:roster:roster", active_roster="members")
 
-@login_required(login_url="/login/")
 @executive_required(redirect_url="organization:home")
 def roster(request, active_roster="members"):
     context = {
@@ -40,8 +29,7 @@ def roster(request, active_roster="members"):
     return render(request, "roster/roster.html", context)
 
 @require_POST
-@login_required(login_url="/login/")
-@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@executive_required(redirect_url="organization:home")
 def accept(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.status = User.Status.APPROVED
@@ -49,8 +37,7 @@ def accept(request, pk):
     return redirect("exec_panel:roster:roster", active_roster="applications")
 
 @require_POST
-@login_required(login_url="/login/")
-@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@executive_required(redirect_url="organization:home")
 def reject(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.status = User.Status.REJECTED
@@ -58,8 +45,7 @@ def reject(request, pk):
     return redirect("exec_panel:roster:roster", active_roster="applications")
 
 @require_POST
-@login_required(login_url="/login/")
-@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@executive_required(redirect_url="organization:home")
 def ban(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.status = User.Status.BANNED
@@ -68,8 +54,7 @@ def ban(request, pk):
     return redirect("exec_panel:roster:roster", active_roster="members")
 
 @require_POST
-@login_required(login_url="/login/")
-@user_passes_test(is_exec, login_url="/", redirect_field_name=None)
+@executive_required(redirect_url="organization:home")
 def renew_application(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.status = User.Status.PENDING
@@ -77,7 +62,6 @@ def renew_application(request, pk):
     return redirect("exec_panel:roster:roster", active_roster="banned-rejected")
 
 @require_POST
-@login_required(login_url="/login/")
 @user_passes_test(is_owner, login_url="/", redirect_field_name=None)
 def set_role(request, pk):
     member = get_object_or_404(User, pk=pk)
