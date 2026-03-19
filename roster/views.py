@@ -1,8 +1,7 @@
-from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from core.models import User
-from core.decorators import executive_required
+from core.decorators import executive_required, owner_required
 
 # Create your views here.
 def is_owner(user):
@@ -62,7 +61,7 @@ def renew_application(request, pk):
     return redirect("exec_panel:roster:roster", active_roster="banned-rejected")
 
 @require_POST
-@user_passes_test(is_owner, login_url="/", redirect_field_name=None)
+@owner_required(redirect_url="organization:home")
 def set_role(request, pk):
     member = get_object_or_404(User, pk=pk)
     member.role = request.POST.get("role")

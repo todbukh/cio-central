@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from core.permissions import is_executive
+from core.permissions import is_executive, is_owner
 
 # Create your models here.
 class User(AbstractUser):
@@ -19,7 +19,7 @@ class User(AbstractUser):
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
 
     def is_owner(self): # FIXME: look into permissions.py
-        return self.role == self.Role.OWNER
+        return is_owner(self)
 
     def __str__(self):
         return self.username
