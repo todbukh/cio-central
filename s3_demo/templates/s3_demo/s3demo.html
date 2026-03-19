@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}S3 File Upload Demo{% endblock %}
+
+{% block content %}
+    <div class="d-flex flex-column gap-3 align-items-start px-3">
+        <h1>S3 File Upload Demo</h1>
+
+        {% if my_s3_image %}
+            <img src="{{ my_s3_image.url }}" alt="User-uploaded s3 image" width="300"/>
+        {% endif %}
+
+        {% if error %}
+            <p class="text-danger">Failed to upload</p>
+        {% endif %}
+
+        <form enctype="multipart/form-data" method="post" action="{% url "core:s3_demo" %}">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <input type="submit" value="Submit">
+        </form>
+
+    </div>
+{% endblock %}
