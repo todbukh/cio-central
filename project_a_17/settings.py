@@ -77,7 +77,7 @@ INSTALLED_APPS = [
     "analytics.apps.AnalyticsConfig",
     "roster.apps.RosterConfig",
     "organization.apps.OrganizationConfig",
-    "s3_demo.apps.S3DemoConfig",
+    "s3_demo.apps.S3DemoConfig",  # TODO: remove this when done previewing demo
     "django_bootstrap5",
     "django.contrib.admin",
     "django.contrib.auth",
