@@ -1,5 +1,5 @@
 from django.db import models
-from project_a_17 import settings
+from django.conf import settings
 
 # Create your models here.
 class MyS3Image(models.Model):
