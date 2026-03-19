@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from s3_demo.forms import S3Form
 from s3_demo.models import MyS3Image
 
 
+# this function demonstrates how to upload an image
+# images passed-in are of type UploadedFile
 def upload_image_for_user(user, image):
     if hasattr(user, "my_s3_image"):
         user.my_s3_image.image.delete()
@@ -12,11 +14,11 @@ def upload_image_for_user(user, image):
         user.my_s3_image = MyS3Image(user=user, image=image)
         user.my_s3_image.save()
 
-# Create your views here.
+
 def s3_demo(request):
     context = {
         "form": S3Form(),
-        "error": False
+        "error": False,
     }
 
     if request.method == "POST":
@@ -30,3 +32,11 @@ def s3_demo(request):
         context["my_s3_image"] = request.user.my_s3_image.image
 
     return render(request, "s3_demo/s3demo.html", context=context)
+
+
+def s3_demo_delete(request):
+    if request.method == "GET": redirect("s3_demo:s3_demo")
+
+    if hasattr(request.user, "my_s3_image"): request.user.my_s3_image.image.delete()
+
+    return redirect("s3_demo:s3_demo")
