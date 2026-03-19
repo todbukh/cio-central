@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
 
 from s3_demo.forms import S3Form
 from s3_demo.models import MyS3Image
@@ -15,6 +17,7 @@ def upload_image_for_user(user, image):
         user.my_s3_image.save()
 
 
+@login_required(login_url="/login/")
 def s3_demo(request):
     context = {
         "form": S3Form(),
@@ -37,10 +40,10 @@ def s3_demo(request):
 
     return render(request, "s3_demo/s3demo.html", context=context)
 
-
+# copilot suggested to use @require_POST instead of the if statement I used
+@require_POST
+@login_required(login_url="/login/")
 def s3_demo_delete(request):
-    if request.method == "GET": redirect("s3_demo:s3_demo")
-
     if hasattr(request.user, "my_s3_image"): request.user.my_s3_image.image.delete()
 
     return redirect("s3_demo:s3_demo")
