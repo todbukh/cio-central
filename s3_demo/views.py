@@ -44,6 +44,8 @@ def s3_demo(request):
 @require_POST
 @login_required(login_url="/login/")
 def s3_demo_delete(request):
-    if hasattr(request.user, "my_s3_image"): request.user.my_s3_image.image.delete()
+    if hasattr(request.user, "my_s3_image"):
+        request.user.my_s3_image.image.delete()  # deletes the image off of S3 and sets field in record to ""
+        # request.user.my_s3_image.delete()  # this would delete the actual record
 
     return redirect("s3_demo:s3_demo")
