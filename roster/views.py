@@ -22,24 +22,24 @@ def roster(request, active_roster="members"):
 
 @require_POST
 @executive_required(redirect_url="organization:home")
-def accept(request, pk):
-    member = get_object_or_404(User, pk=pk)
+def accept(request, uid):
+    member = get_object_or_404(User, uid=uid)
     member.status = User.Status.APPROVED
     member.save()
     return redirect("exec_panel:roster:roster", active_roster="applications")
 
 @require_POST
 @executive_required(redirect_url="organization:home")
-def reject(request, pk):
-    member = get_object_or_404(User, pk=pk)
+def reject(request, uid):
+    member = get_object_or_404(User, uid=uid)
     member.status = User.Status.REJECTED
     member.save()
     return redirect("exec_panel:roster:roster", active_roster="applications")
 
 @require_POST
 @executive_required(redirect_url="organization:home")
-def ban(request, pk):
-    member = get_object_or_404(User, pk=pk)
+def ban(request, uid):
+    member = get_object_or_404(User, uid=uid)
     member.status = User.Status.BANNED
     member.role = User.Role.MEMBER
     member.save()
@@ -47,16 +47,16 @@ def ban(request, pk):
 
 @require_POST
 @executive_required(redirect_url="organization:home")
-def renew_application(request, pk):
-    member = get_object_or_404(User, pk=pk)
+def renew_application(request, uid):
+    member = get_object_or_404(User, uid=uid)
     member.status = User.Status.PENDING
     member.save()
     return redirect("exec_panel:roster:roster", active_roster="banned-rejected")
 
 @require_POST
 @owner_required(redirect_url="organization:home")
-def set_role(request, pk):
-    member = get_object_or_404(User, pk=pk)
+def set_role(request, uid):
+    member = get_object_or_404(User, uid=uid)
     member.role = request.POST.get("role")
     member.save()
     return redirect("exec_panel:roster:roster", active_roster="members")

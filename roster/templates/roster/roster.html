@@ -81,7 +81,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                        <form method="post" action="{% url 'exec_panel:roster:set_role' member.pk %}">
+                                                        <form method="post" action="{% url 'exec_panel:roster:set_role' member.uid %}">
                                                             {% csrf_token %}
                                                             <input type="hidden" name="role" value="EXEC">
                                                             <button type="submit" class="dropdown-item">
@@ -90,7 +90,7 @@
                                                         </form>
                                                     </li>
                                                     <li>
-                                                        <form method="post" action="{% url 'exec_panel:roster:set_role' member.pk %}">
+                                                        <form method="post" action="{% url 'exec_panel:roster:set_role' member.uid %}">
                                                             {% csrf_token %}
                                                             <input type="hidden" name="role" value="MEMBER">
                                                             <button type="submit" class="dropdown-item">
@@ -121,7 +121,7 @@
                                 {% if active_roster == 'members' %}
                                     {% if member != user %}
                                         {% if user.is_owner or not member.is_exec %}
-                                            <form method="post" action="{% url 'exec_panel:roster:ban' member.pk %}">
+                                            <form method="post" action="{% url 'exec_panel:roster:ban' member.uid %}">
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-sm btn-danger">
                                                     <i class="bi bi-slash-circle me-1"></i>Ban
@@ -131,13 +131,13 @@
                                     {% endif %}
 
                                 {% elif active_roster == 'applications' %}
-                                    <form method="post" action="{% url 'exec_panel:roster:accept' member.pk %}">
+                                    <form method="post" action="{% url 'exec_panel:roster:accept' member.uid %}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-sm btn-success">
                                             <i class="bi bi-check-circle me-1"></i>Accept
                                         </button>
                                     </form>
-                                    <form method="post" action="{% url 'exec_panel:roster:reject' member.pk %}">
+                                    <form method="post" action="{% url 'exec_panel:roster:reject' member.uid %}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-sm btn-danger">
                                             <i class="bi bi-x-circle me-1"></i>Reject
@@ -145,7 +145,7 @@
                                     </form>
 
                                 {% elif active_roster == 'banned-rejected' %}
-                                    <form method="post" action="{% url 'exec_panel:roster:renew_application' member.pk %}">
+                                    <form method="post" action="{% url 'exec_panel:roster:renew_application' member.uid %}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-arrow-counterclockwise me-1"></i>Restore to Pending

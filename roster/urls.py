@@ -6,9 +6,9 @@ app_name = 'roster'
 urlpatterns = [
     path("", views.roster, kwargs={"active_roster": "members"}),
     path("<str:active_roster>/", views.roster, name="roster"),
-    path("action/accept/<int:pk>/", views.accept, name="accept"),
-    path("action/reject/<int:pk>/", views.reject, name="reject"),
-    path("action/ban/<int:pk>/", views.ban, name="ban"),
-    path("action/renew_application/<int:pk>/", views.renew_application, name="renew_application"),
-    path("roster/set-role/<int:pk>/", views.set_role, name="set_role"),
+    path("action/accept/<uuid:uid>/", views.accept, name="accept"),
+    path("action/reject/<uuid:uid>/", views.reject, name="reject"),
+    path("action/ban/<uuid:uid>/", views.ban, name="ban"),
+    path("action/renew_application/<uuid:uid>/", views.renew_application, name="renew_application"),
+    path("roster/set-role/<uuid:uid>/", views.set_role, name="set_role"),
 ]
