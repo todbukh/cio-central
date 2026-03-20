@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     "analytics.apps.AnalyticsConfig",
     "roster.apps.RosterConfig",
     "organization.apps.OrganizationConfig",
+    "s3_demo.apps.S3DemoConfig",  # TODO: remove this when done previewing demo
     "django_bootstrap5",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -104,6 +105,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # allauth account middleware:
     "allauth.account.middleware.AccountMiddleware",
+    # redirects non-approved users to /pending/, /rejected/, or /banned/ on every request:
+    "core.middleware.ApprovalStatusMiddleware",
 ]
 
 ROOT_URLCONF = "project_a_17.urls"
@@ -185,7 +188,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+### Static files (CSS, JavaScript, Images) ###
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -196,7 +199,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-# Bootstrap 5 python package settings
+### Bootstrap 5 python package settings ###
 BOOTSTRAP5 = {
 
     # The complete URL to the Bootstrap CSS file.
@@ -275,7 +278,7 @@ BOOTSTRAP5 = {
 AUTH_USER_MODEL = 'core.User'
 
 
-# Django allauth settings:
+### Django allauth settings: ###
 
 # Sources:
 # Setup and config:
@@ -349,3 +352,24 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 # This bypasses the additional form to fill in details related to the user model (it creates a unique username, for instance)
 # This is the default setting
 SOCIALACCOUNT_AUTO_SIGNUP = True
+
+
+### S3 Settings: ###
+
+# This overrides the default storage for media uploads (from users) to use S3 while keeping staticfiles the same
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "access_key": os.environ.get("AWS_S3_ACCESS_KEY_ID"),
+            "secret_key": os.environ.get("AWS_S3_SECRET_ACCESS_KEY"),
+            "bucket_name": os.environ.get("AWS_STORAGE_BUCKET_NAME"),
+            "querystring_expire": 3600,  # if we want to change how long the presigned urls last this is how
+            "file_overwrite": False,  # set this to not overwrite files w/ same name and to instead append extra chars
+            "region_name": "us-east-1",  # this appears to be unnecessary, but I specified it just in case
+        }
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",  # keep staticfiles backend the same
+    },
+}
