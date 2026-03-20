@@ -4,5 +4,5 @@ from . import views
 app_name = "organization"
 
 urlpatterns = [
-    path("", views.home, name="home"),
+    path("messsaging/<str:channel>/", views.home, name="home"),
 ]
