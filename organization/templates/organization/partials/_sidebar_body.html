@@ -1,0 +1,35 @@
+{# generated with Claude Opus 4.6 Extended #}
+{# Sidebar body: channel nav + user footer — shared by desktop aside & offcanvas #}
+<nav class="flex-grow-1 overflow-auto py-2 px-2">
+   <p class="text-body-secondary text-uppercase small fw-semibold px-2 mt-2 mb-1">
+      Channels
+   </p>
+   <ul class="list-unstyled mb-0">
+      <li>
+         <a href="#"
+            class="d-flex align-items-center gap-2 px-2 py-1 rounded text-body text-decoration-none">
+            <i class="bi bi-hash"></i><span>general</span>
+         </a>
+      </li>
+      <li>
+         <a href="#"
+            class="d-flex align-items-center gap-2 px-2 py-1 rounded text-body text-decoration-none">
+            <i class="bi bi-hash"></i><span>announcements</span>
+         </a>
+      </li>
+   </ul>
+</nav>
+
+{# User footer #}
+<a href="{% url 'profiles:profile_redirect' %}"
+   class="p-3 border-top d-flex align-items-center gap-2 text-decoration-none text-body link-info flex-shrink-0">
+   <i class="bi bi-person-circle fs-4"></i>
+   <div class="overflow-hidden flex-grow-1">
+      <p class="mb-0 small fw-semibold text-truncate">
+         {{ user.get_full_name|default:user.username }}
+      </p>
+      <p class="mb-0 small text-truncate">
+         {{ user.email }}
+      </p>
+   </div>
+</a>

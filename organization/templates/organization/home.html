@@ -42,40 +42,8 @@
          </div>
       </div>
 
-      {# Channel nav #}
-      <nav class="flex-grow-1 overflow-auto py-2 px-2">
-         <p class="text-body-secondary text-uppercase small fw-semibold px-2 mt-2 mb-1">
-            Channels
-         </p>
-         <ul class="list-unstyled mb-0">
-            <li>
-               <a href="#"
-                  class="d-flex align-items-center gap-2 px-2 py-1 rounded text-body text-decoration-none">
-                  <i class="bi bi-hash"></i><span>general</span>
-               </a>
-            </li>
-            <li>
-               <a href="#"
-                  class="d-flex align-items-center gap-2 px-2 py-1 rounded text-body text-decoration-none">
-                  <i class="bi bi-hash"></i><span>announcements</span>
-               </a>
-            </li>
-         </ul>
-      </nav>
-
-      {# User footer #}
-      <a href="{% url 'profiles:profile_redirect' %}"
-         class="p-3 border-top d-flex align-items-center gap-2 bg-body-secondary text-decoration-none text-body link-info flex-shrink-0">
-         <i class="bi bi-person-circle fs-4"></i>
-         <div class="overflow-hidden flex-grow-1">
-            <p class="mb-0 small fw-semibold text-truncate">
-               {{ user.get_full_name|default:user.username }}
-            </p>
-            <p class="mb-0 small text-truncate">
-               {{ user.email }}
-            </p>
-         </div>
-      </a>
+      {# Channel nav + user footer #}
+      {% include "organization/partials/_sidebar_body.html" %}
    </aside>
 
    {# Sidebar offcanvas — mobile/tablet, below lg #}
@@ -106,37 +74,7 @@
          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body d-flex flex-column p-0">
-         <nav class="flex-grow-1 overflow-auto py-2 px-2">
-            <p class="text-body-secondary text-uppercase small fw-semibold px-2 mt-2 mb-1">
-               Channels
-            </p>
-            <ul class="list-unstyled mb-0">
-               <li>
-                  <a href="#"
-                     class="d-flex align-items-center gap-2 px-2 py-1 rounded text-body text-decoration-none">
-                     <i class="bi bi-hash"></i><span>general</span>
-                  </a>
-               </li>
-               <li>
-                  <a href="#"
-                     class="d-flex align-items-center gap-2 px-2 py-1 rounded text-body text-decoration-none">
-                     <i class="bi bi-hash"></i><span>announcements</span>
-                  </a>
-               </li>
-            </ul>
-         </nav>
-         <a href="{% url 'profiles:profile_redirect' %}"
-            class="p-3 border-top d-flex align-items-center gap-2 text-decoration-none text-body link-info flex-shrink-0">
-            <i class="bi bi-person-circle fs-4"></i>
-            <div class="overflow-hidden flex-grow-1">
-               <p class="mb-0 small fw-semibold text-truncate">
-                  {{ user.get_full_name|default:user.username }}
-               </p>
-               <p class="mb-0 small text-truncate">
-                  {{ user.email }}
-               </p>
-            </div>
-         </a>
+         {% include "organization/partials/_sidebar_body.html" %}
       </div>
    </div>
 
@@ -223,23 +161,7 @@
 
             {# Events list — scrollable #}
             <div class="flex-grow-1 overflow-auto px-3 py-3 d-flex flex-column gap-3">
-               {% for _ in "123" %}
-                  <div class="rounded border bg-body p-3 d-flex gap-3">
-                     <div class="flex-shrink-0 d-flex flex-column align-items-center justify-content-center rounded bg-primary-subtle border border-info-subtle text-center px-2 py-1" style="min-width: 3rem;">
-                        <span class="text-primary small fw-bold text-uppercase" style="font-size: .65rem;">Month</span>
-                        <span class="text-primary fw-bold lh-1" style="font-size: 1.25rem;">--</span>
-                     </div>
-                     <div class="overflow-hidden">
-                        <p class="fw-semibold text-body mb-1 text-truncate">Event title placeholder</p>
-                        <p class="text-body-secondary small mb-1">
-                           <i class="bi bi-clock me-1"></i>00:00 – 00:00
-                        </p>
-                        <p class="text-body-secondary small mb-0 text-truncate">
-                           <i class="bi bi-geo-alt me-1"></i>Location or virtual link
-                        </p>
-                     </div>
-                  </div>
-               {% endfor %}
+               {% include "organization/partials/_events_panel_body.html" %}
             </div>
 
             {# Create event button — exec only #}
@@ -267,23 +189,7 @@
          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body d-flex flex-column px-3 py-3 gap-3">
-         {% for _ in "123" %}
-            <div class="rounded border bg-body p-3 d-flex gap-3">
-               <div class="flex-shrink-0 d-flex flex-column align-items-center justify-content-center rounded bg-primary-subtle border border-info-subtle text-center px-2 py-1" style="min-width: 3rem;">
-                  <span class="text-primary small fw-bold text-uppercase" style="font-size: .65rem;">Month</span>
-                  <span class="text-primary fw-bold lh-1" style="font-size: 1.25rem;">--</span>
-               </div>
-               <div class="overflow-hidden">
-                  <p class="fw-semibold text-body mb-1 text-truncate">Event title placeholder</p>
-                  <p class="text-body-secondary small mb-1">
-                     <i class="bi bi-clock me-1"></i>00:00 – 00:00
-                  </p>
-                  <p class="text-body-secondary small mb-0 text-truncate">
-                     <i class="bi bi-geo-alt me-1"></i>Location or virtual link
-                  </p>
-               </div>
-            </div>
-         {% endfor %}
+         {% include "organization/partials/_events_panel_body.html" %}
       </div>
       {% if user.is_exec %}
          <div class="px-4 py-3 border-top">
