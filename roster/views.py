@@ -8,10 +8,6 @@ def is_owner(user):
     return user.is_owner()
 
 @executive_required(redirect_url="organization:home")
-def roster_default(request):
-    return redirect("exec_panel:roster:roster", active_roster="members")
-
-@executive_required(redirect_url="organization:home")
 def roster(request, active_roster="members"):
     context = {
         "active_tab": "roster",
