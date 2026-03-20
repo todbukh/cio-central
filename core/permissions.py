@@ -41,6 +41,6 @@ def is_executive(user):
     return is_authenticated_user(user) and user.role in {user.Role.OWNER, user.Role.EXEC}
 
 def is_owner(user):
-    return is_authenticated_user(user) and user.status == user.Status.OWNER
+    return is_authenticated_user(user) and user.status == user.Role.OWNER
 
 # Add more helper functions here down the line as needed.

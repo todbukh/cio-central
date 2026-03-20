@@ -2,7 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from core.permissions import is_executive, is_owner
+from core.permissions import is_executive, is_owner as check_is_owner
 
 # Create your models here.
 class User(AbstractUser):
@@ -17,12 +17,12 @@ class User(AbstractUser):
         REJECTED = "REJECTED"
         BANNED = "BANNED"
 
-    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    uid = models.UUIDField(default=uuid.uuid4, editable=False)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.MEMBER)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
 
-    def is_owner(self): # FIXME: look into permissions.py
-        return is_owner(self)
+    def is_owner(self):
+        return check_is_owner(self)
 
     def __str__(self):
         return self.username
