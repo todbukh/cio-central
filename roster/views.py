@@ -4,9 +4,6 @@ from core.models import User
 from core.decorators import executive_required, owner_required
 
 # Create your views here.
-def is_owner(user):
-    return user.is_owner()
-
 @executive_required(redirect_url="organization:home")
 def roster(request, active_roster="members"):
     context = {
