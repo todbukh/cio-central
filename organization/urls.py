@@ -4,5 +4,7 @@ from . import views
 app_name = "organization"
 
 urlpatterns = [
-    path("messsaging/<str:channel>/", views.home, name="home"),
+    # this redirects "/" to "/messages/general/"
+    path("", views.home_redirect, name="home"),  # kept this as "organization:home" to avoid refactoring
+    path("messages/<str:channel>/", views.messages, name="messages"),
 ]
