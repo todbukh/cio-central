@@ -1,9 +1,14 @@
 from django.urls import path
-
 from . import views
 
 app_name = 'roster'
 
 urlpatterns = [
-    path("", views.roster, name="roster"),
+    path("", views.roster, kwargs={"active_roster": "members"}),
+    path("<str:active_roster>/", views.roster, name="roster"),
+    path("action/accept/<uuid:uid>/", views.accept, name="accept"),
+    path("action/reject/<uuid:uid>/", views.reject, name="reject"),
+    path("action/ban/<uuid:uid>/", views.ban, name="ban"),
+    path("action/renew_application/<uuid:uid>/", views.renew_application, name="renew_application"),
+    path("roster/set-role/<uuid:uid>/", views.set_role, name="set_role"),
 ]
