@@ -460,4 +460,9 @@ body {
     .form-floating > label::after {
         background-color: #{$input-bg} !important;
     }
+
+    // custom css utility class to change color to bg-secondary on hover
+    .hover-bg-secondary:hover {
+        background-color: $dark-bg-surface;
+    }
 }
