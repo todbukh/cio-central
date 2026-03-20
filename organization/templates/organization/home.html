@@ -98,10 +98,10 @@
                </button>
 
                <i class="bi bi-hash fs-5 text-body-secondary"></i>
-               <h1 class="h6 fw-semibold text-body mb-0">general</h1>
+               <h1 class="h6 fw-semibold text-body mb-0">{{ active_channel }}</h1>
 
                {# Mobile events toggle #}
-               <button class="btn btn-sm btn-outline-secondary d-xl-none ms-auto"
+               <button class="btn btn-sm btn-outline-primary d-xl-none ms-auto"
                        type="button"
                        data-bs-toggle="offcanvas"
                        data-bs-target="#eventsOffcanvas"
@@ -139,7 +139,7 @@
                   <input
                      type="text"
                      class="form-control form-control-sm border-0 bg-transparent text-body shadow-none"
-                     placeholder="Messaging coming soon…"
+                     placeholder="Message #{{ active_channel }}"
                      aria-label="Message input — not yet available"
                   >
                   <button class="btn btn-primary btn-sm">
@@ -155,7 +155,7 @@
 
             {# Events header #}
             <header class="px-4 py-3 border-bottom d-flex align-items-center gap-2 flex-shrink-0">
-               <i class="bi bi-calendar-event fs-5 text-body-secondary"></i>
+               <i class="bi bi-calendar-event fs-5 text-primary"></i>
                <h2 class="h6 fw-semibold text-body mb-0">Upcoming Events</h2>
             </header>
 
