@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from core.permissions import is_executive, is_owner
@@ -15,6 +17,7 @@ class User(AbstractUser):
         REJECTED = "REJECTED"
         BANNED = "BANNED"
 
+    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.MEMBER)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
 
