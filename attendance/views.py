@@ -19,8 +19,8 @@ def attendance(request):
     return render(request, "attendance/attendance.html", context)
 
 @executive_required(redirect_url="organization:home")
-def event_attendance(request, event_id):
-    event = get_object_or_404(Event, pk=event_id)
+def event_attendance(request, event_uid):
+    event = get_object_or_404(Event, uid=event_uid)
     existing_attendance_member_ids = Attendance.objects.filter(event=event).values_list("member_id", flat=True)
     new_attendance_members = User.objects.filter(status=User.Status.APPROVED).exclude(id__in=existing_attendance_member_ids)
     if new_attendance_members:
@@ -37,8 +37,8 @@ def event_attendance(request, event_id):
 
 @require_POST
 @executive_required(redirect_url="organization:home")
-def update_attendance(request, event_pk, member_pk):
-    attendance = get_object_or_404(Attendance, event_id=event_pk, member_id=member_pk)
+def update_attendance(request, event_uid, member_uid):
+    attendance = get_object_or_404(Attendance, event__uid=event_uid, member__uid=member_uid)
     attendance.status = request.POST["status"]
     attendance.save()
-    return redirect("exec_panel:attendance:event_attendance", event_id=event_pk)
+    return redirect("exec_panel:attendance:event_attendance", event_uid=event_uid)

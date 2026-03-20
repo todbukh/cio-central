@@ -17,4 +17,4 @@ class Attendance(models.Model):
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.UNSET)
 
     def __str__(self):
-        return self.user.username
+        return self.member.username
