@@ -12,7 +12,7 @@ def messages(request, channel):
     context = {
         "active_channel": channel,
         "channels": [
-            "general", "announcements"
+            "general", "announcements"  # TODO: fetch from channel table
         ]
     }
 
