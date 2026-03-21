@@ -17,21 +17,19 @@
       </div>
 
       {% if attendees %}
-        <div class="bg-body-secondary rounded border overflow-hidden">
+        <div class="bg-body-secondary rounded border overflow-hidden" style="max-width: 480px;">
           <div class="table-responsive">
             <table class="table mb-0 align-middle">
               <thead class="bg-body-tertiary">
-                  <tr>
-                    <th class="text-body-secondary fw-semibold ps-3 py-2 w-25">Member</th>
-                    <th class="text-body-secondary fw-semibold py-2 w-25">Status</th>
-                    <th class="text-body-secondary fw-semibold py-2 w-50">Update</th>
-                  </tr>
-                </thead>
+                <tr>
+                  <th class="text-body-secondary fw-semibold ps-3 py-2">Member</th>
+                  <th class="text-body-secondary fw-semibold py-2">Status</th>
+                </tr>
+              </thead>
               <tbody>
                 {% for record in attendees %}
                   <tr class="border-top">
 
-                    {# Member name #}
                     <td class="ps-3 py-3">
                       <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-person-circle text-body-secondary"></i>
@@ -41,50 +39,59 @@
                       </div>
                     </td>
 
-                    {# Current status badge #}
-                    <td class="py-3">
-                      {% if record.status == 'PRESENT' %}
-                        <span class="badge text-bg-success">Present</span>
-                      {% elif record.status == 'ABSENT' %}
-                        <span class="badge text-bg-danger">Absent</span>
-                      {% elif record.status == 'EXCUSED' %}
-                        <span class="badge text-bg-warning">Excused</span>
-                      {% else %}
-                        <span class="badge text-bg-info">Unset</span>
-                      {% endif %}
-                    </td>
-
-                    {# Update controls — one small form per status button #}
-                    <td class="py-3">
-                      <div class="d-flex flex-wrap gap-2">
-
-                        <form method="post"
-                              action="{% url 'exec_panel:attendance:update_attendance' event_uid=record.event.uid member_uid=record.member.uid %}">
-                          {% csrf_token %}
-                          <input type="hidden" name="status" value="PRESENT">
-                          <button type="submit" class="btn btn-outline-success btn-sm">
-                            <i class="bi bi-check-lg me-1"></i>Present
-                          </button>
-                        </form>
-
-                        <form method="post"
-                              action="{% url 'exec_panel:attendance:update_attendance' event_uid=record.event.uid member_uid=record.member.uid %}">
-                          {% csrf_token %}
-                          <input type="hidden" name="status" value="ABSENT">
-                          <button type="submit" class="btn btn-outline-danger btn-sm">
-                            <i class="bi bi-x-lg me-1"></i>Absent
-                          </button>
-                        </form>
-
-                        <form method="post"
-                              action="{% url 'exec_panel:attendance:update_attendance' event_uid=record.event.uid member_uid=record.member.uid %}">
-                          {% csrf_token %}
-                          <input type="hidden" name="status" value="EXCUSED">
-                          <button type="submit" class="btn btn-outline-warning btn-sm">
-                            <i class="bi bi-slash-circle me-1"></i>Excused
-                          </button>
-                        </form>
-
+                    <td class="py-3 pe-3">
+                      <div class="dropdown d-inline">
+                        <button class="btn btn-sm dropdown-toggle p-0 border-0"
+                                type="button"
+                                data-bs-toggle="dropdown">
+                          {% if record.status == 'PRESENT' %}
+                            <span class="badge text-bg-success">Present</span>
+                          {% elif record.status == 'ABSENT' %}
+                            <span class="badge text-bg-danger">Absent</span>
+                          {% elif record.status == 'EXCUSED' %}
+                            <span class="badge text-bg-warning">Excused</span>
+                          {% else %}
+                            <span class="badge text-bg-secondary">Unset</span>
+                          {% endif %}
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li>
+                            <form method="post" action="{% url 'exec_panel:attendance:update_attendance' event_uid=record.event.uid member_uid=record.member.uid %}">
+                              {% csrf_token %}
+                              <input type="hidden" name="status" value="PRESENT">
+                              <button type="submit" class="dropdown-item">
+                                <span class="badge text-bg-success me-2">Present</span>
+                              </button>
+                            </form>
+                          </li>
+                          <li>
+                            <form method="post" action="{% url 'exec_panel:attendance:update_attendance' event_uid=record.event.uid member_uid=record.member.uid %}">
+                              {% csrf_token %}
+                              <input type="hidden" name="status" value="ABSENT">
+                              <button type="submit" class="dropdown-item">
+                                <span class="badge text-bg-danger me-2">Absent</span>
+                              </button>
+                            </form>
+                          </li>
+                          <li>
+                            <form method="post" action="{% url 'exec_panel:attendance:update_attendance' event_uid=record.event.uid member_uid=record.member.uid %}">
+                              {% csrf_token %}
+                              <input type="hidden" name="status" value="EXCUSED">
+                              <button type="submit" class="dropdown-item">
+                                <span class="badge text-bg-warning me-2">Excused</span>
+                              </button>
+                            </form>
+                          </li>
+                          <li>
+                            <form method="post" action="{% url 'exec_panel:attendance:update_attendance' event_uid=record.event.uid member_uid=record.member.uid %}">
+                              {% csrf_token %}
+                              <input type="hidden" name="status" value="UNSET">
+                              <button type="submit" class="dropdown-item">
+                                <span class="badge text-bg-secondary me-2">Unset</span>
+                              </button>
+                            </form>
+                          </li>
+                        </ul>
                       </div>
                     </td>
 
