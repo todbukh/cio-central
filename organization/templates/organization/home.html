@@ -137,18 +137,27 @@
                     </section>
 
                     {# Message composer #}
-                    <footer class="px-3 px-md-4 py-3 border-top bg-body flex-shrink-0">
-                        <div class="d-flex align-items-center gap-2 p-2 rounded border bg-body-secondary">
-                            <input
+                    <footer id="messageComposerContainer" class="px-3 px-md-4 border-top bg-body flex-shrink-0 pt-4 pb-4">
+                        <form method="post" action="{% url "organization:messages" active_channel %}" autocomplete="off">
+                            {% csrf_token %}
+                            <div class="d-flex align-items-end gap-2 p-2 rounded border bg-body-secondary">
+                                <textarea
+                                    name="text"
                                     type="text"
+                                    required
+                                    rows="1"
+                                    id="messageTextBox"
                                     class="form-control form-control-sm border-0 bg-transparent text-body shadow-none"
                                     placeholder="Message #{{ active_channel }}"
-                                    aria-label="Message input — not yet available"
-                            >
-                            <button class="btn btn-primary btn-sm">
-                                <i class="bi bi-send-fill"></i>
-                            </button>
-                        </div>
+                                    aria-label="Message input"
+                                    style="resize: none;"
+                                ></textarea>
+                                <button id="messageSubmitButton" type="submit" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-send-fill"></i>
+                                </button>
+                            </div>
+                            <p id="messageInputError" class="text-danger mb-0 d-none"><small>Messages must be 2000 characters or fewer</small></p>
+                        </form>
                     </footer>
                 </div>
 
