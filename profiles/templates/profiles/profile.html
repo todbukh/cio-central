@@ -19,7 +19,18 @@
 
   <!-- Profile picture and username -->
   <div class="text-center mb-4">
-    <img src="https://placehold.co/120x120" alt="Profile picture" class="rounded-circle mb-3">
+    {% if is_owner %}
+      <!-- Hidden form for upload, similar to s3_demo -->
+      <form id="profile-pic-form" method="post" enctype="multipart/form-data" style="display: none;">
+        {% csrf_token %}
+        <input type="file" name="profile_picture" id="profile-pic-input" accept="image/*">
+      </form>
+      <!-- Clickable image for owners -->
+      <img id="profile-pic" src="{% if profile_user.profile.profile_picture %}{{ profile_user.profile.profile_picture.url }}{% else %}https://placehold.co/120x120{% endif %}" alt="Profile picture" class="rounded-circle mb-3" style="cursor: pointer;" title="Click to upload a new picture">
+    {% else %}
+      <!-- Non-clickable for others -->
+      <img src="{% if profile_user.profile.profile_picture %}{{ profile_user.profile.profile_picture.url }}{% else %}https://placehold.co/120x120{% endif %}" alt="Profile picture" class="rounded-circle mb-3">
+    {% endif %}
     <h2 class="text-body">{{ profile_user.username }}</h2>
   </div>
 
@@ -32,4 +43,16 @@
   </div>
 
 </div>
+
+{% if is_owner %}
+<script>
+  // JavaScript to handle click and auto-submit on file selection (mimics s3_demo's form behavior)
+  document.getElementById('profile-pic').addEventListener('click', function() {
+    document.getElementById('profile-pic-input').click();
+  });
+  document.getElementById('profile-pic-input').addEventListener('change', function() {
+    document.getElementById('profile-pic-form').submit();
+  });
+</script>
+{% endif %}
 {% endblock %}

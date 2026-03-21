@@ -10,11 +10,15 @@
       <i class="bi bi-pencil-square me-2"></i>Edit Profile
     </h4>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">  <!-- Add enctype for file uploads -->
       {% csrf_token %}
       <div class="mb-3">
         <label for="id_bio" class="form-label text-body">About Me</label>
         <textarea name="bio" id="id_bio" class="form-control bg-body text-body" rows="4">{{ form.bio.value|default:'' }}</textarea>
+      </div>
+      <div class="mb-3">
+        <label for="id_profile_picture" class="form-label text-body">Profile Picture</label>
+        {{ form.profile_picture }}  <!-- Render the file input -->
       </div>
       <div class="d-flex gap-2">
         <button type="submit" class="btn btn-primary">Save</button>

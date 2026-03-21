@@ -27,8 +27,10 @@ def profile_edit_view(request, username):
     profile = request.user.profile
 
     if request.method == "POST": # user wants to save changes to profile
-        form = ProfileEditForm(request.POST, instance=profile)
+        form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
+            if 'profile_picture' in request.FILES and profile.profile_picture:
+                profile.profile_picture.delete()
             form.save()
             return redirect("profiles:profile", username=username)
     else:                       # user just wants to view the edit page
