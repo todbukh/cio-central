@@ -2,18 +2,16 @@
 
 {% block tab %}
     <div class="container py-4">
-      <h2 class="text-muted text-center">{{ event.name|default:"This Event" }}</h2>
-      <div class="mb-4 d-flex align-items-center gap-3 flex-wrap">
-        <a href="{% url 'exec_panel:attendance:attendance' %}"
-           class="btn btn-outline-primary btn-sm">
-          <i class="bi bi-arrow-left me-1"></i>All Events
-        </a>
-        <div>
-          <h4 class="text-body mb-0">Event Attendance</h4>
-          <p class="text-body-secondary mb-0 small">
+      <div class="mb-4">
+          <a href="{% url 'exec_panel:attendance:attendance' %}"
+             class="btn btn-outline-secondary btn-sm mb-3">
+            <i class="bi bi-arrow-left me-1"></i>All Events
+          </a>
+          <h2 class="text-body fw-bold mb-0">{{ event.name|default:"This Event" }}</h2>
+          <p class="text-body-secondary mt-1 mb-0">
+            <i class="bi bi-people me-1"></i>
             {{ attendees.count }} member{{ attendees.count|pluralize }} listed
           </p>
-        </div>
       </div>
 
       {% if attendees %}
