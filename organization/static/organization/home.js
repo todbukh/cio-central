@@ -1,5 +1,5 @@
-// Credit to Gemini 3.1 Pro for suggesting using JS for this (and for showing me some of this logic, though I wrote this myself)
-
+// Credit to Gemini 3.1 Pro for suggesting using JS for scrolling message box down
+// (and for showing me some of this logic, though I wrote this myself)
 // adding this event listener is likely overkill, but it just ensures this won't fire until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", (_event) => {
     const messageContainer = document.getElementById("messageContainer");
