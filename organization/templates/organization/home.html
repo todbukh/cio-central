@@ -5,204 +5,214 @@
 {% block title %}{{ org_name|default:"CIO Central" }} — Home{% endblock %}
 
 {% block content %}
-{# Style block: Bootstrap has no utilities for viewport-minus-navbar height or arbitrary fixed widths. #}
-{# Adjust the 70px in .home-wrapper if your navbar height changes. #}
-<style>
-   .home-wrapper { height: calc(100vh - 80px); }
-   .sidebar-w    { width: 240px; min-width: 240px; }
-   .events-w     { width: 320px; min-width: 320px; }
-</style>
+    {# Style block: Bootstrap has no utilities for viewport-minus-navbar height or arbitrary fixed widths. #}
+    {# Adjust the 70px in .home-wrapper if your navbar height changes. #}
+    <style>
+        .home-wrapper {
+            height: calc(100vh - 80px);
+        }
 
-{# Outer wrapper — locks to remaining viewport height #}
-<div class="home-wrapper d-flex overflow-hidden">
+        .sidebar-w {
+            width: 240px;
+            min-width: 240px;
+        }
 
-   {# Sidebar — visible on lg+ only #}
-   <aside class="sidebar-w d-none d-lg-flex flex-column flex-shrink-0 bg-body-secondary border-end overflow-hidden">
+        .events-w {
+            width: 320px;
+            min-width: 320px;
+        }
+    </style>
 
-      {# Org identity #}
-      <div class="p-3 border-bottom d-flex align-items-center gap-3 flex-shrink-0">
-         <div class="flex-shrink-0">
-            <img
-               src="https://placehold.co/48x48/png"
-               alt="{{ org_name|default:'Organization' }} logo"
-               class="rounded"
-               width="48"
-               height="48"
-            >
-         </div>
-         <div class="overflow-hidden">
-            <p class="fw-semibold text-body mb-0 text-truncate">
-               {{ org_name|default:"My Organization" }}
-            </p>
-            {% if user.is_exec %}
-               <a href="{% url 'exec_panel:roster:roster' %}"
-                  class="text-body-secondary small mb-0 text-truncate link-info text-decoration-none">
-                  <i class="bi bi-people-fill me-1"></i>Members
-               </a>
-            {% endif %}
-         </div>
-      </div>
+    {# Outer wrapper — locks to remaining viewport height #}
+    <div class="home-wrapper d-flex overflow-hidden">
 
-      {# Channel nav + user footer #}
-      {% include "organization/partials/_sidebar_body.html" %}
-   </aside>
+        {# Sidebar — visible on lg+ only #}
+        <aside class="sidebar-w d-none d-lg-flex flex-column flex-shrink-0 bg-body-secondary border-end overflow-hidden">
 
-   {# Sidebar offcanvas — mobile/tablet, below lg #}
-   <div class="offcanvas offcanvas-start bg-body-secondary"
-        tabindex="-1" id="sidebarOffcanvas"
-        aria-labelledby="sidebarOffcanvasLabel">
-      <div class="offcanvas-header border-bottom">
-         <div class="d-flex align-items-center gap-3">
-            <img
-               src="https://placehold.co/48x48/png"
-               alt="{{ org_name|default:'Organization' }} logo"
-               class="rounded"
-               width="48"
-               height="48"
-            >
-            <div class="overflow-hidden">
-               <p id="sidebarOffcanvasLabel" class="fw-semibold text-body mb-0 text-truncate">
-                  {{ org_name|default:"My Organization" }}
-               </p>
-               {% if user.is_exec %}
-                  <a href="{% url 'exec_panel:roster:roster' %}"
-                     class="text-body-secondary small link-info text-decoration-none">
-                     <i class="bi bi-people-fill me-1"></i>Members
-                  </a>
-               {% endif %}
-            </div>
-         </div>
-         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body d-flex flex-column p-0">
-         {% include "organization/partials/_sidebar_body.html" %}
-      </div>
-   </div>
-
-   {# Main content — messaging + events side-by-side #}
-   <main class="d-flex flex-column flex-grow-1 overflow-hidden bg-body">
-      <div class="d-flex flex-grow-1 overflow-hidden">
-
-         {# Messaging column #}
-         <div class="d-flex flex-column flex-grow-1 overflow-hidden">
-
-            {# Channel header #}
-            <header class="px-3 px-md-4 py-3 border-bottom d-flex align-items-center gap-2 flex-shrink-0">
-               {# Mobile sidebar toggle #}
-               <button class="btn btn-sm btn-outline-secondary d-lg-none me-1"
-                       type="button"
-                       data-bs-toggle="offcanvas"
-                       data-bs-target="#sidebarOffcanvas"
-                       aria-controls="sidebarOffcanvas"
-                       aria-label="Open sidebar">
-                  <i class="bi bi-list"></i>
-               </button>
-
-               <i class="bi bi-hash fs-5 text-body-secondary"></i>
-               <h1 class="h6 fw-semibold text-body mb-0">{{ active_channel }}</h1>
-
-               {# Mobile events toggle #}
-               <button class="btn btn-sm btn-outline-primary d-xl-none ms-auto"
-                       type="button"
-                       data-bs-toggle="offcanvas"
-                       data-bs-target="#eventsOffcanvas"
-                       aria-controls="eventsOffcanvas"
-                       aria-label="Show events">
-                  <i class="bi bi-calendar-event"></i>
-               </button>
-            </header>
-
-            {# Messages feed — the only scrollable region on desktop #}
-            <section id="messageContainer" class="flex-grow-1 overflow-auto px-3 px-md-4 py-4">
-               {% for message in messages %}
-                  <div class="d-flex flex-column align-items-start gap-2 p-3 hover-bg-secondary">
-                     <div class="d-flex flex-row align-items-start gap-2">
-                        <p class="mb-0 fw-bold text-light">{{ message.username }}</p>
-                        <p class="mb-0 text-secondary">-</p>
-                        <p class="mb-0 text-secondary"><small>{{ message.timestamp }}</small></p>
-                     </div>
-                     <p class="mb-0 text-secondary">
-                        {{ message.text }}
-                     </p>
-                  </div>
-               {% empty %}
-                  <div class="d-flex align-items-center justify-content-center h-100">
-                     <div class="text-center">
-                        <i class="bi bi-chat-square-dots text-primary" style="font-size: 3.5rem;"></i>
-                     </div>
-                  </div>
-               {% endfor %}
-            </section>
-
-            {# Message composer #}
-            <footer class="px-3 px-md-4 py-3 border-top bg-body flex-shrink-0">
-               <div class="d-flex align-items-center gap-2 p-2 rounded border bg-body-secondary">
-                  <input
-                     type="text"
-                     class="form-control form-control-sm border-0 bg-transparent text-body shadow-none"
-                     placeholder="Message #{{ active_channel }}"
-                     aria-label="Message input — not yet available"
-                  >
-                  <button class="btn btn-primary btn-sm">
-                     <i class="bi bi-send-fill"></i>
-                  </button>
-               </div>
-            </footer>
-         </div>
-
-         {# Events panel — desktop, xl+ #}
-         <aside class="events-w d-none d-xl-flex flex-column flex-shrink-0 bg-body-secondary border-start overflow-hidden"
-                aria-label="Upcoming events">
-
-            {# Events header #}
-            <header class="px-4 py-3 border-bottom d-flex align-items-center gap-2 flex-shrink-0">
-               <i class="bi bi-calendar-event fs-5 text-primary"></i>
-               <h2 class="h6 fw-semibold text-body mb-0">Upcoming Events</h2>
-            </header>
-
-            {# Events list — scrollable #}
-            <div class="flex-grow-1 overflow-auto px-3 py-3 d-flex flex-column gap-3">
-               {% include "organization/partials/_events_panel_body.html" %}
+            {# Org identity #}
+            <div class="p-3 border-bottom d-flex align-items-center gap-3 flex-shrink-0">
+                <div class="flex-shrink-0">
+                    <img
+                            src="https://placehold.co/48x48/png"
+                            alt="{{ org_name|default:'Organization' }} logo"
+                            class="rounded"
+                            width="48"
+                            height="48"
+                    >
+                </div>
+                <div class="overflow-hidden">
+                    <p class="fw-semibold text-body mb-0 text-truncate">
+                        {{ org_name|default:"My Organization" }}
+                    </p>
+                    {% if user.is_exec %}
+                        <a href="{% url 'exec_panel:roster:roster' %}"
+                           class="text-body-secondary small mb-0 text-truncate link-info text-decoration-none">
+                            <i class="bi bi-people-fill me-1"></i>Members
+                        </a>
+                    {% endif %}
+                </div>
             </div>
 
-            {# Create event button — exec only #}
+            {# Channel nav + user footer #}
+            {% include "organization/partials/_sidebar_body.html" %}
+        </aside>
+
+        {# Sidebar offcanvas — mobile/tablet, below lg #}
+        <div class="offcanvas offcanvas-start bg-body-secondary"
+             tabindex="-1" id="sidebarOffcanvas"
+             aria-labelledby="sidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <div class="d-flex align-items-center gap-3">
+                    <img
+                            src="https://placehold.co/48x48/png"
+                            alt="{{ org_name|default:'Organization' }} logo"
+                            class="rounded"
+                            width="48"
+                            height="48"
+                    >
+                    <div class="overflow-hidden">
+                        <p id="sidebarOffcanvasLabel" class="fw-semibold text-body mb-0 text-truncate">
+                            {{ org_name|default:"My Organization" }}
+                        </p>
+                        {% if user.is_exec %}
+                            <a href="{% url 'exec_panel:roster:roster' %}"
+                               class="text-body-secondary small link-info text-decoration-none">
+                                <i class="bi bi-people-fill me-1"></i>Members
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column p-0">
+                {% include "organization/partials/_sidebar_body.html" %}
+            </div>
+        </div>
+
+        {# Main content — messaging + events side-by-side #}
+        <main class="d-flex flex-column flex-grow-1 overflow-hidden bg-body">
+            <div class="d-flex flex-grow-1 overflow-hidden">
+
+                {# Messaging column #}
+                <div class="d-flex flex-column flex-grow-1 overflow-hidden">
+
+                    {# Channel header #}
+                    <header class="px-3 px-md-4 py-3 border-bottom d-flex align-items-center gap-2 flex-shrink-0">
+                        {# Mobile sidebar toggle #}
+                        <button class="btn btn-sm btn-outline-secondary d-lg-none me-1"
+                                type="button"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#sidebarOffcanvas"
+                                aria-controls="sidebarOffcanvas"
+                                aria-label="Open sidebar">
+                            <i class="bi bi-list"></i>
+                        </button>
+
+                        <i class="bi bi-hash fs-5 text-body-secondary"></i>
+                        <h1 class="h6 fw-semibold text-body mb-0">{{ active_channel }}</h1>
+
+                        {# Mobile events toggle #}
+                        <button class="btn btn-sm btn-outline-primary d-xl-none ms-auto"
+                                type="button"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#eventsOffcanvas"
+                                aria-controls="eventsOffcanvas"
+                                aria-label="Show events">
+                            <i class="bi bi-calendar-event"></i>
+                        </button>
+                    </header>
+
+                    {# Messages feed — the only scrollable region on desktop #}
+                    <section id="messageContainer" class="flex-grow-1 overflow-auto px-3 px-md-4 py-4">
+                        {% for message in messages %}
+                            <div class="d-flex flex-column align-items-start gap-2 p-3 hover-bg-secondary">
+                                <div class="d-flex flex-row align-items-start gap-2">
+                                    <p class="mb-0 fw-bold text-light">{{ message.username }}</p>
+                                    <p class="mb-0 text-secondary">-</p>
+                                    <p class="mb-0 text-secondary"><small>{{ message.timestamp }}</small></p>
+                                </div>
+                                <p class="mb-0 text-secondary">
+                                    {{ message.text }}
+                                </p>
+                            </div>
+                        {% empty %}
+                            <div class="d-flex align-items-center justify-content-center h-100">
+                                <div class="text-center">
+                                    <i class="bi bi-chat-square-dots text-primary" style="font-size: 3.5rem;"></i>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </section>
+
+                    {# Message composer #}
+                    <footer class="px-3 px-md-4 py-3 border-top bg-body flex-shrink-0">
+                        <div class="d-flex align-items-center gap-2 p-2 rounded border bg-body-secondary">
+                            <input
+                                    type="text"
+                                    class="form-control form-control-sm border-0 bg-transparent text-body shadow-none"
+                                    placeholder="Message #{{ active_channel }}"
+                                    aria-label="Message input — not yet available"
+                            >
+                            <button class="btn btn-primary btn-sm">
+                                <i class="bi bi-send-fill"></i>
+                            </button>
+                        </div>
+                    </footer>
+                </div>
+
+                {# Events panel — desktop, xl+ #}
+                <aside class="events-w d-none d-xl-flex flex-column flex-shrink-0 bg-body-secondary border-start overflow-hidden"
+                       aria-label="Upcoming events">
+
+                    {# Events header #}
+                    <header class="px-4 py-3 border-bottom d-flex align-items-center gap-2 flex-shrink-0">
+                        <i class="bi bi-calendar-event fs-5 text-primary"></i>
+                        <h2 class="h6 fw-semibold text-body mb-0">Upcoming Events</h2>
+                    </header>
+
+                    {# Events list — scrollable #}
+                    <div class="flex-grow-1 overflow-auto px-3 py-3 d-flex flex-column gap-3">
+                        {% include "organization/partials/_events_panel_body.html" %}
+                    </div>
+
+                    {# Create event button — exec only #}
+                    {% if user.is_exec %}
+                        <div class="px-4 py-3 border-top flex-shrink-0">
+                            <button class="btn btn-outline-primary btn-sm w-100">
+                                <i class="bi bi-calendar-plus me-1"></i>Create Event
+                            </button>
+                        </div>
+                    {% endif %}
+                </aside>
+
+            </div>
+        </main>
+
+        {# Events offcanvas — tablet/mobile, below xl #}
+        <div class="offcanvas offcanvas-end bg-body-secondary"
+             tabindex="-1" id="eventsOffcanvas"
+             aria-labelledby="eventsOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-calendar-event fs-5 text-body-secondary"></i>
+                    <h5 id="eventsOffcanvasLabel" class="mb-0">Upcoming Events</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column px-3 py-3 gap-3">
+                {% include "organization/partials/_events_panel_body.html" %}
+            </div>
             {% if user.is_exec %}
-               <div class="px-4 py-3 border-top flex-shrink-0">
-                  <button class="btn btn-outline-primary btn-sm w-100">
-                     <i class="bi bi-calendar-plus me-1"></i>Create Event
-                  </button>
-               </div>
+                <div class="px-4 py-3 border-top">
+                    <button class="btn btn-outline-primary btn-sm w-100">
+                        <i class="bi bi-calendar-plus me-1"></i>Create Event
+                    </button>
+                </div>
             {% endif %}
-         </aside>
+        </div>
 
-      </div>
-   </main>
+    </div>
 
-   {# Events offcanvas — tablet/mobile, below xl #}
-   <div class="offcanvas offcanvas-end bg-body-secondary"
-        tabindex="-1" id="eventsOffcanvas"
-        aria-labelledby="eventsOffcanvasLabel">
-      <div class="offcanvas-header border-bottom">
-         <div class="d-flex align-items-center gap-2">
-            <i class="bi bi-calendar-event fs-5 text-body-secondary"></i>
-            <h5 id="eventsOffcanvasLabel" class="mb-0">Upcoming Events</h5>
-         </div>
-         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body d-flex flex-column px-3 py-3 gap-3">
-         {% include "organization/partials/_events_panel_body.html" %}
-      </div>
-      {% if user.is_exec %}
-         <div class="px-4 py-3 border-top">
-            <button class="btn btn-outline-primary btn-sm w-100">
-               <i class="bi bi-calendar-plus me-1"></i>Create Event
-            </button>
-         </div>
-      {% endif %}
-   </div>
-
-</div>
-
-{# This script scrolls the messages to the bottom #}
-<script src="{% static 'organization/home.js' %}"></script>
+    {# This script scrolls the messages to the bottom #}
+    <script src="{% static 'organization/home.js' %}"></script>
 {% endblock %}
