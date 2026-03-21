@@ -4,6 +4,8 @@
 
 {% block title %}{{ org_name|default:"CIO Central" }} — Home{% endblock %}
 
+{% block body_classes %}vh-100 overflow-hidden{% endblock %}
+
 {% block content %}
     {# Style block: Bootstrap has no utilities for viewport-minus-navbar height or arbitrary fixed widths. #}
     {# Adjust the 70px in .home-wrapper if your navbar height changes. #}
