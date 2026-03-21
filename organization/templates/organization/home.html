@@ -117,7 +117,7 @@
                         {% for message in messages %}
                             <div class="d-flex flex-column align-items-start gap-2 p-3 hover-bg-secondary">
                                 <div class="d-flex flex-row align-items-start gap-2">
-                                    <p class="mb-0 fw-bold text-light">{{ message.username }}</p>
+                                    <p class="mb-0 fw-bold text-light">{{ message.user.username }}</p>
                                     <p class="mb-0 text-secondary">-</p>
                                     <p class="mb-0 text-secondary"><small>{{ message.timestamp }}</small></p>
                                 </div>
