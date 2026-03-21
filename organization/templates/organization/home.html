@@ -1,5 +1,6 @@
 {# generated with Claude Opus 4.6 Extended #}
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ org_name|default:"CIO Central" }} — Home{% endblock %}
 
@@ -112,7 +113,7 @@
             </header>
 
             {# Messages feed — the only scrollable region on desktop #}
-            <section class="flex-grow-1 overflow-auto px-3 px-md-4 py-4">
+            <section id="messageContainer" class="flex-grow-1 overflow-auto px-3 px-md-4 py-4">
                {% for message in messages %}
                   <div class="d-flex flex-column align-items-start gap-2 p-3 hover-bg-secondary">
                      <div class="d-flex flex-row align-items-start gap-2">
@@ -201,4 +202,7 @@
    </div>
 
 </div>
+
+{# This script scrolls the messages to the bottom #}
+<script src="{% static 'organization/home.js' %}"></script>
 {% endblock %}
