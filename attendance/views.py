@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
@@ -9,11 +11,14 @@ from events.models import Event
 
 # Create your views here.
 @executive_required(redirect_url="organization:home")
-def attendance(request):
-    events = Event.objects.all().order_by("date")
+def attendance(request, date_filter="today"):
+    if date_filter in ["all", "ALL"]:
+        events = Event.objects.all().order_by("date")
+    else: events = Event.objects.filter(date__date=datetime.date.today())
     context = {
         "active_tab": "attendance",
         "events": events,
+        "date_filter": date_filter,
     }
 
     return render(request, "attendance/attendance.html", context)
