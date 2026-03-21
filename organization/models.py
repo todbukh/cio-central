@@ -15,4 +15,4 @@ class Message(models.Model):
     sent_at = models.DateTimeField(auto_now=True)
 
     def timestamp(self):
-        return self.sent_at.strftime("%m/%d/%Y %I:%M%p")
+        return self.sent_at.strftime("%m/%d/%Y, %I:%M%p")
