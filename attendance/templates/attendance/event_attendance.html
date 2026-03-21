@@ -17,17 +17,16 @@
       </div>
 
       {% if attendees %}
-        <div class="bg-body-secondary rounded border overflow-hidden" style="max-width: 480px;">
-          <div class="table-responsive">
-            <table class="table mb-0 align-middle">
-              <thead class="bg-body-tertiary">
-                <tr>
-                  <th class="text-body-secondary fw-semibold ps-3 py-2">Member</th>
-                  <th class="text-body-secondary fw-semibold py-2">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for record in attendees %}
+        <div class="bg-body-secondary rounded border overflow-visible" style="max-width: 550px;">
+          <table class="table mb-0 align-middle">
+            <thead class="bg-body-tertiary">
+              <tr>
+                <th class="text-body-secondary fw-semibold ps-3 py-2">Member</th>
+                <th class="text-body-secondary fw-semibold py-2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in attendees %}
                   <tr class="border-top">
 
                     <td class="ps-3 py-3">
@@ -97,9 +96,8 @@
 
                   </tr>
                 {% endfor %}
-              </tbody>
-            </table>
-          </div>
+            </tbody>
+          </table>
         </div>
 
       {% else %}
