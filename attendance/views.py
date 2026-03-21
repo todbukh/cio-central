@@ -1,6 +1,5 @@
 import datetime
 
-from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 

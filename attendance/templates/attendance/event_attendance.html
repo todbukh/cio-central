@@ -29,7 +29,15 @@
 
                     <td class="ps-3 py-3">
                       <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-person-circle text-body-secondary"></i>
+                        {% if record.member.profile.profile_picture %}
+                          <img src="{{ record.member.profile.profile_picture.url }}"
+                               class="rounded-circle"
+                               width="32"
+                               height="32"
+                               alt="{{ record.member.get_full_name }}">
+                        {% else %}
+                          <i class="bi bi-person-circle text-body-secondary"></i>
+                        {% endif %}
                         <span class="text-body">
                           {{ record.member.last_name }}, {{ record.member.first_name }}
                         </span>
