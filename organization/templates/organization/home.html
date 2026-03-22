@@ -27,7 +27,7 @@
             {{ org_name |default:"My Organization" }}
           </p>
             {% if user.is_exec %}
-              <a href="{% url 'exec_panel:roster:roster' 'members' %}" class="text-body-secondary small mb-0 text-truncate link-info text-decoration-none">
+              <a href="{% url 'exec_panel:roster:roster' %}" class="text-body-secondary small mb-0 text-truncate link-info text-decoration-none">
                 <i class="bi bi-people-fill me-1"></i>Members
               </a>
             {% endif %}

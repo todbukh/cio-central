@@ -4,7 +4,7 @@ from . import views
 app_name = 'roster'
 
 urlpatterns = [
-    path("", views.roster, kwargs={"active_roster": "members"}),
+    path("", views.roster, name="roster"),
     path("<str:active_roster>/", views.roster, name="roster"),
     path("action/accept/<uuid:uid>/", views.accept, name="accept"),
     path("action/reject/<uuid:uid>/", views.reject, name="reject"),

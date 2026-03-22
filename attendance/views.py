@@ -42,7 +42,7 @@ def event_attendance(request, event_uid):
 @require_POST
 @executive_required(redirect_url="organization:home")
 def update_attendance(request, event_uid, member_uid):
-    attendance = get_object_or_404(Attendance, event__uid=event_uid, member__uid=member_uid)
-    attendance.status = request.POST["status"]
-    attendance.save()
+    member_attendance = get_object_or_404(Attendance, event__uid=event_uid, member__uid=member_uid)
+    member_attendance.status = request.POST["status"]
+    member_attendance.save()
     return redirect("exec_panel:attendance:event_attendance", event_uid=event_uid)

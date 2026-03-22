@@ -21,11 +21,11 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.MEMBER)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
 
+    def is_exec(self):
+        return is_executive(self)
+
     def is_owner(self):
         return check_is_owner(self)
 
     def __str__(self):
         return self.username
-
-    def is_exec(self):
-        return is_executive(self)
