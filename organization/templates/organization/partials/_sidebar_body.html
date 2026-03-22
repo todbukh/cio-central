@@ -24,7 +24,7 @@
                     {% if user.is_exec and not channel.builtin %}
                         <a class="text-decoration-none d-inline ps-1"
                            href="{% url "organization:edit_channel" channel.name %}"
-                           aria-label="Edit {{ channel.name }}"
+                           aria-label="Edit channel {{ channel.name }}"
                         >
                             <i class="bi bi-three-dots"></i>
                         </a>
