@@ -2,11 +2,11 @@
 
 {% extends 'base.html' %}
 
-{% block title %}{{ organization.name|default:"Your Organization" }} — Home{% endblock %}
+{% block title %}{{ org_name |default:"CIO Central" }} — Home{% endblock %}
 
 {% block content %}
 <div class="container-fluid px-0 h-100">
-  <div class="row g-0" style="min-height: calc(100vh - 56px);">
+  <div class="row g-0" style="min-height: calc(100vh - 80px);">
 
     {# ── Sidebar ── #}
     <aside class="col-12 col-lg-3 col-xl-2 bg-body-secondary border-end d-flex flex-column">
@@ -16,7 +16,7 @@
         <div class="flex-shrink-0">
           <img
             src="https://placehold.co/48x48/png"
-            alt="{{ organization.name|default:'Organization' }} logo"
+            alt="{{ org_name|default:'Organization' }} logo"
             class="rounded"
             width="48"
             height="48"
@@ -24,10 +24,10 @@
         </div>
         <div class="overflow-hidden">
           <p class="fw-semibold text-body mb-0 text-truncate">
-            {{ organization.name|default:"My Organization" }}
+            {{ org_name |default:"My Organization" }}
           </p>
-            {% if request.user.is_exec %}
-              <a href="{% url 'exec_panel:executive' tab='roster' %}" class="text-body-secondary small mb-0 text-truncate link-info text-decoration-none">
+            {% if user.is_exec %}
+              <a href="{% url 'exec_panel:roster:roster' %}" class="text-body-secondary small mb-0 text-truncate link-info text-decoration-none">
                 <i class="bi bi-people-fill me-1"></i>Members
               </a>
             {% endif %}
@@ -62,10 +62,10 @@
         <i class="bi bi-person-circle fs-4"></i>
         <div class="overflow-hidden flex-grow-1">
           <p class="mb-0 small fw-semibold text-truncate">
-            {{ request.user.get_full_name|default:request.user.username }}
+            {{ user.get_full_name|default:user.username }}
           </p>
           <p class="mb-0 small text-truncate">
-            {{ request.user.email }}
+            {{ user.email }}
           </p>
         </div>
       </a>
@@ -90,19 +90,6 @@
               <span class="badge text-bg-info">
                 <i class="bi bi-people-fill me-1"></i>Coming Soon
               </span>
-
-              {# Toggle button — visible only on xl+ where the panel is inline #}
-              <button
-                class="btn btn-outline-primary btn-sm d-none d-xl-inline-flex align-items-center gap-1"
-                id="events-toggle-btn"
-                type="button"
-                aria-expanded="true"
-                aria-controls="events-panel"
-                title="Toggle events panel"
-              >
-                <i class="bi bi-calendar-event"></i>
-                <i class="bi bi-chevron-right" id="events-toggle-icon"></i>
-              </button>
             </div>
           </header>
 
@@ -127,10 +114,9 @@
                 type="text"
                 class="form-control form-control-sm border-0 bg-transparent text-body shadow-none"
                 placeholder="Messaging coming soon…"
-                disabled
                 aria-label="Message input — not yet available"
               >
-              <button class="btn btn-primary btn-sm" disabled>
+              <button class="btn btn-primary btn-sm">
                 <i class="bi bi-send-fill"></i>
               </button>
             </div>
@@ -145,35 +131,18 @@
 
         {# ── Events panel ── #}
 
-        {# Mobile collapse trigger — hidden on xl+ #}
+        {# Mobile events panel #}
         <div class="d-xl-none border-top">
-          <button
-            class="btn btn-outline-primary btn-sm w-100 rounded-0 py-2 d-flex align-items-center justify-content-center gap-2"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#events-panel-mobile"
-            aria-expanded="false"
-            aria-controls="events-panel-mobile"
-            id="events-mobile-toggle"
-          >
-            <i class="bi bi-calendar-event"></i>
-            <span>Upcoming Events</span>
-            <i class="bi bi-chevron-down ms-1" id="events-mobile-icon"></i>
-          </button>
-        </div>
-
-        {# Mobile collapsible wrapper #}
-        <div class="collapse d-xl-none" id="events-panel-mobile">
-          {% include "core/partials/_events_panel_body.html" with panel_id="events-mobile" user=request.user%}
+          {% include "organization/partials/_events_panel_body.html"%}
         </div>
 
         {# Desktop inline panel — hidden on smaller screens #}
         <aside
-          class="d-none d-xl-flex flex-column bg-body-secondary border-start events-panel-desktop"
-          id="events-panel"
+          class="d-none d-xl-flex flex-column bg-body-secondary border-start"
+          style="width: 320px; min-width: 320px;"
           aria-label="Upcoming events"
         >
-          {% include "core/partials/_events_panel_body.html" with panel_id="events-desktop" user=request.user %}
+          {% include "organization/partials/_events_panel_body.html"%}
         </aside>
 
       </div>
@@ -182,56 +151,4 @@
 
   </div>
 </div>
-
-<style>
-  .events-panel-desktop {
-    width: 320px;
-    min-width: 320px;
-    overflow: hidden;
-    transition: width 0.25s ease, min-width 0.25s ease, opacity 0.2s ease;
-  }
-  .events-panel-desktop.events-collapsed {
-    width: 0;
-    min-width: 0;
-    opacity: 0;
-    pointer-events: none;
-  }
-</style>
-
-<script>
-  (function () {
-    const panel      = document.getElementById('events-panel');
-    const toggleBtn  = document.getElementById('events-toggle-btn');
-    const toggleIcon = document.getElementById('events-toggle-icon');
-
-    if (!panel || !toggleBtn) return;
-
-    function setCollapsed(collapsed) {
-      panel.classList.toggle('events-collapsed', collapsed);
-      toggleBtn.setAttribute('aria-expanded', String(!collapsed));
-      // Flip the chevron: point right when panel is hidden (click to reveal),
-      // point left when panel is visible (click to hide).
-      toggleIcon.className = collapsed
-        ? 'bi bi-chevron-left'
-        : 'bi bi-chevron-right';
-    }
-
-    toggleBtn.addEventListener('click', function () {
-      const isCollapsed = panel.classList.contains('events-collapsed');
-      setCollapsed(!isCollapsed);
-    });
-
-    // Mirror the chevron for the mobile Bootstrap collapse button.
-    const mobileToggle = document.getElementById('events-mobile-toggle');
-    const mobileIcon   = document.getElementById('events-mobile-icon');
-    if (mobileToggle && mobileIcon) {
-      mobileToggle.addEventListener('click', function () {
-        const expanded = mobileToggle.getAttribute('aria-expanded') === 'true';
-        mobileIcon.className = expanded
-          ? 'bi bi-chevron-down ms-1'
-          : 'bi bi-chevron-up ms-1';
-      });
-    }
-  })();
-</script>
 {% endblock %}

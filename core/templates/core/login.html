@@ -1,5 +1,6 @@
 {# Base bootstrap in template generate by Google Gemini 3 Pro #}
 {% extends 'base-no-nav.html' %}
+{% load static %}
 
 {% load socialaccount %}
 
@@ -10,12 +11,12 @@
     <div class="row w-100 justify-content-center">
         <div class="col-12 col-md-8 col-lg-5 col-xl-4 text-center">
 
-{#            <div class="mb-4">#}
-{#                <img src="https://placehold.co/120x120/png" alt="CIO Central Logo" class="rounded-circle border border-info-subtle">#}
-{#            </div>#}
+            <div class="mb-4">
+                <img src="{% static 'images/logo-full-dark-bg.png' %}" width="400" class="img-fluid" alt="CIO Central Logo">
+            </div>
 
             <div class="p-4 p-md-5 bg-body-secondary rounded">
-                <h1 class="h3 mb-2 text-body">CIO Central</h1>
+{#                <h1 class="h3 mb-2 text-body">CIO Central</h1>#}
                 <p class="text-body-secondary mb-4">For all your CIO management needs.</p>
 
                 <form method="post" action="{% provider_login_url "google" process="login" %}">
