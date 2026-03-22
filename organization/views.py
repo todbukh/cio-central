@@ -5,7 +5,7 @@ from django.views.decorators.http import require_POST
 
 from core.decorators import executive_required
 from .forms import MessageForm, CreateChannelForm
-from .models import *
+from .models import Channel, Message
 
 
 @login_required(login_url="/login/")
