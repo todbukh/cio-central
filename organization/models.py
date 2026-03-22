@@ -12,7 +12,7 @@ class Message(models.Model):
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=2000)
-    sent_at = models.DateTimeField(auto_now=True)
+    sent_at = models.DateTimeField(auto_now_add=True)
 
     def timestamp(self):
         return self.sent_at.strftime("%m/%d/%Y, %I:%M%p")
