@@ -18,5 +18,6 @@ class ChannelForm(forms.ModelForm):
         error_messages = {
             "name": {
                 "unique": "A channel with that name already exists.",
+                "invalid": "Channel names may consist of only letters, numbers, underscores or hyphens."
             }
         }
