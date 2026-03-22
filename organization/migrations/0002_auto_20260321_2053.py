@@ -13,7 +13,7 @@ def create_builtin_channels(apps, schema_editor):
         name="general",
         defaults={
             "exec_only": True,
-            "built_in": True
+            "builtin": True
         }
     )
 
@@ -21,7 +21,7 @@ def create_builtin_channels(apps, schema_editor):
         name="announcements",
         defaults={
             "exec_only": True,
-            "built_in": True
+            "builtin": True
         }
     )
 
