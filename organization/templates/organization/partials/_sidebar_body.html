@@ -6,7 +6,7 @@
             Channels
         </p>
         {% if user.is_exec %}
-            <a href="{% url "organization:create_channel" %}"><i class="bi bi-plus-lg"></i></a>
+            <a href="{% url "organization:create_channel" %}" aria-label="Create channel"><i class="bi bi-plus-lg"></i></a>
         {% endif %}
     </div>
     <ul class="list-unstyled mb-0">
