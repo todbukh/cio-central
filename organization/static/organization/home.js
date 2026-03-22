@@ -51,11 +51,7 @@ function autoResizeTextArea(textArea) {
 }
 
 function displayInputErrorMessage(messageTextBox, inputErrorMessageElement, messageSubmitButton, messageComposerContainer) {
-    let messageLength = 0;
-    for (let c of messageTextBox.value) {
-        if (c === "\n") messageLength += 2;
-        else messageLength += 1;
-    }
+    const messageLength = getTextAreaInputLengthDoubleCountingNewlines(messageTextBox);
 
     if (messageLength > 2000){
         inputErrorMessageElement.className = "text-danger";  // show error message
@@ -86,4 +82,14 @@ function scrollMessagesToBottom() {
 function scrollMessagesBy(x, y) {
     const messageContainer = document.getElementById("messageContainer");
     messageContainer.scrollBy(x, y);
+}
+
+// newlines are double counted since they are sent as 2 chars to the backend
+function getTextAreaInputLengthDoubleCountingNewlines(textArea) {
+    let textAreaLength = 0;
+    for (let c of textArea.value) {
+        if (c === "\n") textAreaLength += 2;
+        else textAreaLength += 1;
+    }
+    return textAreaLength;
 }
