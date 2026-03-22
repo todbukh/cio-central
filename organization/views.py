@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.http.response import HttpResponseForbidden, Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 
 from .forms import MessageForm
 from .models import *
@@ -34,3 +36,19 @@ def messages(request, channel):
     }
 
     return render(request, 'organization/home.html', context)
+
+
+@require_POST
+@login_required(login_url="/login/")
+def delete_message(request):
+    # credit to Claude Opus 4.6 for suggesting get_object_or_404 and .get("id")
+    message_id = request.POST.get("id")
+    if message_id is None: return Http404("Message does not exist")
+    message = get_object_or_404(Message, id=message_id)
+
+    if request.user.is_exec() or request.user.username == message.user.username:
+        message.delete()
+    else:  # credit to Claude Opus 4.6 for suggesting returning the forbidden code instead of just a redirect
+        return HttpResponseForbidden()
+
+    return redirect("organization:home")
