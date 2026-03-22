@@ -28,8 +28,7 @@ def messages(request, channel):
             message.save()
             return redirect("organization:messages", channel=channel)
 
-    message_list = list(Message.objects.filter(channel__name=channel))
-    message_list.sort(key=lambda message : message.sent_at)
+    message_list = list(Message.objects.filter(channel__name=channel).order_by("sent_at"))
 
     context = {
         "active_channel": active_channel,
