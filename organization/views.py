@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from core.decorators import executive_required
-from .forms import MessageForm, CreateChannelForm
+from .forms import MessageForm, ChannelForm
 from .models import Channel, Message
 
 
@@ -59,11 +59,11 @@ def delete_message(request):
 @executive_required(redirect_url="organization:home")
 def create_channel(request):
     context = {
-        "form": CreateChannelForm()
+        "form": ChannelForm()
     }
 
     if request.method == "POST":
-        form = CreateChannelForm(request.POST)
+        form = ChannelForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("organization:home")
@@ -82,11 +82,11 @@ def edit_channel(request, channel):
 
     context = {
         "channel": channel_model,
-        "form": CreateChannelForm(instance=channel_model)
+        "form": ChannelForm(instance=channel_model)
     }
 
     if request.method == "POST":
-        form = CreateChannelForm(request.POST, instance=channel_model)
+        form = ChannelForm(request.POST, instance=channel_model)
         if form.is_valid():
             form.save()
             return redirect("organization:home")
