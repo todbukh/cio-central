@@ -2,44 +2,60 @@
 // (and for showing me some of this logic, though I wrote this myself)
 // adding this event listener is likely overkill, but it just ensures this won't fire until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", (_event) => {
-    const messageContainer = document.getElementById("messageContainer");
-
-    // Reference for how this work:
-    // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollBy
-    // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight
-    // https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight
-    messageContainer.scrollBy(0, messageContainer.scrollHeight - messageContainer.clientHeight);
+    scrollMessagesToBottom();
 });
 
 // Credit to Google AI overview for suggesting using the keyup event listener to display an error message when message input is too long
 // I wrote this myself, though
 document.addEventListener("keyup", (event) => {
-    displayInputErrorMessage();
+    resizeMessageTextAreaAndDisplayInputErrorMessage();
+    scrollMessagesToBottom();
 })
 
 document.addEventListener("keydown", (event) => {
-    displayInputErrorMessage();
+    resizeMessageTextAreaAndDisplayInputErrorMessage();
+    scrollMessagesToBottom();
 })
 
-function displayInputErrorMessage() {
+function resizeMessageTextAreaAndDisplayInputErrorMessage() {
     const messageTextBox = document.getElementById("messageTextBox");
-    const messageInputError = document.getElementById("messageInputError");
+    const inputErrorMessageElement = document.getElementById("inputErrorMessageElement");
     const messageSubmitButton = document.getElementById("messageSubmitButton");
     const messageComposerContainer = document.getElementById("messageComposerContainer");
 
-    // learned how to make this auto-resizing from here:
-    // https://stackoverflow.com/questions/454202/creating-a-textarea-with-auto-resize
-    messageTextBox.style.height = 'auto';
-    if (messageTextBox.scrollHeight < 200) messageTextBox.style.height = messageTextBox.scrollHeight + "px";
-    else messageTextBox.style.height = "200px";
+    autoResizeTextArea(messageTextBox);
+    displayInputErrorMessage(messageTextBox, inputErrorMessageElement, messageSubmitButton, messageComposerContainer);
 
+    const messageContainer = document.getElementById("messageContainer");
+    messageContainer.scrollBy(0, messageContainer.scrollHeight - messageContainer.clientHeight);
+}
+
+// learned how to make a text area auto-resizing from here:
+// https://stackoverflow.com/questions/454202/creating-a-textarea-with-auto-resize
+function autoResizeTextArea(textArea) {
+    textArea.style.height = 'auto';
+    if (textArea.scrollHeight < 200) textArea.style.height = textArea.scrollHeight + "px";
+    else textArea.style.height = "200px";
+}
+
+function displayInputErrorMessage(messageTextBox, inputErrorMessageElement, messageSubmitButton, messageComposerContainer) {
     if (messageTextBox.value.length > 2000){
-        messageInputError.className = "text-danger mb-0";  // show error message
+        inputErrorMessageElement.className = "text-danger";  // show error message
         messageSubmitButton.setAttribute("disabled", "true");  // disable send button
-        messageComposerContainer.className = "px-3 px-md-4 border-top bg-body flex-shrink-0 pt-4";  // remove bottom padding to prevent visual shift
+        // padding on bottom will be replaced with the error message (which has a height of 30px)
+        messageComposerContainer.style.paddingBottom = "0";
     } else {
-        messageInputError.className = "text-danger mb-0 d-none";
-        messageSubmitButton.removeAttribute("disabled");
-        messageComposerContainer.className = "px-3 px-md-4 border-top bg-body flex-shrink-0 pt-4 pb-4";
+        inputErrorMessageElement.className = "text-danger d-none";  // hide error message
+        messageSubmitButton.removeAttribute("disabled");  // re-enable send button
+        messageComposerContainer.style.paddingBottom = "30px";  // replace padding on bottom
     }
+}
+
+// Reference for how this work:
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollBy
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight
+function scrollMessagesToBottom() {
+    const messageContainer = document.getElementById("messageContainer");
+    messageContainer.scrollBy(0, messageContainer.scrollHeight - messageContainer.clientHeight);
 }

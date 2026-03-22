@@ -137,7 +137,7 @@
                     </section>
 
                     {# Message composer #}
-                    <footer id="messageComposerContainer" class="px-3 px-md-4 border-top bg-body flex-shrink-0 pt-4 pb-4">
+                    <footer id="messageComposerContainer" class="px-3 px-md-4 border-top bg-body flex-shrink-0" style="padding-top: 30px; padding-bottom: 30px">
                         <form method="post" action="{% url "organization:messages" active_channel %}" autocomplete="off">
                             {% csrf_token %}
                             <div class="d-flex align-items-end gap-2 p-2 rounded border bg-body-secondary">
@@ -156,7 +156,7 @@
                                     <i class="bi bi-send-fill"></i>
                                 </button>
                             </div>
-                            <p id="messageInputError" class="text-danger mb-0 d-none"><small>Messages must be 2000 characters or fewer</small></p>
+                            <p id="inputErrorMessageElement" class="text-danger d-none" style="margin-bottom: 6px"><small>Messages must be 2000 characters or fewer</small></p>
                         </form>
                     </footer>
                 </div>
