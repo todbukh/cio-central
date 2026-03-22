@@ -48,7 +48,7 @@ def messages(request, channel):
 def delete_message(request):
     # credit to Claude Opus 4.6 for suggesting get_object_or_404 and .get("id")
     message_id = request.POST.get("id")
-    if message_id is None: return Http404("Message does not exist")
+    if message_id is None: raise Http404("Message does not exist")
     message = get_object_or_404(Message, id=message_id)
 
     if request.user.is_exec() or request.user.username == message.user.username:
