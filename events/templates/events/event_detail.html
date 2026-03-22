@@ -7,9 +7,14 @@
         <a href="{% url 'exec_panel:events:events' %}" class="btn btn-outline-primary">
             <i class="bi bi-arrow-left"></i> Back
         </a>
-        <a href="{% url 'exec_panel:events:event_edit' event.uid %}" class="btn btn-outline-secondary">
-            <i class="bi bi-pencil"></i> Edit
-        </a>
+        <div class="d-flex gap-2">
+            <a href="{% url 'exec_panel:events:event_edit' event.uid %}" class="btn btn-outline-secondary">
+                <i class="bi bi-pencil"></i> Edit
+            </a>
+            <a href="{% url 'exec_panel:events:event_delete' event.uid %}" class="btn btn-outline-danger">
+                <i class="bi bi-trash"></i> Delete
+            </a>
+        </div>
     </div>
 
     <h3 class="text-center w-100">{{ event.name }}</h3>
@@ -22,11 +27,5 @@
         <h6 class="text-body-secondary text-uppercase mb-2">Description</h6>
         <p class="text-body">{{ event.description }}</p>
 
-        {% if event.created_by %}
-        <hr class="border-secondary">
-        <p class="text-body-secondary mb-0 small">
-            Created by {{ event.created_by.username }}
-        </p>
-        {% endif %}
     </div>
 {% endblock %}
