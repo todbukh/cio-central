@@ -18,6 +18,10 @@ def messages(request, channel):
     active_channel = get_object_or_404(Channel, name=channel)
 
     if request.method == "POST":
+        # redirect if user does not have permission to post in channel
+        if active_channel.exec_only and not request.user.is_exec():
+            return redirect("organization:messages", channel=channel)
+
         form = MessageForm(request.POST)
         if form.is_valid():
             message = Message(channel=active_channel, user=request.user, text=form.cleaned_data["text"])
@@ -71,3 +75,40 @@ def create_channel(request):
             context["form"] = form
 
     return render(request,"organization/create_channel.html", context)
+
+
+@login_required(login_url="/login/")
+@executive_required(redirect_url="organization:home")
+def edit_channel(request, channel):
+    channel_model = get_object_or_404(Channel, name=channel)
+
+    if channel_model.builtin: return HttpResponseForbidden()
+
+    context = {
+        "channel": channel_model,
+        "form": CreateChannelForm(instance=channel_model)
+    }
+
+    if request.method == "POST":
+        form = CreateChannelForm(request.POST, instance=channel_model)
+        if form.is_valid():
+            form.save()
+            return redirect("organization:home")
+        else:
+            context["form"] = form
+
+    return render(request,"organization/edit_channel.html", context)
+
+
+@require_POST
+@login_required(login_url="/login/")
+def delete_channel(request, channel):
+    # credit to Claude Opus 4.6 for suggesting get_object_or_404 and .get("id")
+    channel_model = get_object_or_404(Channel, name=channel)
+
+    if request.user.is_exec():
+        channel_model.delete()
+    else:  # credit to Claude Opus 4.6 for suggesting returning the forbidden code instead of just a redirect
+        return HttpResponseForbidden()
+
+    return redirect("organization:home")
