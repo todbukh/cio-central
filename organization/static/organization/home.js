@@ -4,6 +4,7 @@
 document.addEventListener("DOMContentLoaded", (_event) => {
     scrollMessagesToBottom();
     addDeleteMessageButtonOnClicks();
+    addMessageComposerEventListener();
 });
 
 // Claude Opus 4.6 suggested this pattern for passing the message id into the modal for deletion
@@ -17,17 +18,19 @@ function addDeleteMessageButtonOnClicks() {
     });
 }
 
-// Credit to Google AI overview for suggesting using the keyup event listener to display an error message when message input is too long
-// I wrote this myself, though
-document.addEventListener("keyup", (event) => {
-    resizeMessageTextAreaAndDisplayInputErrorMessage();
-    scrollMessagesToBottom();
-})
-
-document.addEventListener("keydown", (event) => {
-    resizeMessageTextAreaAndDisplayInputErrorMessage();
-    scrollMessagesToBottom();
-})
+function addMessageComposerEventListener() {
+    const messageTextBox = document.getElementById("messageTextBox");
+    // Credit to Google AI overview for suggesting using an event listener to display an error message when message input is too long
+    // I wrote this myself, though
+    // Credit to Claude Opus 4.6 for suggesting unifying my keyup and keydown event listeners as an input event listener
+    messageTextBox.addEventListener("input", (event) => {
+        const messageContainer = document.getElementById("messageContainer");
+        const messageContainerHeightBeforeScroll = messageContainer.clientHeight;
+        resizeMessageTextAreaAndDisplayInputErrorMessage();
+        const messageContainerHeightAfterScroll = messageContainer.clientHeight;
+        scrollMessagesBy(0, messageContainerHeightBeforeScroll - messageContainerHeightAfterScroll);
+    });
+}
 
 function resizeMessageTextAreaAndDisplayInputErrorMessage() {
     const messageTextBox = document.getElementById("messageTextBox");
@@ -37,9 +40,6 @@ function resizeMessageTextAreaAndDisplayInputErrorMessage() {
 
     autoResizeTextArea(messageTextBox);
     displayInputErrorMessage(messageTextBox, inputErrorMessageElement, messageSubmitButton, messageComposerContainer);
-
-    const messageContainer = document.getElementById("messageContainer");
-    messageContainer.scrollBy(0, messageContainer.scrollHeight - messageContainer.clientHeight);
 }
 
 // learned how to make a text area auto-resizing from here:
@@ -75,4 +75,9 @@ function displayInputErrorMessage(messageTextBox, inputErrorMessageElement, mess
 function scrollMessagesToBottom() {
     const messageContainer = document.getElementById("messageContainer");
     messageContainer.scrollBy(0, messageContainer.scrollHeight - messageContainer.clientHeight);
+}
+
+function scrollMessagesBy(x, y) {
+    const messageContainer = document.getElementById("messageContainer");
+    messageContainer.scrollBy(x, y);
 }
