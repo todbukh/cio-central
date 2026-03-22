@@ -4,12 +4,13 @@
 
 from django.db import migrations
 
-# get_or_create documentation (suggested by Gemini 3.1 Pro, which also suggested the use of defaults to program more defensively)
-# https://docs.djangoproject.com/en/6.0/ref/models/querysets/#django.db.models.query.QuerySet.get_or_create
+# update_or_create documentation (suggested by Copilot)
+# Additionally, Gemini 3.1 Pro suggested the use of defaults to program more defensively
+# https://docs.djangoproject.com/en/6.0/ref/models/querysets/#update-or-create
 def create_builtin_channels(apps, schema_editor):
     Channel = apps.get_model("organization", "Channel")
 
-    Channel.objects.get_or_create(
+    Channel.objects.update_or_create(
         name="general",
         defaults={
             "exec_only": False,
@@ -17,7 +18,7 @@ def create_builtin_channels(apps, schema_editor):
         }
     )
 
-    Channel.objects.get_or_create(
+    Channel.objects.update_or_create(
         name="announcements",
         defaults={
             "exec_only": True,
