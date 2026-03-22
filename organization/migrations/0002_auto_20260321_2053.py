@@ -12,7 +12,7 @@ def create_builtin_channels(apps, schema_editor):
     Channel.objects.get_or_create(
         name="general",
         defaults={
-            "exec_only": True,
+            "exec_only": False,
             "builtin": True
         }
     )
