@@ -53,12 +53,14 @@ def delete_message(request):
     if message_id is None: raise Http404("Message does not exist")
     message = get_object_or_404(Message, id=message_id)
 
+    channel_name = message.channel.name
+
     if request.user.is_exec() or request.user.username == message.user.username:
         message.delete()
     else:  # credit to Claude Opus 4.6 for suggesting returning the forbidden code instead of just a redirect
         return HttpResponseForbidden()
 
-    return redirect("organization:messages", channel=message.channel.name)
+    return redirect("organization:messages", channel=channel_name)
 
 
 @login_required(login_url="/login/")
