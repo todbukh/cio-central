@@ -101,7 +101,7 @@
                         </button>
 
                         <i class="bi bi-hash fs-5 text-body-secondary"></i>
-                        <h1 class="h6 fw-semibold text-body mb-0">{{ active_channel }}</h1>
+                        <h1 class="h6 fw-semibold text-body mb-0">{{ active_channel.name }}</h1>
 
                         {# Mobile events toggle #}
                         <button class="btn btn-sm btn-outline-primary d-xl-none ms-auto"
@@ -138,7 +138,7 @@
 
                     {# Message composer #}
                     <footer id="messageComposerContainer" class="px-3 px-md-4 border-top bg-body flex-shrink-0" style="padding-top: 30px; padding-bottom: 30px">
-                        <form method="post" action="{% url "organization:messages" active_channel %}" autocomplete="off">
+                        <form method="post" action="{% url "organization:messages" active_channel.name %}" autocomplete="off">
                             {% csrf_token %}
                             <div class="d-flex align-items-end gap-2 p-2 rounded border bg-body-secondary">
                                 <textarea
@@ -148,11 +148,38 @@
                                     rows="1"
                                     id="messageTextBox"
                                     class="form-control form-control-sm border-0 bg-transparent text-body shadow-none"
-                                    placeholder="Message #{{ active_channel }}"
+                                    placeholder="Message #{{ active_channel.name }}"
                                     aria-label="Message input"
                                     style="resize: none;"
+                                    {# disable the text area for users who are not exec in an exec only channel #}
+                                    {% if active_channel.exec_only and not user.is_exec %}
+                                        disabled
+                                    {% endif %}
                                 ></textarea>
-                                <button id="messageSubmitButton" type="submit" class="btn btn-primary btn-sm">
+                                <button
+                                        id="messageSubmitButton"
+                                        type="submit"
+                                        class="btn btn-primary btn-sm"
+
+                                        {# pass custom exec_only status to script #}
+                                        {% if active_channel.exec_only %}
+                                            data-exec-only="true"
+                                        {% else %}
+                                            data-exec-only="false"
+                                        {% endif %}
+
+                                        {# pass user exec status data to script #}
+                                        {% if user.is_exec %}
+                                            data-user-is-exec="true"
+                                        {% else %}
+                                            data-user-is-exec="false"
+                                        {% endif %}
+
+                                        {# disable the button for users who are not exec in an exec only channel #}
+                                        {% if active_channel.exec_only and not user.is_exec %}
+                                            disabled
+                                        {% endif %}
+                                >
                                     <i class="bi bi-send-fill"></i>
                                 </button>
                             </div>
