@@ -14,13 +14,18 @@
             <li>
                 <div class="d-flex flex-row justify-content-between align-items-center rounded px-2 py-1  {% if channel.name == active_channel.name %}dropdown-item active{% endif %}">
                     <a href="{% url "organization:messages" channel.name %}"
-                       class="d-flex text-body text-decoration-none overflow-hidden flex-grow-1">
+                       class="d-flex text-body text-decoration-none overflow-hidden flex-grow-1"
+                       aria-label="{{ channel.name }}"
+                    >
                         <div class="d-flex overflow-hidden">
                             <i class="bi bi-hash"></i><span class="text-truncate">{{ channel.name }}</span>
                         </div>
                     </a>
                     {% if user.is_exec and not channel.builtin %}
-                        <a class="text-decoration-none d-inline ps-1" href="{% url "organization:edit_channel" channel.name %}">
+                        <a class="text-decoration-none d-inline ps-1"
+                           href="{% url "organization:edit_channel" channel.name %}"
+                           aria-label="Edit {{ channel.name }}"
+                        >
                             <i class="bi bi-three-dots"></i>
                         </a>
                     {% endif %}
