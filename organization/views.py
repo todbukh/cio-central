@@ -27,9 +27,6 @@ def messages(request, channel):
             message = Message(channel=active_channel, user=request.user, text=form.cleaned_data["text"])
             message.save()
             return redirect("organization:messages", channel=channel)
-        else:
-            message_send_error = "Messages must be 2000 characters or less"
-            form_text = form["text"].data
 
     message_list = list(Message.objects.filter(channel__name=channel))
     message_list.sort(key=lambda message : message.sent_at)
