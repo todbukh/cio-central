@@ -100,6 +100,7 @@ def edit_channel(request, channel):
 
 @require_POST
 @login_required(login_url="/login/")
+@executive_required(redirect_url="organization:home")
 def delete_channel(request, channel):
     # credit to Claude Opus 4.6 for suggesting get_object_or_404 and .get("id")
     channel_model = get_object_or_404(Channel, name=channel)
