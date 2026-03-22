@@ -465,4 +465,9 @@ body {
     .hover-bg-secondary:hover {
         background-color: $dark-bg-surface;
     }
+
+    // custom css utility class to get the height of the screen w/o the nav
+    .full-height-minus-nav {
+        height: calc(100vh - 80px);
+    }
 }

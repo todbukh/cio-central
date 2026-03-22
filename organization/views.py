@@ -3,7 +3,8 @@ from django.http.response import HttpResponseForbidden, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
-from .forms import MessageForm
+from core.decorators import executive_required
+from .forms import MessageForm, CreateChannelForm
 from .models import *
 
 
@@ -52,3 +53,21 @@ def delete_message(request):
         return HttpResponseForbidden()
 
     return redirect("organization:home")
+
+
+@login_required(login_url="/login/")
+@executive_required(redirect_url="organization:home")
+def create_channel(request):
+    context = {
+        "form": CreateChannelForm()
+    }
+
+    if request.method == "POST":
+        form = CreateChannelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("organization:home")
+        else:
+            context["form"] = form
+
+    return render(request,"organization/create_channel.html", context)

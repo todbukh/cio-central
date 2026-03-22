@@ -3,7 +3,19 @@
 // adding this event listener is likely overkill, but it just ensures this won't fire until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", (_event) => {
     scrollMessagesToBottom();
+    addDeleteMessageButtonOnClicks();
 });
+
+// Claude Opus 4.6 suggested this pattern for passing the message id into the modal for deletion
+// Related docs: https://getbootstrap.com/docs/5.3/components/modal/#events
+function addDeleteMessageButtonOnClicks() {
+    const deleteMessageModal = document.getElementById("deleteMessageModal");
+    deleteMessageModal.addEventListener("show.bs.modal", (event) => {
+        const messageId = event.relatedTarget.dataset.messageId;
+        const deleteMessageInput = document.getElementById("deleteMessageInput");
+        deleteMessageInput.setAttribute("value", messageId);
+    });
+}
 
 // Credit to Google AI overview for suggesting using the keyup event listener to display an error message when message input is too long
 // I wrote this myself, though

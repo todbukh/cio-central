@@ -10,13 +10,12 @@
     {# Style block: Bootstrap has no utilities for viewport-minus-navbar height or arbitrary fixed widths. #}
     {# Adjust the 70px in .home-wrapper if your navbar height changes. #}
     <style>
-        .home-wrapper { height: calc(100vh - 80px); }
         .sidebar-w { width: 240px; min-width: 240px;}
         .events-w { width: 320px; min-width: 320px; }
     </style>
 
     {# Outer wrapper — locks to remaining viewport height #}
-    <div class="home-wrapper d-flex overflow-hidden">
+    <div class="full-height-minus-nav d-flex overflow-hidden">
 
         {# Sidebar — visible on lg+ only #}
         <aside class="sidebar-w d-none d-lg-flex flex-column flex-shrink-0 bg-body-secondary border-end overflow-hidden">
@@ -128,13 +127,14 @@
                                         <p class="mb-0 text-secondary"><small>{{ message.timestamp }}</small></p>
                                     </div>
                                     {% if user.is_exec or user.username == message.user.username %}
-                                        <form method="post" action="{% url "organization:delete_message" %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="id" value="{{ message.id }}">
-                                            <button type="submit" class="btn p-0 border-0 bg-transparent" aria-label="Delete Message">
-                                                <i class="bi bi-trash text-secondary link-danger"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button"
+                                                class="btn p-0 border-0 bg-transparent"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteMessageModal"
+                                                data-message-id="{{ message.id }}"
+                                        >
+                                            <i class="bi bi-trash text-secondary link-danger"></i>
+                                        </button>
                                     {% endif %}
                                 </div>
 
@@ -150,6 +150,30 @@
                             </div>
                         {% endfor %}
                     </section>
+
+                    <div class="modal fade" id="deleteMessageModal" tabindex="-1" aria-labelledby="deleteMessageModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteMessageModalLabel">Delete Message</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to proceed?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form method="post" action="{% url "organization:delete_message" %}">
+                                        {% csrf_token %}
+                                        <input id="deleteMessageInput" type="hidden" name="id">
+                                        <button type="submit" class="btn btn-danger">
+                                            Delete Message
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     {# Message composer #}
                     <footer id="messageComposerContainer" class="px-3 px-md-4 border-top bg-body flex-shrink-0" style="padding-top: 30px; padding-bottom: 30px">

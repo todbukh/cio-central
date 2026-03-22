@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block title %}{{ org_name|default:"CIO Central" }} — Create Channel{% endblock %}
+
+{% block body_classes %}vh-100{% endblock %}
+
+{% block content %}
+    <div class="full-height-minus-nav d-flex flex-column ms-3 mt-3 gap-2 align-items-start">
+        <h1>Create Channel</h1>
+        <form method="post" action="{% url "organization:create_channel" %}" autocomplete="off">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button class="btn btn-primary" type="submit" aria-label="Create Channel">
+                Create Channel
+            </button>
+        </form>
+    </div>
+{% endblock %}
