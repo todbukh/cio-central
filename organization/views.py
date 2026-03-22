@@ -28,7 +28,13 @@ def messages(request, channel):
             message.save()
             return redirect("organization:messages", channel=channel)
 
-    message_list = list(Message.objects.filter(channel__name=channel).order_by("sent_at"))
+    # copilot suggested use of select_related to solve N+1 problem
+    message_list = list(
+        Message.objects
+            .filter(channel__name=channel)
+            .select_related("user")
+            .order_by("sent_at")
+    )
 
     context = {
         "active_channel": active_channel,
