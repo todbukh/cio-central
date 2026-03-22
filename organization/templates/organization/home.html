@@ -118,8 +118,11 @@
                     <section id="messageContainer" class="flex-grow-1 overflow-auto px-3 px-md-4 py-4">
                         {% for message in messages %}
                             <div class="d-flex flex-column align-items-start gap-2 p-3 hover-bg-secondary">
-                                <div class="d-flex flex-row align-items-start gap-2">
-                                    <p class="mb-0 fw-bold text-light">{{ message.user.username }}</p>
+                                <div class="d-flex flex-row align-items-center gap-2">
+                                    <a href="{% url 'profiles:profile' message.user.username %}" class="text-decoration-none d-flex flex-row align-items-center gap-2">
+                                        <img src="https://placehold.co/40x40" alt="Profile picture" class="rounded-circle" width="40px" height="40px">
+                                        <p class="mb-0 fw-bold text-secondary link-info">{{ message.user.username }}</p>
+                                    </a>
                                     <p class="mb-0 text-secondary">-</p>
                                     <p class="mb-0 text-secondary"><small>{{ message.timestamp }}</small></p>
                                 </div>

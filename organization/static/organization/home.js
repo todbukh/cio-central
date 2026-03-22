@@ -46,7 +46,10 @@ function displayInputErrorMessage(messageTextBox, inputErrorMessageElement, mess
         messageComposerContainer.style.paddingBottom = "0";
     } else {
         inputErrorMessageElement.className = "text-danger d-none";  // hide error message
-        if (messageSubmitButton.getAttribute("data-exec-only") !== "true" || messageSubmitButton.getAttribute("data-user-is-exec") === "true") {  // don't re-enable if page is exec only
+        if (
+            messageSubmitButton.getAttribute("data-exec-only") !== "true" ||
+            messageSubmitButton.getAttribute("data-user-is-exec") === "true"
+        ) {  // don't re-enable if page is exec only and user is not exec
             messageSubmitButton.removeAttribute("disabled");  // re-enable send button
         }
         messageComposerContainer.style.paddingBottom = "30px";  // replace padding on bottom
