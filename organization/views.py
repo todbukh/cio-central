@@ -104,6 +104,8 @@ def delete_channel(request, channel):
     # credit to Claude Opus 4.6 for suggesting get_object_or_404 and .get("id")
     channel_model = get_object_or_404(Channel, name=channel)
 
+    if channel_model.builtin: return HttpResponseForbidden()
+
     if request.user.is_exec():
         channel_model.delete()
     else:  # credit to Claude Opus 4.6 for suggesting returning the forbidden code instead of just a redirect
