@@ -1,5 +1,6 @@
 {# generated with Claude Opus 4.6 Extended #}
 {% extends 'base.html' %}
+{% load tz %}
 {% load static %}
 
 {% block title %}{{ org_name|default:"CIO Central" }} — Home{% endblock %}
@@ -124,7 +125,7 @@
                                             <p class="mb-0 fw-bold text-secondary link-info">{{ message.user.username }}</p>
                                         </a>
                                         <p class="mb-0 text-secondary">-</p>
-                                        <p class="mb-0 text-secondary"><small>{{ message.timestamp }}</small></p>
+                                        <p class="mb-0 text-secondary"><small>{{ message.sent_at|localtime|date:"m/d/Y, h:iA" }}</small></p>
                                     </div>
                                     {% if user.is_exec or user.username == message.user.username %}
                                         <button type="button"

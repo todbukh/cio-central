@@ -14,6 +14,3 @@ class Message(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.CharField(max_length=2000)
     sent_at = models.DateTimeField(auto_now_add=True)
-
-    def timestamp(self):
-        return self.sent_at.strftime("%m/%d/%Y, %I:%M%p")
