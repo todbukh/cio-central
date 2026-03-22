@@ -13,7 +13,7 @@
         {% for channel in channels %}
             <li>
                 <div class="d-flex flex-row justify-content-between align-items-center rounded px-2 py-1  {% if channel.name == active_channel.name %}dropdown-item active{% endif %}">
-                    <a href="/messages/{{ channel.name }}"
+                    <a href="{% url "organization:messages" channel.name %}"
                        class="d-flex text-body text-decoration-none overflow-hidden flex-grow-1">
                         <div class="d-flex overflow-hidden">
                             <i class="bi bi-hash"></i><span class="text-truncate">{{ channel.name }}</span>
