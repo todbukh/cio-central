@@ -7,8 +7,8 @@
 {% block body_classes %}vh-100 overflow-hidden{% endblock %}
 
 {% block content %}
-    {# Style block: Bootstrap has no utilities for viewport-minus-navbar height or arbitrary fixed widths. #}
-    {# Adjust the 70px in .home-wrapper if your navbar height changes. #}
+    {# Style block: viewport-minus-navbar height is handled by .full-height-minus-nav (calc(100vh - 80px)); Bootstrap has no built-in utility for this. #}
+    {# Adjust the 80px in .full-height-minus-nav if your navbar height changes. #}
     <style>
         .sidebar-w { width: 240px; min-width: 240px;}
         .events-w { width: 320px; min-width: 320px; }
