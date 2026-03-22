@@ -56,7 +56,9 @@ def delete_message(request):
     else:  # credit to Claude Opus 4.6 for suggesting returning the forbidden code instead of just a redirect
         return HttpResponseForbidden()
 
-    return redirect("organization:home")
+    channel = request.POST.get("channel")
+
+    return redirect("organization:messages", channel=channel)
 
 
 @login_required(login_url="/login/")
