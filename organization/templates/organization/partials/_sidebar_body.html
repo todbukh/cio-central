@@ -12,10 +12,20 @@
     <ul class="list-unstyled mb-0">
         {% for channel in channels %}
             <li>
-                <a href="/messages/{{ channel.name }}"
-                   class="d-flex align-items-center gap-2 px-2 py-1 rounded text-body text-decoration-none {% if channel.name == active_channel.name %}dropdown-item active{% endif %}">
-                    <i class="bi bi-hash"></i><span>{{ channel.name }}</span>
-                </a>
+                <div class="d-flex flex-row justify-content-between align-items-center rounded px-2 py-1  {% if channel.name == active_channel.name %}dropdown-item active{% endif %}">
+                    <a href="/messages/{{ channel.name }}"
+                       class="d-flex text-body text-decoration-none overflow-hidden flex-grow-1">
+                        <div class="d-flex overflow-hidden">
+                            <i class="bi bi-hash"></i><span class="text-truncate">{{ channel.name }}</span>
+                        </div>
+                    </a>
+                    {% if user.is_exec %}
+                        <a class="text-decoration-none d-inline ps-1" href="">
+                            <i class="bi bi-three-dots"></i>
+                        </a>
+                    {% endif %}
+                </div>
+
             </li>
         {% endfor %}
     </ul>
