@@ -7,14 +7,25 @@
 {% block body_classes %}vh-100{% endblock %}
 
 {% block content %}
-    <div class="full-height-minus-nav d-flex flex-column ms-3 mt-3 gap-2 align-items-start">
-        <h1>Create Channel</h1>
-        <form method="post" action="{% url "organization:create_channel" %}" autocomplete="off">
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            <button class="btn btn-primary" type="submit" aria-label="Create Channel">
-                Create Channel
-            </button>
-        </form>
+    <div class="d-flex flex-column w-100 h-100 align-items-center mt-5">
+        <div class="d-flex flex-column align-items-start bg-body-secondary rounded py-4 mx-auto" style="width: 350px">
+            <div class="d-flex flex-column ms-3 gap-2 align-items-start">
+                <div class="d-flex flex-row gap-3 align-items-center">
+                    <h3 class="my-0">Create Channel</h3><i class="bi bi-pencil"></i>
+                </div>
+                <form method="post" action="{% url "organization:create_channel" %}" autocomplete="off">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <div class="d-flex flex-row gap-2 align-items-center">
+                        <button class="btn btn-primary" type="submit" aria-label="Create Channel">
+                            Create Channel
+                        </button>
+                        <a href="{% url "organization:home" %}" class="btn btn-outline-secondary" type="button" aria-label="Cancel">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}
