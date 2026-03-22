@@ -51,7 +51,13 @@ function autoResizeTextArea(textArea) {
 }
 
 function displayInputErrorMessage(messageTextBox, inputErrorMessageElement, messageSubmitButton, messageComposerContainer) {
-    if (messageTextBox.value.length > 2000){
+    let messageLength = 0;
+    for (let c of messageTextBox.value) {
+        if (c === "\n") messageLength += 2;
+        else messageLength += 1;
+    }
+
+    if (messageLength > 2000){
         inputErrorMessageElement.className = "text-danger";  // show error message
         messageSubmitButton.setAttribute("disabled", "true");  // disable send button
         // padding on bottom will be replaced with the error message (which has a height of 30px)
