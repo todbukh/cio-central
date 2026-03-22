@@ -1,0 +1,32 @@
+{% extends 'exec_panel/executive-base.html' %}
+
+{% block title %}{{ event.name }} - CIO Central{% endblock %}
+
+{% block tab %}
+    <div class="d-flex justify-content-between align-items-center w-100">
+        <a href="{% url 'exec_panel:events:events' %}" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+        <a href="{% url 'exec_panel:events:event_edit' event.uid %}" class="btn btn-outline-secondary">
+            <i class="bi bi-pencil"></i> Edit
+        </a>
+    </div>
+
+    <h3 class="text-center w-100">{{ event.name }}</h3>
+
+    <div class="bg-body-secondary rounded p-4 w-100 mx-auto" style="max-width: 900px;">
+        <p class="text-body-secondary mb-4">
+            <i class="bi bi-calendar-event me-1"></i>{{ event.date }}
+        </p>
+
+        <h6 class="text-body-secondary text-uppercase mb-2">Description</h6>
+        <p class="text-body">{{ event.description }}</p>
+
+        {% if event.created_by %}
+        <hr class="border-secondary">
+        <p class="text-body-secondary mb-0 small">
+            Created by {{ event.created_by.username }}
+        </p>
+        {% endif %}
+    </div>
+{% endblock %}

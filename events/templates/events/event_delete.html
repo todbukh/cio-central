@@ -1,0 +1,27 @@
+{% extends 'exec_panel/executive-base.html' %}
+
+{% block title %}Delete Event - CIO Central{% endblock %}
+
+{% block tab %}
+    <a href="{% url 'exec_panel:events:events' %}" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
+
+    <h3 class="text-center w-100">Delete Event</h3>
+
+    <div class="bg-body-secondary rounded p-4 w-100 mx-auto" style="max-width: 900px;">
+        <p class="text-body mb-1">Are you sure you want to delete the following event?</p>
+        <p class="text-body fw-semibold fs-5 mb-1">{{ event.name }}</p>
+        <p class="text-body-secondary mb-4">{{ event.date }}</p>
+
+        <p class="text-danger-emphasis mb-4">This action cannot be undone.</p>
+
+        <div class="d-flex gap-2">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+            <a href="{% url 'exec_panel:events:events' %}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </div>
+{% endblock %}
