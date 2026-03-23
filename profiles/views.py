@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from .forms import ProfileEditForm
+from django.core.files.storage import default_storage
 
 User = get_user_model()
 
@@ -27,13 +28,21 @@ def profile_edit_view(request, username):
     profile = request.user.profile
 
     if request.method == "POST": # user wants to save changes to profile
+        if "delete_picture" in request.POST: # user clicks delete button to clear profile picture
+            if profile.profile_picture:
+                profile.profile_picture.delete()
+                profile.save()
+            return redirect("profiles:profile", username = username)
+        profile_picture = None
+        if 'profile_picture' in request.FILES and profile.profile_picture:
+            profile_picture = profile.profile_picture
+
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            if 'profile_picture' in request.FILES and profile.profile_picture:
-                profile.profile_picture.delete()
+            if profile_picture: default_storage.delete(profile_picture.name) # use of .name to pass in string
             form.save()
             return redirect("profiles:profile", username=username)
     else:                       # user just wants to view the edit page
         form = ProfileEditForm(instance=profile)
 
-    return render(request, "profiles/profile_edit.html", {"form": form})
+    return render(request, "profiles/profile_edit.html", {"form": form, "profile_user": request.user})

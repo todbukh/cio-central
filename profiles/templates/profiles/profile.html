@@ -19,18 +19,7 @@
 
   <!-- Profile picture and username -->
   <div class="text-center mb-4">
-    {% if is_owner %}
-      <!-- Hidden form for upload, similar to s3_demo -->
-      <form id="profile-pic-form" method="post" enctype="multipart/form-data" style="display: none;">
-        {% csrf_token %}
-        <input type="file" name="profile_picture" id="profile-pic-input" accept="image/*">
-      </form>
-      <!-- Clickable image for owners -->
-      <img id="profile-pic" src="{% if profile_user.profile.profile_picture %}{{ profile_user.profile.profile_picture.url }}{% else %}https://placehold.co/120x120{% endif %}" alt="Profile picture" class="rounded-circle mb-3" style="cursor: pointer;" title="Click to upload a new picture">
-    {% else %}
-      <!-- Non-clickable for others -->
-      <img src="{% if profile_user.profile.profile_picture %}{{ profile_user.profile.profile_picture.url }}{% else %}https://placehold.co/120x120{% endif %}" alt="Profile picture" class="rounded-circle mb-3">
-    {% endif %}
+      <img src="{% if profile_user.profile.profile_picture %}{{ profile_user.profile.profile_picture.url }}{% else %}https://placehold.co/120x120{% endif %}" width = 120 height = 120 alt="Profile picture" class="rounded-circle mb-3">
     <h2 class="text-body">{{ profile_user.username }}</h2>
   </div>
 

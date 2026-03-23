@@ -4,7 +4,10 @@
 
 {% block content %}
 <div class="container py-5">
-
+  <div class="text-center mb-4">
+      <img src="{% if profile_user.profile.profile_picture %}{{ profile_user.profile.profile_picture.url }}{% else %}https://placehold.co/120x120{% endif %}" width = 120 height = 120 alt="Profile picture" class="rounded-circle mb-3">
+    <h2 class="text-body">{{ profile_user.username }}</h2>
+  </div>
   <div class="bg-body-secondary rounded p-4 mx-auto" style="max-width: 600px;">
     <h4 class="text-body mb-4">
       <i class="bi bi-pencil-square me-2"></i>Edit Profile
@@ -18,8 +21,16 @@
       </div>
       <div class="mb-3">
         <label for="id_profile_picture" class="form-label text-body">Profile Picture</label>
-        {{ form.profile_picture }}  <!-- Render the file input -->
-      </div>
+        <div class="d-flex gap-2 align-items-center">
+          <input type="file" name="profile_picture" id="id_profile_picture" 
+         class="form-control bg-body text-body" accept="image/*"> <!-- this line uses different formatting aside form django's default widget so can be more customizeable BUT this means we need to call profile_picture.name instead in default_storage.delete() method as we need to pass in a string -->
+        {% if profile_user.profile.profile_picture %} <!-- check if user already has profile picture to be deleted-->
+        <button type = "submit" name = "delete_picture" class="btn btn-danger">Delete
+        </button>
+        {% endif %}
+        </div>
+        
+        </div>
       <div class="d-flex gap-2">
         <button type="submit" class="btn btn-primary">Save</button>
         <a href="{% url 'profiles:profile' username=request.user.username %}" class="btn btn-outline-primary">Cancel</a>
