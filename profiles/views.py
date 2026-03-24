@@ -33,13 +33,13 @@ def profile_edit_view(request, username):
                 profile.profile_picture.delete()
                 profile.save()
             return redirect("profiles:profile", username = username)
-        profile_picture = None
+        profile_picture_file_name = None
         if 'profile_picture' in request.FILES and profile.profile_picture:
-            profile_picture = profile.profile_picture
+            profile_picture_file_name = profile.profile_picture.name # use of .name to pass in string
 
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            if profile_picture: default_storage.delete(profile_picture.name) # use of .name to pass in string
+            if profile_picture_file_name: default_storage.delete(profile_picture_file_name)
             form.save()
             return redirect("profiles:profile", username=username)
     else:                       # user just wants to view the edit page
