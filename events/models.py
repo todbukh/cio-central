@@ -1,6 +1,9 @@
 import uuid
 
+import uuid
+
 from django.db import models
+from django.conf import settings
 
 
 class Event(models.Model):
@@ -14,6 +17,9 @@ class Event(models.Model):
     # returns rows pre-sorted by date. Its handled by the database, not server
     class Meta:
         ordering = ["date"]
+
+    def __str__(self):
+        return self.name
 
     def __str__(self):
         return self.name
