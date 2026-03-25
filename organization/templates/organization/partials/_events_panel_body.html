@@ -31,13 +31,9 @@
 </div>
 
 {% if user.is_exec %}
-<div class="px-4 py-3 border-top">
-  <button class="btn btn-outline-primary btn-sm w-100">
+<div class="px-4 py-3 pb-5 border-top">
+  <a href="{% url 'exec_panel:events:event_create' %}" class="btn btn-outline-primary btn-sm w-100">
     <i class="bi bi-calendar-plus me-1"></i>Create Event
-  </button>
-  <p class="text-body-secondary small mb-0 mt-2 text-center">
-    <i class="bi bi-info-circle me-1"></i>
-    Event management is under development.
-  </p>
+  </a>
 </div>
 {% endif %}

@@ -3,13 +3,14 @@
 {% block title %}Create Event - CIO Central{% endblock %}
 
 {% block tab %}
-    <a href="{% url 'exec_panel:events:events' %}" class="btn btn-outline-primary">
-        <i class="bi bi-arrow-left"></i> Back
+    <div class="container py-4">
+    <a href="{% url 'exec_panel:events:events' %}" class="btn btn-outline-secondary btn-sm mb-3">
+        <i class="bi bi-arrow-left me-1"></i>Return to Events
     </a>
 
-    <h3 class="text-center w-100">Create Event</h3>
+    <h3 class="text-body fw-bold mb-3 text-center">Create Event</h3>
 
-    <div class="bg-body-secondary rounded p-4 w-100 mx-auto" style="max-width: 900px;">
+    <div class="bg-body-secondary rounded p-4 mx-auto" style="max-width: 900px;">
         <form method="post">
             {% csrf_token %}
 
@@ -19,7 +20,7 @@
                        name="{{ form.name.html_name }}"
                        id="{{ form.name.id_for_label }}"
                        class="form-control bg-body text-body {% if form.name.errors %}is-invalid{% endif %}"
-                       maxlength="255"
+                       maxlength="64"
                        value="{{ form.name.value|default:'' }}">
                 {% for error in form.name.errors %}
                     <div class="invalid-feedback">{{ error }}</div>
@@ -34,6 +35,19 @@
                        class="form-control bg-body text-body {% if form.date.errors %}is-invalid{% endif %}"
                        value="{{ form.date.value|default:'' }}">
                 {% for error in form.date.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.location.id_for_label }}" class="form-label text-body">Location <span class="text-body-secondary fw-normal">(optional)</span></label>
+                <input type="text"
+                       name="{{ form.location.html_name }}"
+                       id="{{ form.location.id_for_label }}"
+                       class="form-control bg-body text-body {% if form.location.errors %}is-invalid{% endif %}"
+                       maxlength="100"
+                       value="{{ form.location.value|default:'' }}">
+                {% for error in form.location.errors %}
                     <div class="invalid-feedback">{{ error }}</div>
                 {% endfor %}
             </div>
@@ -55,5 +69,6 @@
                 <a href="{% url 'exec_panel:events:events' %}" class="btn btn-outline-secondary">Cancel</a>
             </div>
         </form>
+    </div>
     </div>
 {% endblock %}

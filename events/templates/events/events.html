@@ -3,48 +3,92 @@
 {% block title %}Events - CIO Central{% endblock %}
 
 {% block tab %}
-    <div class="w-100 px-4">
+    <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="mb-0">Events</h3>
+            <div class="mb-4">
+                <h3>Events</h3>
+                <p class="text-body-secondary mb-0">Manage your events</p>
+            </div>
             <a href="{% url 'exec_panel:events:event_create' %}" class="btn btn-primary">
                 <i class="bi bi-plus-lg"></i> Create Event
             </a>
         </div>
 
-        <table class="table table-hover align-middle">
-            <thead>
-                <tr>
-                    <th class="ps-3">Event Name</th>
-                    <th>Date &amp; Time</th>
-                    <th class="text-end pe-3">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for event in events %}
-                {% url "exec_panel:events:event_detail" event.uid as detail_url %}
-                <tr onclick="window.location='{{ detail_url }}'"
-                    style="cursor: pointer;">
-                    <td class="ps-3">{{ event.name }}</td>
-                    <td>{{ event.date }}</td>
-                    <td class="pe-3">
-                        <div class="d-flex gap-1 justify-content-end flex-nowrap">
-                            <a href="{% url 'exec_panel:events:event_edit' event.uid %}"
-                               class="btn btn-sm btn-outline-secondary"
-                               title="Edit"
-                               onclick="event.stopPropagation()">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <a href="{% url 'exec_panel:events:event_delete' event.uid %}"
-                               class="btn btn-sm btn-outline-danger"
-                               title="Delete"
-                               onclick="event.stopPropagation()">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="dropdown mb-4">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                {% if date_filter == "today" %}
+                    <i class="bi bi-calendar-day me-1"></i>Today
+                {% elif date_filter == "past" %}
+                    <i class="bi bi-calendar-x me-1"></i>Past Events
+                {% else %}
+                    <i class="bi bi-calendar me-1"></i>All Events
+                {% endif %}
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item {% if date_filter == 'all' %}active{% endif %}"
+                       href="{% url 'exec_panel:events:events' %}">
+                        <i class="bi bi-calendar me-1"></i>All Events
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item {% if date_filter == 'today' %}active{% endif %}"
+                       href="{% url 'exec_panel:events:events_filtered_today' %}">
+                        <i class="bi bi-calendar-day me-1"></i>Today
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item {% if date_filter == 'past' %}active{% endif %}"
+                       href="{% url 'exec_panel:events:events_filtered_past' %}">
+                        <i class="bi bi-calendar-x me-1"></i>Past Events
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        {% if events %}
+            <table class="table table-hover align-middle w-100" style="table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th class="ps-3">Event Name</th>
+                        <th style="width: 22%;">Location</th>
+                        <th style="width: 28%;">Date &amp; Time</th>
+                        <th class="text-end pe-3" style="width: 90px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    {% url "exec_panel:events:event_detail" event.uid as detail_url %}
+                    <tr onclick="window.location='{{ detail_url }}'"
+                        style="cursor: pointer;">
+                        <td class="ps-3 text-wrap text-break">{{ event.name }}</td>
+                        <td class="text-wrap text-body-secondary">{{ event.location|default:"No Location Set" }}</td>
+                        <td class="text-wrap">{{ event.date }}</td>
+                        <td class="pe-3">
+                            <div class="d-flex gap-1 justify-content-end flex-nowrap">
+                                <a href="{% url 'exec_panel:events:event_edit' event.uid %}"
+                                   class="btn btn-sm btn-outline-secondary"
+                                   title="Edit"
+                                   onclick="event.stopPropagation()">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'exec_panel:events:event_delete' event.uid %}"
+                                   class="btn btn-sm btn-outline-danger"
+                                   title="Delete"
+                                   onclick="event.stopPropagation()">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="bg-body-secondary rounded p-5 text-center">
+                <i class="bi bi-calendar-x fs-1 text-body-secondary d-block mb-3"></i>
+                <p class="text-body-secondary mb-0">No events found.</p>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
