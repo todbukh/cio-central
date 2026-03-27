@@ -19,7 +19,7 @@
 
   <!-- Profile picture and username -->
   <div class="text-center mb-4">
-    <img src="https://placehold.co/120x120" alt="Profile picture" class="rounded-circle mb-3">
+      <img src="{% if profile_user.profile.profile_picture %}{{ profile_user.profile.profile_picture.url }}{% else %}https://placehold.co/120x120{% endif %}" width = 120 height = 120 alt="Profile picture" class="rounded-circle mb-3">
     <h2 class="text-body">{{ profile_user.username }}</h2>
   </div>
 
