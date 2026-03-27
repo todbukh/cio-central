@@ -72,4 +72,10 @@ def view_document(request, file_id):
     if not document.file:
         raise Http404("File not found")
 
-    return redirect(document.file.url)
+   # render the file inside the site instead of redirecting to s3
+    context = {
+        "document": document,
+        "file_url": document.file.url,
+        "file_name": document.file.name.split("/")[-1],
+    }
+    return render(request, "documents/view_document.html", context)
