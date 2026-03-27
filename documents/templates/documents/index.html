@@ -10,16 +10,21 @@
         Upload and view organization documents
     </p>
 
+    {% if can_upload %}
+    <!-- this only shows the upload section to exec/owner -->
     <div class="bg-body-secondary rounded p-3 mb-4">
 
         <h5>Upload Document</h5>
 
         <form method="post" enctype="multipart/form-data" class="d-flex gap-2">
             {% csrf_token %}
-            <input type="file" name="document_file" class="form-control" required>
+            <!-- changed name to file -->
+            <input type="file" name="file" class="form-control" required>
             <button type="submit" class="btn btn-primary">Upload</button>
         </form>
     </div>
+    {% endif %}
+
 
     <div class="bg-body-secondary rounded p-3">
 
@@ -45,18 +50,22 @@
                     {% for file in files %}
                     <tr>
                         <td>
-                     <!-- opens the file in a new tab when the name is clicked -->
-                            <a href="{% url 'documents:view_document' file %}" target ="_blank">
-                                {{ file }}
+                    <!-- filename -> file.id  -->
+    
+                            <a href="{% url 'documents:view_document' file.id %}" target="_blank">
+                        <!-- file is a Document object now so we access file.file.name -->
+                                {{ file.file.name|cut:"documents/" }}
                             </a>
                         </td>
                         <td>
-                            <form method="post" action="{% url 'documents:delete_file' file %}">
+                            {% if can_upload %}
+                            <form method="post" action="{% url 'documents:delete_file' file.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-outline-danger btn-sm">
                                     Delete
                                 </button>
                             </form>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
