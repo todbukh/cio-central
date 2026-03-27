@@ -4,6 +4,7 @@ from django.http import Http404
 from core.permissions import is_executive
 from .forms import DocumentUploadForm
 from .models import Document
+from django.views.decorators.http import require_POST
 
 
 def index(request):
@@ -51,20 +52,30 @@ def index(request):
 
 
 
-def delete_file(request, file_id):
-    if request.method == "POST":
-        document = get_object_or_404(Document, id=file_id)
-        # remove file from storage
-        document.file.delete()
-        # remove it from database
-        document.delete()
+def delete_file(request, file_uid):
+    
+    document = get_object_or_404(Document, uid=file_uid)
 
+    context = {
+        "document": document,
+        "file_name": document.file.name.split("/")[-1],
+    }
+    return render(request, "documents/delete_document.html", context)
+
+
+@require_POST
+def delete_file_post(request, file_uid):
+    document = get_object_or_404(Document, uid=file_uid)
+    # remove file from storage
+    document.file.delete()
+    # remove it from database
+    document.delete()
     return redirect("documents:index")
 
 
 
-def view_document(request, file_id):
-    document = get_object_or_404(Document, id=file_id)
+def view_document(request, file_uid):
+    document = get_object_or_404(Document, uid=file_uid)
 
     if not document.file:
         raise Http404("File not found")

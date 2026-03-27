@@ -56,20 +56,16 @@
                         <td>
                     <!-- filename -> file.id  -->
     
-                            <a href="{% url 'documents:view_document' file.id %}" target="_blank">
+                            <a href="{% url 'documents:view_document' file.uid %}" target="_blank">
                         <!-- file is a Document object now so we access file.file.name -->
                                 {{ file.file.name|cut:"documents/" }}
                             </a>
                         </td>
                         <td>
                             {% if can_upload %}
-                            <!-- confirmation before deleting a doc -->
-                            <form method="post" action="{% url 'documents:delete_file' file.id %}" onsubmit="return confirm('Are you sure you want to delete this document?');">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-danger btn-sm">
-                                    Delete
-                                </button>
-                            </form>
+                            <a href="{% url 'documents:delete_file' file.uid %}" class="btn btn-outline-danger btn-sm">
+                                Delete
+                            </a>
                             {% endif %}
                         </td>
                     </tr>
