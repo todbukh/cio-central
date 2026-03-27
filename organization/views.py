@@ -33,6 +33,7 @@ def messages(request, channel):
         Message.objects
             .filter(channel__name=channel)
             .select_related("user")
+            .select_related("user__profile")
             .order_by("sent_at")
     )
 
