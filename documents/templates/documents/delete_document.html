@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Delete Document{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="bg-body-secondary rounded p-4 mx-auto" style="max-width: 600px;">
+        <h1 class="mb-3">Delete Document</h1>
+        <p class="mb-4">
+            Are you sure you want to delete <strong>{{ file_name }}</strong>?
+        </p>
+
+        <div class="d-flex gap-2">
+            <form method="post" action="{% url 'documents:delete_file_post' document.uid %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    Delete
+                </button>
+            </form>
+
+            <a href="{% url 'documents:index' %}" class="btn btn-outline-secondary">
+                Cancel
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
