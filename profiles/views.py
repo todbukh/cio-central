@@ -31,7 +31,6 @@ def profile_edit_view(request, username):
         if "delete_picture" in request.POST: # user clicks delete button to clear profile picture
             if profile.profile_picture:
                 profile.profile_picture.delete()
-                profile.save()
             return redirect("profiles:profile", username = username)
         profile_picture_file_name = None
         if 'profile_picture' in request.FILES and profile.profile_picture:
