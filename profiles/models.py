@@ -11,7 +11,8 @@ class Profile(models.Model):
         related_name="profile",
     )
     bio = models.TextField(blank=True)
-    # profile_picture = ...  add later when ready for file uploads
+    
+    profile_picture = models.ImageField(upload_to="images/profile_pictures/", blank=True, null=True)
 
     def __str__(self):
         return f"Profile of {self.user.username}"
