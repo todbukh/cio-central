@@ -19,14 +19,21 @@
     </div>
 
     <div class="bg-body-secondary rounded p-3">
-        <!-- embed the file directly on the page -->
-        <iframe
-            src="{{ file_url }}"
-            width="100%"
-            height="800"
-            style="border: none;"
-            title="{{ file_name }}">
-        </iframe>
+        {% if is_image %}
+            <!-- show images directly to fit them on the page better -->
+            <div class="text-center">
+                <img src="{{ file_url }}" alt="{{ file_name }}" class="img-fluid rounded">
+            </div>
+        {% else %}
+            <!-- embed file directly on the page -->
+            <iframe
+                src="{{ file_url }}"
+                width="100%"
+                height="800"
+                style="border: none;"
+                title="{{ file_name }}">
+            </iframe>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

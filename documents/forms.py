@@ -4,6 +4,13 @@ ALLOWED_FILE_TYPES = [
     "application/pdf",
     "image/png",
     "image/jpeg",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "text/plain",
 ]
 
 

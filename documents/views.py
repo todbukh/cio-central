@@ -8,8 +8,6 @@ from .models import Document
 
 def index(request):
 
-
-    
     # handle file uplod from the form
     if request.method == "POST":
         # only exec/owner allowed to upload
@@ -22,8 +20,7 @@ def index(request):
             uploaded_file = form.cleaned_data["file"]
             #save the file using Django storage
             Document.objects.create(file=uploaded_file)
-
-        return redirect("documents:index")
+            return redirect("documents:index")
     
 
     files = list(Document.objects.all())
@@ -47,7 +44,7 @@ def index(request):
     context = {
         "files": files,
         "query": query,
-        "form": DocumentUploadForm(),
+        "form": form if request.method == "POST" else DocumentUploadForm(),
         "can_upload": is_executive(request.user),
     }
     return render(request, "documents/index.html", context)
@@ -72,10 +69,18 @@ def view_document(request, file_id):
     if not document.file:
         raise Http404("File not found")
 
-   # render the file inside the site instead of redirecting to s3
+   
+    file_name = document.file.name.split("/")[-1]
+    file_url = document.file.url
+    lower_file_name = file_name.lower()
+
+    image_extensions = [".png", ".jpg", ".jpeg", ".gif", ".webp"]
+    # render the file inside the site instead of redirecting to s3
+    # and render images differently so they fit better on the page
     context = {
         "document": document,
-        "file_url": document.file.url,
-        "file_name": document.file.name.split("/")[-1],
+        "file_url": file_url,
+        "file_name": file_name,
+        "is_image": any(lower_file_name.endswith(ext) for ext in image_extensions),
     }
     return render(request, "documents/view_document.html", context)
