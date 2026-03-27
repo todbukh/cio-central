@@ -1,39 +1,34 @@
-import os
+from django.shortcuts import get_object_or_404, redirect, render
+from django.http import Http404
 
-from django.conf import settings
-from django.shortcuts import redirect, render
-from django.http import FileResponse, Http404
+from core.permissions import is_executive
+from .forms import DocumentUploadForm
+from .models import Document
 
 
 def index(request):
-    documents_folder = os.path.join(settings.BASE_DIR, "documents", "files")
-    os.makedirs(documents_folder, exist_ok=True)
+
+
     
     # handle file uplod from the form
     if request.method == "POST":
-        uploaded_file = request.FILES.get("document_file")
+        # only exec/owner allowed to upload
+        if not is_executive(request.user):
+            raise Http404()
 
-        if uploaded_file:
-            file_path = os.path.join(documents_folder, uploaded_file.name)
+        form = DocumentUploadForm(request.POST, request.FILES)
 
-            # write the file to the local doc folders
-            with open(file_path, "wb+") as destination:
-                for chunk in uploaded_file.chunks():
-                    destination.write(chunk)
+        if form.is_valid():
+            uploaded_file = form.cleaned_data["file"]
+            #save the file using Django storage
+            Document.objects.create(file=uploaded_file)
 
         return redirect("documents:index")
     
 
-    files = []
-    
-    for name in os.listdir(documents_folder):
-        file_path = os.path.join(documents_folder, name)
-        # make sure we only add files and not something likefolders
-        if os.path.isfile(file_path):
-            files.append(name)
-            
-
-    files.sort()
+    files = list(Document.objects.all())
+    # sort by the file name
+    files.sort(key=lambda document: document.file.name.lower())
 
     query = request.GET.get("q", "").strip()
 
@@ -41,38 +36,40 @@ def index(request):
     if query != "":
         matching_files = []
 
-        for file_name in files:
+        for document in files:
+            file_name = document.file.name.split("/")[-1]
+
             if query.lower() in file_name.lower():
-                matching_files.append(file_name)
+                matching_files.append(document)
 
         files = matching_files
 
     context = {
         "files": files,
         "query": query,
+        "form": DocumentUploadForm(),
+        "can_upload": is_executive(request.user),
     }
     return render(request, "documents/index.html", context)
 
 
 
-def delete_file(request, file_name):
+def delete_file(request, file_id):
     if request.method == "POST":
-        documents_folder = os.path.join(settings.BASE_DIR, "documents", "files")
-        file_path = os.path.join(documents_folder, file_name)
-
-        if os.path.exists(file_path) and os.path.isfile(file_path):
-            os.remove(file_path)
+        document = get_object_or_404(Document, id=file_id)
+        # remove file from storage
+        document.file.delete()
+        # remove it from database
+        document.delete()
 
     return redirect("documents:index")
 
 
 
-def view_document(request, filename):
-    documents_folder = os.path.join(settings.BASE_DIR, "documents", "files")
-    file_path = os.path.join(documents_folder, filename)
+def view_document(request, file_id):
+    document = get_object_or_404(Document, id=file_id)
 
-    if not os.path.exists(file_path):
+    if not document.file:
         raise Http404("File not found")
-    
-    #return the file so the browser can open/download it
-    return FileResponse(open(file_path, "rb"))
+
+    return redirect(document.file.url)
