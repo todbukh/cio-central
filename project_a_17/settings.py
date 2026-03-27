@@ -27,7 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: Keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+# Use env SECRET_KEY if available; fallback for local dev/tests.
+# Django requires SECRET_KEY for session signing (e.g., force_login in tests).
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "test-secret-key")
 
 # Django has a debug mode which shows more detailed error messages and also means static assets
 # can be served without having to run the production `collectstatic` command. However, this

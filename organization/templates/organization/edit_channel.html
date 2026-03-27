@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block title %}{{ org_name|default:"CIO Central" }} — Edit Channel{% endblock %}
+
+{% block body_classes %}vh-100{% endblock %}
+
+{% block content %}
+    <div class="d-flex flex-column w-100 h-100 align-items-center mt-5">
+        <div class="d-flex flex-column bg-body-secondary rounded py-4 mx-auto" style="width: 350px">
+            <div class="d-flex flex-column mx-3 gap-2">
+                <div class="d-flex flex-row gap-3 align-items-center">
+                    <h3 class="my-0">Edit Channel</h3><i class="bi bi-pencil"></i>
+                </div>
+                <form method="post" action="{% url "organization:edit_channel" channel.name %}" autocomplete="off">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <div class="d-flex flex-row gap-2 align-items-center">
+                        <button class="btn btn-primary" type="submit" aria-label="Edit Channel">
+                            Save
+                        </button>
+                        <a href="{% url "organization:home" %}" class="btn btn-outline-secondary" type="button" aria-label="Cancel">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+
+                <div class="mt-3">
+                    <h5 class="text-danger">Delete Channel</h5>
+                    <button
+                            class="btn btn-outline-danger"
+                            type="button"
+                            aria-label="Delete Channel"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteChannelModal"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div class="modal fade" id="deleteChannelModal" tabindex="-1" aria-labelledby="deleteChannelModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteChannelModalLabel">Delete Channel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to proceed?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form method="post" action="{% url "organization:delete_channel" channel.name %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">
+                            Delete Channel
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
