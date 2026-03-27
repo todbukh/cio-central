@@ -1,3 +1,4 @@
+# Generated using Claude Sonnet 4.6 
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone

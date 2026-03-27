@@ -1,6 +1,11 @@
 from django import forms
 from .models import Event
 
+# Right now here are the field contraints
+# - name: required, max_length=64
+# - date: required, must be a valid datetime
+# - location: optional, max_length=100
+# - description: optional, max_length=2000
 
 class EventForm(forms.ModelForm):
     name = forms.CharField(
