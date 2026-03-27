@@ -121,7 +121,7 @@
                                 <div class="d-flex flex-row w-100 justify-content-between align-items-center">
                                     <div class="d-flex flex-row align-items-center gap-2">
                                         <a href="{% url 'profiles:profile' message.user.username %}" class="text-decoration-none d-flex flex-row align-items-center gap-2">
-                                            <img src="https://placehold.co/40x40" alt="Profile picture" class="rounded-circle" width="40px" height="40px">
+                                            <img {% if message.user.profile.profile_picture %}src={{ message.user.profile.profile_picture.url }}{% else %}src="https://placehold.co/40x40"{% endif %} alt="Profile picture" class="rounded-circle" width="40px" height="40px">
                                             <p class="mb-0 fw-bold text-secondary link-info">{{ message.user.username }}</p>
                                         </a>
                                         <p class="mb-0 text-secondary">-</p>
