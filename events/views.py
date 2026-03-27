@@ -53,13 +53,13 @@ def event_edit(request, event_uid):
         form = EventForm(instance=event)
     return render(request, "events/event_edit.html", {"form": form, "event": event})
 
-# Display delete confirmation page
+# Display the delete confirmation page
 @executive_required(redirect_url="organization:home")
 def event_delete(request, event_uid):
     event = get_object_or_404(Event, uid=event_uid)
     return render(request, "events/event_delete.html", {"event": event})
 
-# Perform the actual deletion
+# Perform the actual deletion (required to be a POST request for safety)
 @executive_required(redirect_url="organization:home")
 @require_POST
 def event_delete_confirm(request, event_uid):
