@@ -32,16 +32,4 @@
   </div>
 
 </div>
-
-{% if is_owner %}
-<script>
-  // JavaScript to handle click and auto-submit on file selection (mimics s3_demo's form behavior)
-  document.getElementById('profile-pic').addEventListener('click', function() {
-    document.getElementById('profile-pic-input').click();
-  });
-  document.getElementById('profile-pic-input').addEventListener('change', function() {
-    document.getElementById('profile-pic-form').submit();
-  });
-</script>
-{% endif %}
 {% endblock %}
