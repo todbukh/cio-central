@@ -32,7 +32,7 @@ def messages(request, channel):
     message_list = list(
         Message.objects
             .filter(channel__name=channel)
-            .select_related("user")
+            .select_related("user__profile")
             .order_by("sent_at")
     )
 
