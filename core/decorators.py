@@ -16,7 +16,7 @@ import functools
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import NoReverseMatch, reverse
-from core.permissions import is_executive
+from core.permissions import is_executive, is_owner
 
 # NOTE: Just a reminder that approval status is checked globally in core/middleware.py
 
@@ -50,3 +50,22 @@ def executive_required(view_func=None, *, redirect_url=None):
     return decorator
 
 # Add more decorators down here as needed
+def owner_required(view_func=None, *, redirect_url=None):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            if not is_owner(request.user):
+                if redirect_url:
+                    try:
+                        # First, treat redirect_url as a URL name for reverse().
+                        return redirect(reverse(redirect_url))
+                    except NoReverseMatch:
+                        # If reversing fails, fall back to using redirect_url as a literal URL/path.
+                        return redirect(redirect_url)
+                raise PermissionDenied
+            return func(request, *args, **kwargs) # call original view function if check passes
+        return wrapper
+
+    if view_func is not None:
+        return decorator(view_func)
+    return decorator
