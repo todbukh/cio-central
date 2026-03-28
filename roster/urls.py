@@ -10,5 +10,5 @@ urlpatterns = [
     path("action/reject/<uuid:uid>/", views.reject, name="reject"),
     path("action/ban/<uuid:uid>/", views.ban, name="ban"),
     path("action/renew_application/<uuid:uid>/", views.renew_application, name="renew_application"),
-    path("roster/set-role/<uuid:uid>/", views.set_role, name="set_role"),
+    path("set-role/<uuid:uid>/", views.set_role, name="set_role"),
 ]
