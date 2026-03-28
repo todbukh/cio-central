@@ -33,7 +33,7 @@ def event_detail(request, event_uid):
 @executive_required(redirect_url="organization:home")
 def event_create(request):
     if request.method == "POST":
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, instance=Event(created_by=request.user))
         if form.is_valid():
             form.save()
             return redirect("exec_panel:events:events")
