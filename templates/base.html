@@ -16,9 +16,12 @@
                     <a class="btn btn-outline-info me-2" href="{% url 'exec_panel:executive_redirect' %}">Exec Panel</a>
                 </li>
                 {% endif %}
+
+                {% if user.is_authenticated and user.status == user.Status.APPROVED %}
                 <li class="nav-item">
                    <a class="btn btn-outline-secondary" href="{% url 'documents:index' %}">Documents</a>
                 </li>
+                {% endif %}
 
             </ul>
             <form method="post" action="/accounts/logout/">

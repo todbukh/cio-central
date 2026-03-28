@@ -36,6 +36,7 @@
     </ul>
 
     <!-- Documents accessibility on the sidebar -->
+     {% if user.is_authenticated and user.status == user.Status.APPROVED %}
     <hr class="my-3">
 
     <p class="text-body-secondary text-uppercase small fw-semibold px-2 mb-1">
@@ -47,6 +48,7 @@
         <i class="bi bi-folder"></i>
         <span class="text-truncate">All Documents</span>
     </a>
+    {% endif %}
     
 </nav>
 
