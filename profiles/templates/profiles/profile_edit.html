@@ -6,8 +6,12 @@
     <div class="container py-5">
         <div class="container text-center">
             <div class="d-inline-flex flex-column align-items-center position-relative">
-                <img src="{% if profile_user.profile.profile_picture %}{{ profile_user.profile.profile_picture.url }}{% else %}https://placehold.co/120x120{% endif %}"
-                     width=120 height=120 alt="Profile picture" class="rounded-circle mb-3">
+                {% if user.profile.profile_picture %}
+                    <img src="{{ profile_user.profile.profile_picture.url }}"
+                         width=120 height=120 alt="Profile picture" class="rounded-circle mb-3">
+                {% else %}
+                    <i class="bi bi-person-circle" style="font-size: 120px;"></i>
+                {% endif %}
                 <!-- check if user already has profile picture to be deleted-->
                 {% if profile_user.profile.profile_picture %}
                     <button type="button"
