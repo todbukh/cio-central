@@ -1,4 +1,5 @@
 from django import forms
+from core.validators import validate_file_size
 
 ALLOWED_FILE_TYPES = [
     "application/pdf",
@@ -22,5 +23,7 @@ class DocumentUploadForm(forms.Form):
 
         if file.content_type not in ALLOWED_FILE_TYPES:
             raise forms.ValidationError("File type not supported")
+        
+        validate_file_size(file)
 
         return file
