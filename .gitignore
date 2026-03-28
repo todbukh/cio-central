@@ -29,6 +29,9 @@ staticfiles/
 # User-uploaded Media
 media/
 
+# Local documents upload
+documents/files/*
+
 # --- Security / Configuration ---
 .env
 .env.local

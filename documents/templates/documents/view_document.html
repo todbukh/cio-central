@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}View Document{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="mb-1">Document Viewer</h1>
+            <p class="text-body-secondary mb-0">{{ file_name }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'documents:index' %}" class="btn btn-outline-secondary">
+                Back
+            </a>
+            <a href="{{ file_url }}" target="_blank" class="btn btn-primary">
+                Open in New Tab
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-body-secondary rounded p-3">
+        {% if is_image %}
+            <!-- show images directly to fit them on the page better -->
+            <div class="text-center">
+                <img src="{{ file_url }}" alt="{{ file_name }}" class="img-fluid rounded">
+            </div>
+        {% else %}
+            <!-- embed file directly on the page -->
+            <iframe
+                src="{{ file_url }}"
+                width="100%"
+                height="800"
+                style="border: none;"
+                title="{{ file_name }}">
+            </iframe>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
