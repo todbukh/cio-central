@@ -1,5 +1,3 @@
-import datetime
-
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from core.decorators import executive_required
@@ -12,7 +10,7 @@ from .models import Event
 @executive_required(redirect_url="organization:home")
 def events(request, date_filter="all"):
     if date_filter == "today":
-        all_events = Event.objects.filter(date__date=datetime.date.today())
+        all_events = Event.objects.filter(date__date=timezone.localdate())
     elif date_filter == "past":
         all_events = Event.objects.filter(date__lt=timezone.now())
     else:

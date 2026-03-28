@@ -1,5 +1,6 @@
 import datetime
 
+from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
@@ -14,7 +15,7 @@ from events.models import Event
 def attendance(request, date_filter="today"):
     if date_filter in ["all", "ALL"]:
         events = Event.objects.all().order_by("date")
-    else: events = Event.objects.filter(date__date=datetime.date.today())
+    else: events = Event.objects.filter(date__date=timezone.localdate())
     context = {
         "active_tab": "attendance",
         "events": events,
