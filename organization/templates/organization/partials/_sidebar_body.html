@@ -39,7 +39,11 @@
 {# User footer #}
 <a href="{% url 'profiles:profile_redirect' %}"
    class="p-3 border-top d-flex align-items-center gap-2 text-decoration-none text-body link-info flex-shrink-0">
-    <i class="bi bi-person-circle fs-4"></i>
+    {% if user.profile.profile_picture %}
+        <img src="{{ user.profile.profile_picture.url }}" alt="Profile picture" class="rounded-circle" width="32px" height="32px">
+    {% else %}
+        <i class="bi bi-person-circle fs-4"></i>
+    {% endif %}
     <div class="overflow-hidden flex-grow-1">
         <p class="mb-0 small fw-semibold text-truncate">
             {{ user.get_full_name|default:user.username }}
