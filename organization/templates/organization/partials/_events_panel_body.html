@@ -19,6 +19,9 @@
     </div>
 {% empty %}
     <div class="d-flex align-items-center justify-content-center h-100">
-        <p class="text-body-secondary small text-center mb-0">No events today.</p>
+        <div class="text-center">
+            <i class="bi bi-calendar-x fs-1 text-body-secondary d-block mb-3"></i>
+            <p class="text-body-secondary small mb-0">No events today.</p>
+        </div>
     </div>
 {% endfor %}
