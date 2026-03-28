@@ -26,7 +26,7 @@
                 <i class="bi bi-calendar-event me-1"></i>{{ event.date }}
             </p>
             {% if event.location %}
-            <p class="text-body-secondary mb-4">
+            <p class="text-body-secondary mb-4 text-break">
                 <i class="bi bi-geo-alt me-1"></i>{{ event.location }}
             </p>
             {% else %}
@@ -34,7 +34,7 @@
             {% endif %}
 
             <h6 class="text-body-secondary text-uppercase mb-2">Description</h6>
-            <p class="text-body">{{ event.description }}</p>
+            <p class="text-body text-break">{{ event.description }}</p>
         </div>
     </div>
 {% endblock %}

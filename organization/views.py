@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponseForbidden, Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from core.decorators import executive_required
+from events.models import Event
 from .forms import MessageForm, ChannelForm
 from .models import Channel, Message
 
@@ -36,10 +38,14 @@ def messages(request, channel):
             .order_by("sent_at")
     )
 
+    today = timezone.localdate()
+    today_events = list(Event.objects.filter(date__date=today))
+
     context = {
         "active_channel": active_channel,
         "channels": list(Channel.objects.all()),
         "messages": message_list,
+        "today_events": today_events,
     }
 
     return render(request, 'organization/home.html', context)
