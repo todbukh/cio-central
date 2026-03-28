@@ -1,19 +1,27 @@
 {# generated with Claude Opus 4.6 Extended #}
 {# Events panel body: event cards — shared by desktop aside & offcanvas #}
-{% for _ in "123" %}
+{% load tz %}
+{% for event in today_events %}
     <div class="rounded border bg-body p-3 d-flex gap-3">
         <div class="flex-shrink-0 d-flex flex-column align-items-center justify-content-center rounded bg-primary-subtle border border-info-subtle text-center px-2 py-1" style="min-width: 3rem;">
-            <span class="text-primary small fw-bold text-uppercase" style="font-size: .65rem;">Month</span>
-            <span class="text-primary fw-bold lh-1" style="font-size: 1.25rem;">--</span>
+            <span class="text-primary small fw-bold text-uppercase" style="font-size: .65rem;">{{ event.date|localtime|date:"M" }}</span>
+            <span class="text-primary fw-bold lh-1" style="font-size: 1.25rem;">{{ event.date|localtime|date:"j" }}</span>
         </div>
         <div class="overflow-hidden">
-            <p class="fw-semibold text-body mb-1 text-truncate">Event title placeholder</p>
+            <p class="fw-semibold text-body mb-1 text-truncate">{{ event.name }}</p>
             <p class="text-body-secondary small mb-1">
-                <i class="bi bi-clock me-1"></i>00:00 – 00:00
+                <i class="bi bi-clock me-1"></i>{{ event.date|localtime|date:"g:i A" }}
             </p>
             <p class="text-body-secondary small mb-0 text-truncate">
-                <i class="bi bi-geo-alt me-1"></i>Location or virtual link
+                <i class="bi bi-geo-alt me-1"></i>{{ event.location|default:"No location specified" }}
             </p>
+        </div>
+    </div>
+{% empty %}
+    <div class="d-flex align-items-center justify-content-center h-100">
+        <div class="text-center">
+            <i class="bi bi-calendar-x fs-1 text-body-secondary d-block mb-3"></i>
+            <p class="text-body-secondary small mb-0">No events today.</p>
         </div>
     </div>
 {% endfor %}

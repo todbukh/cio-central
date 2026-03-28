@@ -1,5 +1,4 @@
-import datetime
-
+from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from core.decorators import executive_required
 from django.views.decorators.http import require_POST
@@ -11,9 +10,9 @@ from .models import Event
 @executive_required(redirect_url="organization:home")
 def events(request, date_filter="all"):
     if date_filter == "today":
-        all_events = Event.objects.filter(date__date=datetime.date.today())
+        all_events = Event.objects.filter(date__date=timezone.localdate())
     elif date_filter == "past":
-        all_events = Event.objects.filter(date__lt=datetime.datetime.now())
+        all_events = Event.objects.filter(date__lt=timezone.now())
     else:
         all_events = Event.objects.all()
     return render(request, "events/events.html", {
@@ -32,7 +31,7 @@ def event_detail(request, event_uid):
 @executive_required(redirect_url="organization:home")
 def event_create(request):
     if request.method == "POST":
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, instance=Event(created_by=request.user))
         if form.is_valid():
             form.save()
             return redirect("exec_panel:events:events")

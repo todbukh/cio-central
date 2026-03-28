@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from core.models import User
@@ -40,6 +42,8 @@ def reject(request, uid):
 @executive_required(redirect_url="organization:home")
 def ban(request, uid):
     member = get_object_or_404(User, uid=uid)
+    if member.role == User.Role.EXEC and request.user.role != User.Role.Owner:
+        raise PermissionDenied
     member.status = User.Status.BANNED
     member.role = User.Role.MEMBER
     member.save()
@@ -57,6 +61,18 @@ def renew_application(request, uid):
 @owner_required(redirect_url="organization:home")
 def set_role(request, uid):
     member = get_object_or_404(User, uid=uid)
-    member.role = request.POST.get("role")
+    member_role = request.POST.get("role")
+    if member_role not in [User.Role.EXEC, User.Role.MEMBER]:
+        raise PermissionDenied
+    member.role = member_role
     member.save()
     return redirect("exec_panel:roster:roster", active_roster="members")
+
+@require_POST
+@login_required(login_url="/login/")
+@executive_required()
+def restore_application(request, uid):
+    member = get_object_or_404(User, uid=uid)
+    member.status = User.Status.PENDING
+    member.save()
+    return redirect("organization:home")

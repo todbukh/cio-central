@@ -48,10 +48,12 @@
 
     {# Actions #}
     <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
-      <a
-         class="btn btn-primary">
-        <i class="bi bi-send me-2"></i>Reapply
-      </a>
+      <form method="post" action="{% url "exec_panel:roster:restore_application" user.uid %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-send me-2"></i>Reapply
+        </button>
+      </form>
     </div>
 
   </div>
