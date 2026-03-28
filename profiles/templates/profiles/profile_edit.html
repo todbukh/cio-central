@@ -34,8 +34,11 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="id_bio" class="form-label text-body">About Me</label>
-                    <textarea name="bio" id="id_bio" class="form-control bg-body text-body"
+                    <textarea name="bio" id="id_bio" class="form-control bg-body text-body {% if form.bio.errors %}is-invalid{% endif %}"
                               rows="4">{{ form.bio.value|default:'' }}</textarea>
+                    {% if form.bio.errors %}
+                        <div class="invalid-feedback">{{ form.bio.errors|join:", " }}</div>
+                    {% endif %}
                 </div>
                 <div class="mb-3">
                     <label for="id_profile_picture" class="form-label text-body">Profile Picture</label>
