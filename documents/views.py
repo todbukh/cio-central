@@ -5,8 +5,10 @@ from core.permissions import is_executive
 from .forms import DocumentUploadForm
 from .models import Document
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url="/login/")
 def index(request):
 
     # handle file uplod from the form
@@ -52,7 +54,10 @@ def index(request):
 
 
 
+@login_required(login_url="/login/")
 def delete_file(request, file_uid):
+    if not is_executive(request.user):
+        raise Http404()
     
     document = get_object_or_404(Document, uid=file_uid)
 
@@ -63,8 +68,12 @@ def delete_file(request, file_uid):
     return render(request, "documents/delete_document.html", context)
 
 
+@login_required(login_url="/login/")
 @require_POST
 def delete_file_post(request, file_uid):
+    if not is_executive(request.user):
+        raise Http404()
+    
     document = get_object_or_404(Document, uid=file_uid)
     # remove file from storage
     document.file.delete()
@@ -74,6 +83,7 @@ def delete_file_post(request, file_uid):
 
 
 
+@login_required(login_url="/login/")
 def view_document(request, file_uid):
     document = get_object_or_404(Document, uid=file_uid)
 
