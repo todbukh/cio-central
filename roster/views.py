@@ -70,6 +70,7 @@ def set_role(request, uid):
 
 @require_POST
 @login_required(login_url="/login/")
+@executive_required()
 def restore_application(request, uid):
     member = get_object_or_404(User, uid=uid)
     member.status = User.Status.PENDING

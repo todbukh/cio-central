@@ -20,7 +20,7 @@
 
         <!-- Profile picture and username -->
         <div class="text-center mb-4">
-            {% if user.profile.profile_picture %}
+            {% if profile_user.profile.profile_picture %}
                 <img src="{{ profile_user.profile.profile_picture.url }}"
                      width=120 height=120 alt="Profile picture" class="rounded-circle mb-3">
             {% else %}

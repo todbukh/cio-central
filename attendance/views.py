@@ -46,7 +46,7 @@ def event_attendance(request, event_uid):
 def update_attendance(request, event_uid, member_uid):
     member_attendance = get_object_or_404(Attendance, event__uid=event_uid, member__uid=member_uid)
     member_attendance_status = request.POST["status"]
-    if member_attendance.status not in [Attendance.Status.PRESENT, Attendance.Status.ABSENT, Attendance.Status.UNSET, Attendance.Status.EXCUSED]:
+    if member_attendance_status not in [Attendance.Status.PRESENT, Attendance.Status.ABSENT, Attendance.Status.UNSET, Attendance.Status.EXCUSED]:
         raise PermissionDenied("Status doesn't exist")
     member_attendance.status = member_attendance_status
     member_attendance.save()
