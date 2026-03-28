@@ -42,7 +42,7 @@ def reject(request, uid):
 @executive_required(redirect_url="organization:home")
 def ban(request, uid):
     member = get_object_or_404(User, uid=uid)
-    if member.role == User.Role.EXEC and request.role != User.Role.Owner:
+    if member.role == User.Role.EXEC and request.user.role != User.Role.Owner:
         raise PermissionDenied
     member.status = User.Status.BANNED
     member.role = User.Role.MEMBER
