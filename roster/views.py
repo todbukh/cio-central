@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from core.models import User
@@ -57,6 +58,9 @@ def renew_application(request, uid):
 @owner_required(redirect_url="organization:home")
 def set_role(request, uid):
     member = get_object_or_404(User, uid=uid)
-    member.role = request.POST.get("role")
+    member_role = request.POST.get("role")
+    if member_role not in [User.Role.OWNER, User.Role.EXEC, User.Role.MEMBER]:
+        raise PermissionDenied("That role doesn't exist")
+    member.role = member_role
     member.save()
     return redirect("exec_panel:roster:roster", active_roster="members")

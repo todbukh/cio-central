@@ -1,6 +1,6 @@
 import datetime
 
-from django.http import HttpResponseNotAllowed
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
@@ -44,8 +44,9 @@ def event_attendance(request, event_uid):
 @executive_required(redirect_url="organization:home")
 def update_attendance(request, event_uid, member_uid):
     member_attendance = get_object_or_404(Attendance, event__uid=event_uid, member__uid=member_uid)
-    member_attendance.status = request.POST["status"]
+    member_attendance_status = request.POST["status"]
     if member_attendance.status not in [Attendance.Status.PRESENT, Attendance.Status.ABSENT, Attendance.Status.UNSET, Attendance.Status.EXCUSED]:
-        raise HttpResponseNotAllowed
+        raise PermissionDenied("Status doesn't exist")
+    member_attendance.status = member_attendance_status
     member_attendance.save()
     return redirect("exec_panel:attendance:event_attendance", event_uid=event_uid)
