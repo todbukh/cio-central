@@ -77,7 +77,7 @@ def delete_file_post(request, file_uid):
     
     document = get_object_or_404(Document, uid=file_uid)
     # remove file from storage
-    document.file.delete()
+    document.file.delete(save=False)
     # remove it from database
     document.delete()
     return redirect("documents:index")
@@ -106,3 +106,4 @@ def view_document(request, file_uid):
         "is_image": any(lower_file_name.endswith(ext) for ext in image_extensions),
     }
     return render(request, "documents/view_document.html", context)
+
