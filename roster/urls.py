@@ -11,4 +11,5 @@ urlpatterns = [
     path("action/ban/<uuid:uid>/", views.ban, name="ban"),
     path("action/renew_application/<uuid:uid>/", views.renew_application, name="renew_application"),
     path("set-role/<uuid:uid>/", views.set_role, name="set_role"),
+    path("restore-application/<uuid:uid>/", views.restore_application, name="restore_application"),
 ]

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
@@ -64,3 +65,11 @@ def set_role(request, uid):
     member.role = member_role
     member.save()
     return redirect("exec_panel:roster:roster", active_roster="members")
+
+@require_POST
+@login_required(login_url="/login/")
+def restore_application(request, uid):
+    member = get_object_or_404(User, uid=uid)
+    member.status = User.Status.PENDING
+    member.save()
+    return redirect("organization:home")

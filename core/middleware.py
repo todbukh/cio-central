@@ -15,6 +15,7 @@ class ApprovalStatusMiddleware:
     EXEMPT_PATHS = [
         "/accounts/",       # allauth login, logout, signup routes
         "/admin/",          # Django admin
+        "/executive/roster/restore-application/"
     ]
 
     # Paths matched exactly.
