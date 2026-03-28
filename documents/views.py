@@ -6,6 +6,8 @@ from .forms import DocumentUploadForm
 from .models import Document
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from core.decorators import executive_required
+
 
 
 @login_required(login_url="/login/")
@@ -55,9 +57,8 @@ def index(request):
 
 
 @login_required(login_url="/login/")
+@executive_required(redirect_url="documents:index")
 def delete_file(request, file_uid):
-    if not is_executive(request.user):
-        raise Http404()
     
     document = get_object_or_404(Document, uid=file_uid)
 
@@ -70,9 +71,8 @@ def delete_file(request, file_uid):
 
 @login_required(login_url="/login/")
 @require_POST
+@executive_required(redirect_url="documents:index")
 def delete_file_post(request, file_uid):
-    if not is_executive(request.user):
-        raise Http404()
     
     document = get_object_or_404(Document, uid=file_uid)
     # remove file from storage
