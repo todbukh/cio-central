@@ -7,6 +7,7 @@ from .models import Document
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from core.decorators import executive_required
+from django.core.exceptions import PermissionDenied
 
 
 
@@ -17,7 +18,7 @@ def index(request):
     if request.method == "POST":
         # only exec/owner allowed to upload
         if not is_executive(request.user):
-            raise Http404()
+            raise PermissionDenied
 
         form = DocumentUploadForm(request.POST, request.FILES)
 
