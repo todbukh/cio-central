@@ -1,0 +1,99 @@
+{% extends 'exec_panel/executive-base.html' %}
+
+{% block tab %}
+    <div class="d-flex flex-column gap-4 align-self-stretch mb-4">
+        <section class="rounded-4 overflow-hidden border bg-body">
+            <div class="p-4 p-md-5 border-bottom">
+                <div class="d-flex flex-column gap-3 gap-md-4">
+                    <div>
+                        <a href="{% url 'exec_panel:analytics:analytics' %}?view=users" class="btn btn-outline-secondary btn-sm rounded-pill px-3">&larr; Back to analytics</a>
+                    </div>
+                    <div class="row g-4 align-items-end">
+                        <div class="col-12 col-lg-7">
+                            <p class="text-uppercase small fw-semibold text-primary mb-2">Member Detail</p>
+                            <h2 class="display-6 fw-semibold mb-2">{{ display_name }}</h2>
+                            <p class="text-body-secondary mb-0">Past-event attendance, participation rate, and event-by-event status in one place.</p>
+                        </div>
+                        <div class="col-12 col-lg-5">
+                            <div class="bg-body-tertiary rounded-4 p-4">
+                                <div class="d-flex justify-content-between align-items-baseline mb-2">
+                                    <span class="text-body-secondary text-uppercase small">Attendance rate</span>
+                                    <span class="fs-2 fw-semibold text-primary">{{ attendance_rate }}</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 0.65rem;" role="img" aria-label="{{ display_name }} attendance rate {{ attendance_rate }}">
+                                    <div
+                                        class="progress-bar bg-primary"
+                                        style="width: {{ attendance_rate }};"
+                                        aria-hidden="true"
+                                    ></div>
+                                </div>
+                                <p class="text-body-secondary small mb-0">{{ events_attended }} attended out of {{ tracked_events }} tracked past events.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 p-md-5">
+                <div class="row g-4">
+                    <div class="col-12 col-md-4">
+                        <div class="h-100">
+                            <p class="text-body-secondary text-uppercase small mb-1">Events attended</p>
+                            <p class="fs-1 fw-semibold mb-0">{{ events_attended }}</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="h-100 ps-md-4">
+                            <p class="text-body-secondary text-uppercase small mb-1">Tracked events</p>
+                            <p class="fs-1 fw-semibold mb-0">{{ tracked_events }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="rounded-4 border bg-body p-4 p-md-5">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-4">
+                <div>
+                    <p class="text-uppercase small fw-semibold text-primary mb-2">History</p>
+                    <h4 class="mb-1">Past event history</h4>
+                    <p class="text-body-secondary mb-0">Use this list to inspect how attendance was recorded for each event.</p>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Event</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in attendance_rows %}
+                            <tr>
+                                <td><a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'exec_panel:attendance:event_attendance' row.event.uid %}">{{ row.event.name }}</a></td>
+                                <td>{{ row.event.date|date:"M j, Y g:i A" }}</td>
+                                <td>
+                                    {% if row.status == "PRESENT" %}
+                                        <span class="badge text-bg-primary rounded-pill px-3 py-2">{{ row.status }}</span>
+                                    {% elif row.status == "ABSENT" %}
+                                        <span class="badge text-bg-secondary rounded-pill px-3 py-2">{{ row.status }}</span>
+                                    {% elif row.status == "EXCUSED" %}
+                                        <span class="badge text-bg-info rounded-pill px-3 py-2">{{ row.status }}</span>
+                                    {% else %}
+                                        <span class="badge text-bg-light rounded-pill px-3 py-2">{{ row.status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-body-secondary">No past attendance records yet.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+{% endblock %}
