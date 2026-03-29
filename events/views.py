@@ -25,7 +25,7 @@ def events(request, date_filter="all"):
 @executive_required(redirect_url="organization:home")
 def event_detail(request, event_uid):
     event = get_object_or_404(Event, uid=event_uid)
-    return render(request, "events/event_detail.html", {"event": event})
+    return render(request, "events/event_detail.html", {"event": event, "active_tab": "events"})
 
 # Create a new event
 @executive_required(redirect_url="organization:home")
@@ -37,7 +37,7 @@ def event_create(request):
             return redirect("exec_panel:events:events")
     else:
         form = EventForm()
-    return render(request, "events/event_create.html", {"form": form})
+    return render(request, "events/event_create.html", {"form": form, "active_tab": "events"})
 
 # Edit an existing event
 @executive_required(redirect_url="organization:home")
@@ -50,13 +50,13 @@ def event_edit(request, event_uid):
             return redirect("exec_panel:events:events")
     else:
         form = EventForm(instance=event)
-    return render(request, "events/event_edit.html", {"form": form, "event": event})
+    return render(request, "events/event_edit.html", {"form": form, "event": event, "active_tab": "events"})
 
 # Display the delete confirmation page
 @executive_required(redirect_url="organization:home")
 def event_delete(request, event_uid):
     event = get_object_or_404(Event, uid=event_uid)
-    return render(request, "events/event_delete.html", {"event": event})
+    return render(request, "events/event_delete.html", {"event": event, "active_tab": "events"})
 
 # Perform the actual deletion (required to be a POST request for safety)
 @executive_required(redirect_url="organization:home")
