@@ -6,17 +6,14 @@
     <div class="container py-5">
 
         <!-- Top bar -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <a href="/" class="btn btn-outline-primary">
-                <i class="bi bi-arrow-left"></i> Home
+        {% if is_owner %}
+        <div class="d-flex justify-content-end align-items-center mb-4">
+            <a href="{% url 'profiles:profile_edit' username=profile_user.username %}" class="btn btn-outline-info"
+               title="Edit Profile">
+                <i class="bi bi-pencil-square"></i> Edit Profile
             </a>
-            {% if is_owner %}
-                <a href="{% url 'profiles:profile_edit' username=profile_user.username %}" class="btn btn-outline-info"
-                   title="Edit Profile">
-                    <i class="bi bi-pencil-square"></i> Edit Profile
-                </a>
-            {% endif %}
         </div>
+        {% endif %}
 
         <!-- Profile picture and username -->
         <div class="text-center mb-4">

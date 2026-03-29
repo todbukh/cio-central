@@ -71,7 +71,7 @@ def set_role(request, uid):
 @require_POST
 @login_required(login_url="/login/")
 def restore_application(request, uid):
-    if request.user.uid != uid:
+    if request.user.uid != uid or request.user.status == User.Status.BANNED:
         raise PermissionDenied
     member = get_object_or_404(User, uid=uid)
     member.status = User.Status.PENDING
