@@ -3,25 +3,83 @@
 {% block title %}Edit Profile{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+    <div class="container py-5">
+        <div class="container text-center">
+            <div class="d-inline-flex flex-column align-items-center position-relative">
+                {% if profile_user.profile.profile_picture %}
+                    <img src="{{ profile_user.profile.profile_picture.url }}"
+                         width=120 height=120 alt="Profile picture" class="rounded-circle mb-3">
+                {% else %}
+                    <i class="bi bi-person-circle" style="font-size: 120px;"></i>
+                {% endif %}
+                <!-- check if user already has profile picture to be deleted-->
+                {% if profile_user.profile.profile_picture %}
+                    <button type="button"
+                            class="btn p-0 bg-transparent border-0 text-secondary link-danger position-absolute top-0 end-0"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteProfilePictureModal"
+                    >
+                        <i class="bi bi-file-x fs-3"></i>
+                    </button>
+                {% endif %}
+            </div>
+            <h2 class="text-body">{{ profile_user.username }}</h2>
+        </div>
+        <div class="bg-body-secondary rounded p-4 mx-auto" style="max-width: 600px;">
+            <h4 class="text-body mb-4">
+                <i class="bi bi-pencil-square me-2"></i>Edit Profile
+            </h4>
 
-  <div class="bg-body-secondary rounded p-4 mx-auto" style="max-width: 600px;">
-    <h4 class="text-body mb-4">
-      <i class="bi bi-pencil-square me-2"></i>Edit Profile
-    </h4>
+            <form method="post" enctype="multipart/form-data" action="{% url "profiles:profile_edit" user.username %}">  <!-- Add enctype for file uploads -->
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_bio" class="form-label text-body">About Me</label>
+                    <textarea name="bio" id="id_bio" class="form-control bg-body text-body {% if form.bio.errors %}is-invalid{% endif %}"
+                              rows="4">{{ form.bio.value|default:'' }}</textarea>
+                    {% if form.bio.errors %}
+                        <div class="invalid-feedback">{{ form.bio.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label for="id_profile_picture" class="form-label text-body">Profile Picture</label>
+                    <div class="d-flex gap-2 align-items-center">
+                        <!-- this line uses different formatting aside form django's default widget so can be more customizeable BUT this means we need to call profile_picture.name instead in default_storage.delete() method as we need to pass in a string -->
+                        <input type="file" name="profile_picture" id="id_profile_picture"
+                               class="form-control bg-body text-body" accept="image/*">
+                    </div>
 
-    <form method="post">
-      {% csrf_token %}
-      <div class="mb-3">
-        <label for="id_bio" class="form-label text-body">About Me</label>
-        <textarea name="bio" id="id_bio" class="form-control bg-body text-body" rows="4">{{ form.bio.value|default:'' }}</textarea>
-      </div>
-      <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a href="{% url 'profiles:profile' username=request.user.username %}" class="btn btn-outline-primary">Cancel</a>
-      </div>
-    </form>
-  </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{% url 'profiles:profile' username=request.user.username %}"
+                       class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
 
-</div>
+    </div>
+
+    <div class="modal fade" id="deleteProfilePictureModal" tabindex="-1" aria-labelledby="deleteProfilePictureModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProfilePictureModalLabel">Delete Profile Picture</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to proceed? Your current profile picture will be immediately deleted.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form method="post" enctype="multipart/form-data" action="{% url "profiles:profile_edit" user.username %}">
+                        {% csrf_token %}
+                        <input id="deleteProfilePictureInput" type="hidden" name="id">
+                        <button type="submit" name="delete_picture" class="btn btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

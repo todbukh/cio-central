@@ -3,33 +3,36 @@
 {% block title %}{{ profile_user.username }}'s Profile{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+    <div class="container py-5">
 
-  <!-- Top bar -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <a href="/" class="btn btn-outline-primary">
-      <i class="bi bi-arrow-left"></i> Home
-    </a>
-    {% if is_owner %}
-      <a href="{% url 'profiles:profile_edit' username=profile_user.username %}" class="btn btn-outline-info" title="Edit Profile">
-        <i class="bi bi-pencil-square"></i> Edit Profile
-      </a>
-    {% endif %}
-  </div>
+        <!-- Top bar -->
+        {% if is_owner %}
+        <div class="d-flex justify-content-end align-items-center mb-4">
+            <a href="{% url 'profiles:profile_edit' username=profile_user.username %}" class="btn btn-outline-info"
+               title="Edit Profile">
+                <i class="bi bi-pencil-square"></i> Edit Profile
+            </a>
+        </div>
+        {% endif %}
 
-  <!-- Profile picture and username -->
-  <div class="text-center mb-4">
-    <img src="https://placehold.co/120x120" alt="Profile picture" class="rounded-circle mb-3">
-    <h2 class="text-body">{{ profile_user.username }}</h2>
-  </div>
+        <!-- Profile picture and username -->
+        <div class="text-center mb-4">
+            {% if profile_user.profile.profile_picture %}
+                <img src="{{ profile_user.profile.profile_picture.url }}"
+                     width=120 height=120 alt="Profile picture" class="rounded-circle mb-3">
+            {% else %}
+                <i class="bi bi-person-circle" style="font-size: 120px;"></i>
+            {% endif %}
+            <h2 class="text-body">{{ profile_user.username }}</h2>
+        </div>
 
-  <!-- Bio section -->
-  <div class="bg-body-secondary rounded p-4 mx-auto" style="max-width: 600px;">
-    <h5 class="text-body mb-2">
-      <i class="bi bi-person-lines-fill me-2"></i>About Me
-    </h5>
-    <p class="text-body-secondary mb-0">{{ profile_user.profile.bio }}</p>
-  </div>
+        <!-- Bio section -->
+        <div class="bg-body-secondary rounded p-4 mx-auto" style="max-width: 600px;">
+            <h5 class="text-body mb-2">
+                <i class="bi bi-person-lines-fill me-2"></i>About Me
+            </h5>
+            <p class="text-body-secondary mb-0" style="overflow-wrap: break-word; word-break: break-word;">{{ profile_user.profile.bio }}</p>
+        </div>
 
-</div>
+    </div>
 {% endblock %}

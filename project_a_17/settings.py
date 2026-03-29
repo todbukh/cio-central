@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "profiles.apps.ProfilesConfig",
     "exec_panel.apps.ExecPanelConfig",
+    "documents.apps.DocumentsConfig",
     "events.apps.EventsConfig",
     "attendance.apps.AttendanceConfig",
     "analytics.apps.AnalyticsConfig",

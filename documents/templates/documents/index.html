@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Documents{% endblock %}
+
+
+{% block content %}
+<div class="container py-4">
+
+    <h1>Documents</h1>
+    <p class="text-body-secondary">
+        Upload and view organization documents
+    </p>
+
+    {% if can_upload %}
+    <!-- this only shows the upload section to exec/owner -->
+    <div class="bg-body-secondary rounded p-3 mb-4">
+
+        <h5>Upload Document</h5>
+
+        <form method="post" enctype="multipart/form-data" class="d-flex gap-2">
+            {% csrf_token %}
+            <!-- changed name to file -->
+            <input type="file" name="file" class="form-control" required>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+
+        {% if form.file.errors %}
+        <p class="text-danger mt-2 mb-0">{{ form.file.errors.0 }}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+
+    <div class="bg-body-secondary rounded p-3">
+
+        <h5>All Documents</h5>
+
+        <form method="get" class="d-flex gap-2 mb-3">
+            <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by file name">
+            <button type="submit" class="btn btn-outline-primary">
+                Search
+            </button>
+        </form>
+
+        {% if files %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in files %}
+                    <tr>
+                        <td>
+                    <!-- filename -> file.id  -->
+    
+                            <a href="{% url 'documents:view_document' file.uid %}" target="_blank" rel="noopener noreferrer">
+                        <!-- file is a Document object now so we access file.file.name -->
+                                {{ file.file.name|cut:"documents/" }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if can_upload %}
+                            <a href="{% url 'documents:delete_file' file.uid %}" class="btn btn-outline-danger btn-sm">
+                                Delete
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        {% else %}
+        <p class="text-body-secondary mb-0">No documents found.</p>
+        {% endif %}
+
+    </div>
+
+
+
+</div>
+{% endblock %}
