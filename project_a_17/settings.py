@@ -337,8 +337,8 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Changing these defaults is not necessary as social accounts just get auto-generated usernames
 # But if we decide later to add regular accounts, this can allow them to line up with the social accounts
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # this setting is necessary since ACCOUNT_LOGIN_METHODS must match this
-ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']  # this setting is necessary since ACCOUNT_LOGIN_METHODS must match this
+ACCOUNT_LOGIN_METHODS = {"username", "email"}
 
 # This is set to true as it will disable the normal account functionality since we *only* need Google login
 SOCIALACCOUNT_ONLY = True
@@ -352,8 +352,11 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 
 # This bypasses the additional form to fill in details related to the user model (it creates a unique username, for instance)
 # This is the default setting
-SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_AUTO_SIGNUP = False
 
+SOCIALACCOUNT_FORMS = {
+    'signup': 'core.forms.CustomSocialSignupForm',
+}
 
 ### S3 Settings: ###
 
