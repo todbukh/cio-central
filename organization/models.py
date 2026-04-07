@@ -14,6 +14,6 @@ class Channel(models.Model):
 
 class Message(models.Model):
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_deleted_user()))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_deleted_user))
     text = models.CharField(max_length=2000)
     sent_at = models.DateTimeField(auto_now_add=True)

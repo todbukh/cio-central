@@ -12,7 +12,7 @@ class Event(models.Model):
     date = models.DateTimeField()
     location = models.CharField(max_length=100, blank=True)
     description = models.TextField(max_length=2000, blank=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_deleted_user()), null=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_deleted_user), null=True)
 
     # This Meta class tells Django to always append ORDER BY date ASC to any SQL query on the 
     # Event table. So when the view calls Event.objects.all(), the database 
