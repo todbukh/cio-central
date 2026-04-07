@@ -3,11 +3,14 @@
 
 from django.db import migrations
 
+from project_a_17.settings import DELETED_USER_UID
+
+
 def create_deleted_user(apps, schema_editor):
     User = apps.get_model('core', 'User')
 
     User.objects.update_or_create(
-        uid="00000000-0000-0000-0000-000000000000",
+        uid=DELETED_USER_UID,
         defaults={
             "username": "deleted_user",
             "email": "deleted_user@ciocentral.com",
