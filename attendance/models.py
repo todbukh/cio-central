@@ -14,7 +14,7 @@ class Attendance(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['member', 'event'], name='unique_attendance')
         ]
-    member = models.ForeignKey(User, on_delete=models.SET(get_deleted_user))
+    member = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.UNSET)
 
