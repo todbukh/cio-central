@@ -1,10 +1,11 @@
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
 
 from core.permissions import is_executive
+from project_a_17.settings import DELETED_USER_UID
 from .forms import ProfileEditForm
 from django.core.files.storage import default_storage
 
@@ -17,11 +18,14 @@ def profile_redirect(request):
 @login_required(login_url="/login/")
 def profile_view(request, username):
     profile_user = get_object_or_404(User, username=username)
+    if str(profile_user.uid) == DELETED_USER_UID:
+        raise Http404
     is_owner =  request.user == profile_user
     context = {
         "profile_user": profile_user,
         "is_executive": is_executive(request.user),
-        "is_owner": is_owner
+        "is_owner": is_owner,
+        "can_delete": is_executive(request.user) and not is_executive(profile_user) or is_owner,
     }
     return render(request, "profiles/profile.html", context)
 
