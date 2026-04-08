@@ -18,7 +18,7 @@ def profile_redirect(request):
 @login_required(login_url="/login/")
 def profile_view(request, username):
     profile_user = get_object_or_404(User, username=username)
-    if str(profile_user.uid) == DELETED_USER_UID:
+    if profile_user.status != "APPROVED":
         raise Http404
     user_is_profile_owner =  request.user == profile_user
     context = {
