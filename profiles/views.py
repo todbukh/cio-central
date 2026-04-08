@@ -59,7 +59,7 @@ def profile_edit_view(request, username):
 @login_required
 def delete_user(request, username):
     member = get_object_or_404(User, username=username)
-    if request.user.is_exec() or request.user == member:
+    if is_owner(request.user) or (is_executive(request.user) and not is_executive(member)) or request.user == member:
         member.delete()
     else:
         return HttpResponseForbidden()
