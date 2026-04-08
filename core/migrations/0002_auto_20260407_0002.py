@@ -18,8 +18,7 @@ def create_deleted_user(apps, schema_editor):
             "first_name": "Deleted",
             "last_name": "User",
             "is_active": False,
-            "status": "BANNED",
-            "role": "MEMBER",
+            "status": "DELETED",
         }
     )
 
