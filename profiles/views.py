@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -12,6 +13,8 @@ def profile_redirect(request):
 
 @login_required(login_url="/login/")
 def profile_view(request, username):
+    if request.user.is_user_admin(): raise Http404
+
     profile_user = get_object_or_404(User, username=username)
     is_owner =  request.user == profile_user
     context = {
