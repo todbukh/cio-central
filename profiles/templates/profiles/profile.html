@@ -7,7 +7,7 @@
 
         <!-- Top bar -->
         <div class="d-flex justify-content-end align-items-center gap-2 mb-4">
-            {% if is_owner %}
+            {% if user_is_profile_owner %}
                 <a href="{% url 'profiles:profile_edit' username=profile_user.username %}" class="btn btn-outline-info"
                    title="Edit Profile">
                     <i class="bi bi-pencil-square"></i> Edit Profile
