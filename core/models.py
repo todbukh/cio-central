@@ -38,7 +38,7 @@ def get_deleted_user():
         defaults={
             "username": "deleted_user",
             "email": "deleted_user@ciocentral.com",
-            "password": "blah",
+            "password": "!",
             "first_name": "Deleted",
             "last_name": "User",
             "is_active": False,
