@@ -1,6 +1,10 @@
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.views.decorators.http import require_POST
+
+from core.permissions import is_executive
 from .forms import ProfileEditForm
 from django.core.files.storage import default_storage
 
@@ -16,6 +20,7 @@ def profile_view(request, username):
     is_owner =  request.user == profile_user
     context = {
         "profile_user": profile_user,
+        "is_executive": is_executive(request.user),
         "is_owner": is_owner
     }
     return render(request, "profiles/profile.html", context)
@@ -45,3 +50,13 @@ def profile_edit_view(request, username):
         form = ProfileEditForm(instance=profile)
 
     return render(request, "profiles/profile_edit.html", {"form": form, "profile_user": request.user})
+
+@require_POST
+@login_required
+def delete_user(request, username):
+    member = get_object_or_404(User, username=username)
+    if request.user.is_exec() or request.user == member:
+        member.delete()
+    else:
+        return HttpResponseForbidden()
+    return redirect("/")
