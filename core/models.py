@@ -42,6 +42,6 @@ def get_deleted_user():
             "first_name": "Deleted",
             "last_name": "User",
             "is_active": False,
-            "status": "BANNED",
+            "status": "DELETED",
             "role": "MEMBER",
         })[0]
