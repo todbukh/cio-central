@@ -4,8 +4,9 @@ from django.views.decorators.http import require_POST
 
 from .forms import UserAdminLoginForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import get_user_model
 
-from core.models import User
+User = get_user_model()
 
 def user_admin_login(request):
     # Claude Opus 4.6 Extended suggested request.user.is_authenticated guard to avoid error for anonymous users

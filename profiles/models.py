@@ -3,8 +3,6 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from core.models import User
-
 
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -22,5 +20,5 @@ class Profile(models.Model):
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_profile(sender, instance, created, **kwargs):
-    if created and instance.role != User.Role.USERADMIN:
+    if created and instance.role != instance.Role.USERADMIN:
         Profile.objects.create(user=instance)

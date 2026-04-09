@@ -1,9 +1,11 @@
 # Generated in part by Claude Opus 4.6 Extended
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from core.models import User
 from attendance.models import Attendance
 from profiles.models import Profile
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 # this deletes all the attendance records for a user admin upon their promotion to the role
