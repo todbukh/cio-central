@@ -20,5 +20,5 @@ class Profile(models.Model):
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_profile(sender, instance, created, **kwargs):
-    if created:
+    if created and instance.role != instance.Role.USERADMIN:
         Profile.objects.create(user=instance)

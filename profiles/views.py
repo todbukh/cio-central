@@ -1,6 +1,8 @@
+from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+
 from .forms import ProfileEditForm
 from django.core.files.storage import default_storage
 
@@ -13,6 +15,7 @@ def profile_redirect(request):
 @login_required(login_url="/login/")
 def profile_view(request, username):
     profile_user = get_object_or_404(User, username=username)
+    if profile_user.role == User.Role.USERADMIN: raise Http404
     is_owner =  request.user == profile_user
     context = {
         "profile_user": profile_user,
