@@ -146,7 +146,9 @@
                                 {% if message.poll_url %}
                                     <div class="d-flex flex-column align-items-start gap-2">
                                         <p class="mb-0 text-secondary fw-semibold text-break">{{ message.poll_question }}</p>
-                                        <a href="{{ message.poll_url }}" class="btn btn-sm btn-outline-primary">Open Poll</a>
+                                        <a href="{{ message.poll_url }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-bar-chart-steps me-1"></i>Open Poll
+                                        </a>
                                     </div>
                                 {% else %}
                                     <p class="mb-0 text-secondary text-break">
