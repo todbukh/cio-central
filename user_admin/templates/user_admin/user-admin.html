@@ -39,7 +39,7 @@
                                             <span class="badge text-bg-danger">User Admin</span>
                                             <span class="badge text-bg-secondary">Me</span>
 
-                                        {% elif member.role == "USERADMIN" %}
+                                        {% elif member.is_user_admin %}
                                             {# Other user admins — view only, no dropdowns, no status #}
                                             <span class="badge text-bg-danger">User Admin</span>
 
