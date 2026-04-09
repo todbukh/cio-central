@@ -39,11 +39,13 @@
                                 </button>
                             </div>
                         </form>
+                        {% if not user.is_authenticated %}
                         <a href="{% url "organization:home" %}">
                             <button class="btn btn-outline-danger mt-3 w-100">
                                 Back to Organization Sign In
                             </button>
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
