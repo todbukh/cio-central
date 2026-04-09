@@ -39,11 +39,9 @@
                                 </button>
                             </div>
                         </form>
-                        {% if not user.is_authenticated %}
-                        <a class="btn btn-outline-danger mt-3 w-100" href="{% url "organization:home" %}">
+                        <a class="btn btn-outline-danger mt-3 w-100" href="{% url "core:login" %}">
                             Back to Organization Sign In
                         </a>
-                        {% endif %}
                     </div>
                 </div>
             </div>
