@@ -135,7 +135,7 @@ class PollFlowTest(TestCase):
         self.assertRedirects(response, reverse("polls:poll_detail", args=[poll.uid]))
         self.assertEqual(Vote.objects.count(), 0)
 
-    def test_member_cannot_see_results_while_open(self):
+    def test_member_can_see_results_while_open(self):
         poll = self.create_poll()
         option = poll.options.first()
         Vote.objects.create(poll=poll, option=option, user=self.member_user)
@@ -143,7 +143,8 @@ class PollFlowTest(TestCase):
 
         response = self.client.get(reverse("polls:poll_detail", args=[poll.uid]))
 
-        self.assertNotContains(response, "<h4 class=\"mb-0\">Results</h4>", html=False)
+        self.assertContains(response, "Results")
+        self.assertContains(response, option.text)
         self.assertContains(response, "recorded")
 
     def test_exec_can_see_results_while_open(self):

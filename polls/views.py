@@ -107,7 +107,7 @@ def exec_poll_close(request, poll_uid):
 def poll_detail(request, poll_uid):
     poll = get_object_or_404(Poll.objects.prefetch_related("options"), uid=poll_uid)
     existing_vote = Vote.objects.filter(poll=poll, user=request.user).select_related("option").first()
-    can_view_results = request.user.is_exec() or poll.is_closed
+    can_view_results = True
     vote_form = None
 
     if not poll.is_closed and existing_vote is None:
@@ -156,8 +156,8 @@ def poll_vote(request, poll_uid):
             "poll": poll,
             "existing_vote": None,
             "can_vote": True,
-            "can_view_results": request.user.is_exec(),
-            "results": _build_poll_results(poll) if request.user.is_exec() else None,
+            "can_view_results": True,
+            "results": _build_poll_results(poll),
             "total_votes": poll.votes.count(),
             "vote_form": form,
         },
