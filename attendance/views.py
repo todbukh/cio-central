@@ -38,7 +38,7 @@ def event_attendance(request, event_uid):
         Attendance.objects.bulk_create(new_records)
     context = {
         "active_tab": "attendance",
-        "attendees": Attendance.objects.filter(event=event).select_related("member").order_by("member__last_name"),
+        "attendees": Attendance.objects.filter(event=event).exclude(member__role=User.Role.USERADMIN).select_related("member").order_by("member__last_name"),
         "event": event,
     }
     return render(request, "attendance/event_attendance.html", context)
