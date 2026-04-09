@@ -36,6 +36,7 @@ def user_admin_login(request):
     return render(request, "user_admin/user-admin-login.html", context)
 
 
+@require_POST
 def user_admin_logout(request):
     logout(request)
     return redirect("user_admin:login")
