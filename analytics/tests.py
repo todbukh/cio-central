@@ -53,6 +53,11 @@ class AnalyticsViewTests(TestCase):
             date=now - timedelta(days=5),
             created_by=self.exec_user,
         )
+        self.oldest_past_event = Event.objects.create(
+            name="Winter Social",
+            date=now - timedelta(days=9),
+            created_by=self.exec_user,
+        )
         self.future_event = Event.objects.create(
             name="Future Planning",
             date=now + timedelta(days=2),
@@ -84,6 +89,16 @@ class AnalyticsViewTests(TestCase):
             event=self.older_past_event,
             status=Attendance.Status.PRESENT,
         )
+        Attendance.objects.create(
+            member=self.exec_user,
+            event=self.oldest_past_event,
+            status=Attendance.Status.ABSENT,
+        )
+        Attendance.objects.create(
+            member=self.other_member,
+            event=self.oldest_past_event,
+            status=Attendance.Status.PRESENT,
+        )
 
     def test_anonymous_user_is_redirected_to_login(self):
         response = self.client.get(self.url)
@@ -111,7 +126,7 @@ class AnalyticsViewTests(TestCase):
         self.assertContains(response, "Tracked members")
         self.assertContains(response, reverse("exec_panel:analytics:user_detail", args=[self.exec_user.uid]))
         self.assertEqual(response.context["summary_cards"][0]["value"], 3)
-        self.assertEqual(response.context["summary_cards"][1]["value"], 2)
+        self.assertEqual(response.context["summary_cards"][1]["value"], 3)
         self.assertEqual(response.context["summary_cards"][2]["value"], 2)
 
     def test_exec_user_can_switch_to_real_event_analytics(self):
@@ -125,9 +140,33 @@ class AnalyticsViewTests(TestCase):
         self.assertContains(response, "Showing the 3 most recent past events")
         self.assertContains(response, "Spring Kickoff")
         self.assertContains(response, "Hack Night")
+        self.assertContains(response, "Winter Social")
         self.assertContains(response, reverse("exec_panel:attendance:event_attendance", args=[self.past_event.uid]))
         self.assertContains(response, "67%")
         self.assertContains(response, "100%")
+        self.assertEqual(len(response.context["chart_rows"]), 3)
+        self.assertEqual(len(response.context["table_rows"]), 3)
+
+    def test_event_analytics_table_includes_all_past_events_while_chart_is_capped(self):
+        self.client.force_login(self.exec_user)
+
+        Event.objects.create(
+            name="Founders Forum",
+            date=timezone.now() - timedelta(days=12),
+            created_by=self.exec_user,
+        )
+
+        response = self.client.get(self.url, {"view": "events"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Showing the 3 most recent past events")
+        self.assertContains(response, "Founders Forum")
+        self.assertEqual(len(response.context["chart_rows"]), 3)
+        self.assertEqual(len(response.context["table_rows"]), 4)
+        chart_names = [row["label"] for row in response.context["chart_rows"]]
+        table_names = [row["name"] for row in response.context["table_rows"]]
+        self.assertNotIn("Founders Forum", chart_names)
+        self.assertIn("Founders Forum", table_names)
 
     def test_future_events_are_excluded_from_analytics(self):
         self.client.force_login(self.exec_user)

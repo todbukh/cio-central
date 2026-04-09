@@ -59,20 +59,33 @@ def _build_analytics_context(selected_view):
     past_events = Event.objects.filter(date__lt=now)
     approved_users = User.objects.filter(status=User.Status.APPROVED)
 
-    event_rows = []
     past_events_with_counts = past_events.annotate(
         attendees=Count("attendance", filter=Q(attendance__status=Attendance.Status.PRESENT)),
         tracked_attendance=Count("attendance"),
     )
-    all_past_events = list(past_events_with_counts)
+    all_past_events = sorted(past_events_with_counts, key=lambda event: event.date, reverse=True)
     recent_past_events = sorted(all_past_events, key=lambda event: event.date, reverse=True)[:3]
     past_event_count = past_events.count()
 
     total_present = sum(event.attendees for event in all_past_events)
+    chart_rows = []
     for event in recent_past_events:
         tracked_count = event.tracked_attendance
         attendance_rate = _format_rate(event.attendees, tracked_count)
-        event_rows.append(
+        chart_rows.append(
+            {
+                "name": event.name,
+                "event_uid": event.uid,
+                "attendees": event.attendees,
+                "attendance_rate": attendance_rate,
+            }
+        )
+
+    event_table_rows = []
+    for event in all_past_events:
+        tracked_count = event.tracked_attendance
+        attendance_rate = _format_rate(event.attendees, tracked_count)
+        event_table_rows.append(
             {
                 "name": event.name,
                 "event_uid": event.uid,
@@ -115,7 +128,7 @@ def _build_analytics_context(selected_view):
         {"label": "Avg attendance", "value": avg_attendance},
     ]
     normalized_view = selected_view if selected_view in {"users", "events"} else "users"
-    chart_rows = _build_chart_rows(event_rows, "attendees") if normalized_view == "events" else []
+    chart_rows = _build_chart_rows(chart_rows, "attendees") if normalized_view == "events" else []
 
     return {
         "active_tab": "analytics",
@@ -124,7 +137,7 @@ def _build_analytics_context(selected_view):
         "chart_title": "Recent event turnout overview",
         "chart_rows": chart_rows,
         "table_title": "Per-user analytics" if normalized_view == "users" else "Per-event analytics",
-        "table_rows": user_rows if normalized_view == "users" else event_rows,
+        "table_rows": user_rows if normalized_view == "users" else event_table_rows,
     }
 
 
