@@ -14,7 +14,7 @@
                 {% if user.status == "APPROVED" %}
                 <li class="nav-item me-2">
                     <a class="btn btn-outline-primary" href="{% url 'organization:home' %}">
-                        {% if user.role != "USERADMIN" %}Home{% else %}User Admin Panel{% endif %}
+                        {% if not user.is_user_admin %}Home{% else %}User Admin Panel{% endif %}
                     </a>
                 </li>
                 {% endif %}
@@ -24,14 +24,14 @@
                 </li>
                 {% endif %}
 
-                {% if user.is_authenticated and user.status == user.Status.APPROVED and user.role != "USERADMIN" %}
+                {% if user.is_authenticated and user.status == user.Status.APPROVED and not user.is_user_admin %}
                 <li class="nav-item">
                    <a class="btn btn-outline-secondary" href="{% url 'documents:index' %}">Documents</a>
                 </li>
                 {% endif %}
 
             </ul>
-            {% if user.role != "USERADMIN" %}
+            {% if not user.is_user_admin %}
             <form method="post" action="/accounts/logout/">
                 {% csrf_token %}
                 <button class="btn btn-outline-danger" type="submit">
