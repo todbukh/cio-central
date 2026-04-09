@@ -1,5 +1,7 @@
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
+
 from .forms import UserAdminLoginForm
 from django.contrib.auth import authenticate, login, logout
 
@@ -52,6 +54,7 @@ def user_admin(request):
     return render(request, "user_admin/user-admin.html", context)
 
 
+@require_POST
 def set_role(request, uid):
     # Deny ANY other user from setting roles
     if request.user.role != User.Role.USERADMIN: raise PermissionDenied
@@ -72,6 +75,7 @@ def set_role(request, uid):
     return redirect("user_admin:user_admin")
 
 
+@require_POST
 def set_status(request, uid):
     # Deny ANY other user from setting status
     if request.user.role != User.Role.USERADMIN: raise PermissionDenied
