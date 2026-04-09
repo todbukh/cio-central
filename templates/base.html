@@ -11,7 +11,7 @@
             </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                {% if user.status == "APPROVED" %}
+                {% if user.status == "APPROVED" and not user.is_user_admin %}
                 <li class="nav-item me-2">
                     <a class="btn btn-outline-primary" href="{% url 'organization:home' %}">
                         {% if not user.is_user_admin %}Home{% else %}User Admin Panel{% endif %}
