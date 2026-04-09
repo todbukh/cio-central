@@ -30,9 +30,11 @@ def event_attendance(request, event_uid):
     existing_attendance_member_ids = Attendance.objects.filter(event=event).values_list("member_id", flat=True)
     new_attendance_members = User.objects.filter(status=User.Status.APPROVED).exclude(id__in=existing_attendance_member_ids)
     if new_attendance_members:
-        new_records = [
-            Attendance(event=event, member=member, status=Attendance.Status.UNSET) for member in new_attendance_members
-        ]
+        new_records = []
+        for member in new_attendance_members:
+            if not member.is_user_admin():  # does not lazily create attendance records for USERADMINs
+                new_records.append(Attendance(event=event, member=member, status=Attendance.Status.UNSET))
+
         Attendance.objects.bulk_create(new_records)
     context = {
         "active_tab": "attendance",
