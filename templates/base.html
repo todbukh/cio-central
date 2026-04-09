@@ -33,20 +33,22 @@
                 {% endif %}
 
             </ul>
-            {% if not user.is_user_admin %}
-            <form method="post" action="/accounts/logout/">
-                {% csrf_token %}
-                <button class="btn btn-outline-danger" type="submit">
-                    Logout
-                </button>
-            </form>
-            {% else %}
-            <form method="post" action="{% url "user_admin:logout" %}">
-                {% csrf_token %}
-                <button class="btn btn-outline-danger" type="submit">
-                    Logout
-                </button>
-            </form>
+            {% if user.is_authenticated %}
+                {% if not user.is_user_admin %}
+                    <form method="post" action="/accounts/logout/">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-danger" type="submit">
+                            Logout
+                        </button>
+                    </form>
+                {% else %}
+                    <form method="post" action="{% url "user_admin:logout" %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-danger" type="submit">
+                            Logout
+                        </button>
+                    </form>
+                {% endif %}
             {% endif %}
         </div>
         </div>
