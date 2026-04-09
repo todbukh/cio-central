@@ -15,6 +15,7 @@ for sensible default configurations
 
 import os
 import secrets
+import sys
 from pathlib import Path
 
 import dj_database_url
@@ -28,6 +29,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: Keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+if not SECRET_KEY and (os.environ.get("ENVIRONMENT") == "development" or "test" in sys.argv):
+    SECRET_KEY = "dev-only-insecure-secret-key"
 
 # Django has a debug mode which shows more detailed error messages and also means static assets
 # can be served without having to run the production `collectstatic` command. However, this
@@ -74,6 +77,7 @@ INSTALLED_APPS = [
     "exec_panel.apps.ExecPanelConfig",
     "documents.apps.DocumentsConfig",
     "events.apps.EventsConfig",
+    "polls.apps.PollsConfig",
     "attendance.apps.AttendanceConfig",
     "analytics.apps.AnalyticsConfig",
     "roster.apps.RosterConfig",

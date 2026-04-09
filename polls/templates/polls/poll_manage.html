@@ -1,0 +1,50 @@
+{% extends 'exec_panel/executive-base.html' %}
+
+{% block title %}Manage Poll - CIO Central{% endblock %}
+
+{% block tab %}
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{% url 'exec_panel:polls:polls' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i>Return to Polls
+            </a>
+            <div class="d-flex gap-2">
+                <a href="{% url 'polls:poll_detail' poll.uid %}" class="btn btn-outline-primary btn-sm">Open Member View</a>
+                {% if not poll.is_closed %}
+                    <form method="post" action="{% url 'exec_panel:polls:poll_close' poll.uid %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Close Poll</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="bg-body-secondary rounded p-4 mx-auto" style="max-width: 900px;">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                    <p class="text-body-secondary text-uppercase small mb-2">Question</p>
+                    <h3 class="mb-0">{{ poll.question }}</h3>
+                </div>
+                <span class="badge {% if poll.is_closed %}text-bg-secondary{% else %}text-bg-success{% endif %}">
+                    {% if poll.is_closed %}Closed{% else %}Open{% endif %}
+                </span>
+            </div>
+
+            <p class="text-body-secondary mt-3 mb-4">Total votes: {{ total_votes }}</p>
+
+            <div class="d-flex flex-column gap-3">
+                {% for row in results %}
+                    <div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>{{ row.option.text }}</span>
+                            <span class="text-body-secondary">{{ row.votes }} vote{{ row.votes|pluralize }} ({{ row.percentage }}%)</span>
+                        </div>
+                        <div class="progress" role="progressbar" aria-label="{{ row.option.text }} votes">
+                            <div class="progress-bar" style="width: {{ row.percentage }}%"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

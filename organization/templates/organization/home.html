@@ -143,9 +143,16 @@
                                     {% endif %}
                                 </div>
 
-                                <p class="mb-0 text-secondary text-break">
-                                    {{ message.text|linebreaksbr }}
-                                </p>
+                                {% if message.poll_url %}
+                                    <div class="d-flex flex-column align-items-start gap-2">
+                                        <p class="mb-0 text-secondary fw-semibold text-break">{{ message.poll_question }}</p>
+                                        <a href="{{ message.poll_url }}" class="btn btn-sm btn-outline-primary">Open Poll</a>
+                                    </div>
+                                {% else %}
+                                    <p class="mb-0 text-secondary text-break">
+                                        {{ message.text|linebreaksbr }}
+                                    </p>
+                                {% endif %}
                             </div>
                         {% empty %}
                             <div class="d-flex align-items-center justify-content-center h-100">

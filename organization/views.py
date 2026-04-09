@@ -3,11 +3,30 @@ from django.http.response import HttpResponseForbidden, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+import re
 
 from core.decorators import executive_required
 from events.models import Event
 from .forms import MessageForm, ChannelForm
 from .models import Channel, Message
+
+
+POLL_ANNOUNCEMENT_PATTERN = re.compile(
+    r"^Poll: (?P<question>.+)\nVote here: (?P<url>/polls/[0-9a-f-]+/)$"
+)
+
+
+def enrich_poll_announcements(messages):
+    for message in messages:
+        match = POLL_ANNOUNCEMENT_PATTERN.match(message.text)
+        message.poll_url = None
+        message.poll_question = None
+
+        if match:
+            message.poll_url = match.group("url")
+            message.poll_question = match.group("question")
+
+    return messages
 
 
 @login_required(login_url="/login/")
@@ -37,6 +56,7 @@ def messages(request, channel):
             .select_related("user__profile")
             .order_by("sent_at")
     )
+    enrich_poll_announcements(message_list)
 
     today = timezone.localdate()
     today_events = list(Event.objects.filter(date__date=today))
