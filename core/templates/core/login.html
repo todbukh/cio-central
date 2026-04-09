@@ -15,19 +15,25 @@
                 <img src="{% static 'images/logo-full-dark-bg.png' %}" width="400" class="img-fluid" alt="CIO Central Logo">
             </div>
 
-            <div class="p-4 p-md-5 bg-body-secondary rounded">
+            <div class="d-flex flex-column p-4 p-md-5 bg-body-secondary rounded gap-3">
 {#                <h1 class="h3 mb-2 text-body">CIO Central</h1>#}
-                <p class="text-body-secondary mb-4">For all your CIO management needs.</p>
+                <p class="text-body-secondary mb-0">For all your CIO management needs.</p>
 
                 <form method="post" action="{% provider_login_url "google" process="login" %}">
                     {% csrf_token %}
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary w-100" type="submit">
                         <i class="bi bi-google"></i>
                         Sign in with Google
                     </button>
                 </form>
 
-                <div class="mt-4 pt-3 border-top border-secondary">
+                <a href="{% url "user_admin:user_admin" %}">
+                    <button class="btn btn-outline-secondary w-100">
+                        User Admin Sign In
+                    </button>
+                </a>
+
+                <div class="pt-3 border-top border-secondary">
                     <span class="badge text-bg-info mb-2"><i class="bi bi-shield-lock"></i> Single Sign-On</span>
                 </div>
             </div>
