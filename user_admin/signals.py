@@ -1,5 +1,5 @@
 # Generated in part by Claude Opus 4.6 Extended
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from core.models import User
 from attendance.models import Attendance
