@@ -3,10 +3,12 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from core.models import User
 from attendance.models import Attendance
+from profiles.models import Profile
+
 
 # this deletes all the attendance records for a user admin upon their promotion to the role
 @receiver(pre_save, sender=User)
-def delete_user_admin_attendance_on_promotion(sender, instance, **kwargs):
+def delete_user_admin_attendance_and_profile_on_promotion(sender, instance, **kwargs):
     if not instance.pk:
         return
     try:
@@ -15,3 +17,4 @@ def delete_user_admin_attendance_on_promotion(sender, instance, **kwargs):
         return
     if old.role != User.Role.USERADMIN and instance.role == User.Role.USERADMIN:
         Attendance.objects.filter(member=instance).delete()
+        Profile.objects.filter(user=instance).delete()
