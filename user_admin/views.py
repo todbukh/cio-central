@@ -57,7 +57,7 @@ def user_admin(request):
 @require_POST
 def set_role(request, uid):
     # Deny ANY other user from setting roles
-    if request.user.role != User.Role.USERADMIN: raise PermissionDenied
+    if request.user.is_anonymous or request.user.role != User.Role.USERADMIN: raise PermissionDenied
 
     member = get_object_or_404(User, uid=uid)
 
@@ -78,7 +78,7 @@ def set_role(request, uid):
 @require_POST
 def set_status(request, uid):
     # Deny ANY other user from setting status
-    if request.user.role != User.Role.USERADMIN: raise PermissionDenied
+    if request.user.is_anonymous or request.user.role != User.Role.USERADMIN: raise PermissionDenied
 
     member = get_object_or_404(User, uid=uid)
 
