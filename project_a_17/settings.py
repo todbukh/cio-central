@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     "analytics.apps.AnalyticsConfig",
     "roster.apps.RosterConfig",
     "organization.apps.OrganizationConfig",
+    "user_admin.apps.UserAdminConfig",
     "s3_demo.apps.S3DemoConfig",  # TODO: remove this when done previewing demo
     "django_bootstrap5",
     "django.contrib.admin",
