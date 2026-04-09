@@ -15,7 +15,7 @@
                             <div class="card-body d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3">
 
                                 {# Avatar #}
-                                {% if member.profile.profile_picture %}
+                                {% if member.profile.profile_picture and not member.is_user_admin %}
                                     <img
                                             src="{{ member.profile.profile_picture.url }}"
                                             class="rounded-circle flex-shrink-0"
