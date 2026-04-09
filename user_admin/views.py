@@ -38,6 +38,10 @@ def user_admin_login(request):
 
 @require_POST
 def user_admin_logout(request):
+    # Claude Opus 4.6 Extended suggested adding this so crafted posts could not arbitrarily logout the user admin
+    if not request.user.is_authenticated or not request.user.is_user_admin():
+        raise PermissionDenied
+
     logout(request)
     return redirect("user_admin:login")
 
