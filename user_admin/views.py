@@ -16,7 +16,7 @@ def user_admin_login(request):
 
         if form.is_valid():
             user = authenticate(username=form.cleaned_data["username"], password=form.cleaned_data["password"])
-            if user is not None:
+            if user is not None and user.is_user_admin():
                 if request.user.is_authenticated:  # logout if a user was already logged-in with another account
                     logout(request)
 
