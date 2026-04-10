@@ -13,6 +13,8 @@ User = get_user_model()
 
 def can_delete(user, profile_user):
     if profile_user.role != User.Role.USERADMIN:
+        if profile_user.status == User.Status.DELETED:
+            return False
         if is_owner(user):
             return True
         if is_executive(user) and not is_executive(profile_user):
