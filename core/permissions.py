@@ -43,4 +43,7 @@ def is_executive(user):
 def is_owner(user):
     return is_authenticated_user(user) and user.role == user.Role.OWNER
 
+def is_user_admin(user):
+    return is_authenticated_user(user) and user.role == user.Role.USERADMIN
+
 # Add more helper functions here down the line as needed.

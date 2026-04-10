@@ -41,6 +41,13 @@ class ApprovalStatusMiddleware:
         if self._is_exempt(request.path):
             return self.get_response(request)
 
+        # added to handle redirecting the user admin away from most other pages
+        if request.user.is_user_admin():
+            if not request.path.startswith("/user-admin/") and not request.path.startswith("/admin/"):
+                return redirect("user_admin:user_admin")
+            # short-circuit middleware here because status checks don't apply to USERADMINs
+            return self.get_response(request)
+
         status_path = self._status_path(request.user)
         if status_path is not None:
             # Render if already on the correct status page, otherwise redirect.

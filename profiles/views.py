@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
 
 from core.permissions import is_executive, is_owner
-from project_a_17.settings import DELETED_USER_UID
+
 from .forms import ProfileEditForm
 from django.core.files.storage import default_storage
 
@@ -18,9 +18,10 @@ def profile_redirect(request):
 @login_required(login_url="/login/")
 def profile_view(request, username):
     profile_user = get_object_or_404(User, username=username)
-    if profile_user.status != "APPROVED":
+    if profile_user.status != "APPROVED" or profile_user.role == User.Role.USERADMIN:
         raise Http404
     user_is_profile_owner =  request.user == profile_user
+    is_owner =  request.user == profile_user
     context = {
         "profile_user": profile_user,
         "is_executive": is_executive(request.user),

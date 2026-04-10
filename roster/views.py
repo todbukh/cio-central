@@ -13,11 +13,19 @@ def roster(request, active_roster="members"):
         "active_roster": active_roster,
     }
     if active_roster == "members":
-        context['members'] = User.objects.filter(status=User.Status.APPROVED).order_by("first_name", "last_name")
+        context['members'] = (User.objects
+                              .filter(status=User.Status.APPROVED)
+                              .exclude(role=User.Role.USERADMIN)
+                              .order_by("first_name", "last_name"))
     elif active_roster == "applications":
-         context["members"] = User.objects.filter(status=User.Status.PENDING).order_by("first_name", "last_name")
+         context["members"] = (User.objects
+                               .filter(status=User.Status.PENDING)
+                               .exclude(role=User.Role.USERADMIN)
+                               .order_by("first_name", "last_name"))
     elif active_roster == "banned-rejected":
-        context["members"] = (User.objects.filter(status__in=[User.Status.BANNED, User.Status.REJECTED])
+        context["members"] = (User.objects
+                              .filter(status__in=[User.Status.BANNED, User.Status.REJECTED])
+                              .exclude(role=User.Role.USERADMIN)
                               .order_by("first_name", "last_name"))
 
     return render(request, "roster/roster.html", context)
@@ -26,6 +34,7 @@ def roster(request, active_roster="members"):
 @executive_required(redirect_url="organization:home")
 def accept(request, uid):
     member = get_object_or_404(User, uid=uid)
+    if member.role == User.Role.USERADMIN: raise PermissionDenied  # USERADMINs cannot be modified in any way
     member.status = User.Status.APPROVED
     member.save()
     return redirect("exec_panel:roster:roster", active_roster="applications")
@@ -34,6 +43,7 @@ def accept(request, uid):
 @executive_required(redirect_url="organization:home")
 def reject(request, uid):
     member = get_object_or_404(User, uid=uid)
+    if member.role == User.Role.USERADMIN: raise PermissionDenied  # USERADMINs cannot be modified in any way
     member.status = User.Status.REJECTED
     member.save()
     return redirect("exec_panel:roster:roster", active_roster="applications")
@@ -42,7 +52,8 @@ def reject(request, uid):
 @executive_required(redirect_url="organization:home")
 def ban(request, uid):
     member = get_object_or_404(User, uid=uid)
-    if member.role == User.Role.EXEC and request.user.role != User.Role.Owner:
+    if member.role == User.Role.USERADMIN: raise PermissionDenied  # USERADMINs cannot be modified in any way
+    if member.role == User.Role.EXEC and request.user.role != User.Role.OWNER:
         raise PermissionDenied
     member.status = User.Status.BANNED
     member.role = User.Role.MEMBER
@@ -53,6 +64,7 @@ def ban(request, uid):
 @executive_required(redirect_url="organization:home")
 def renew_application(request, uid):
     member = get_object_or_404(User, uid=uid)
+    if member.role == User.Role.USERADMIN: raise PermissionDenied  # USERADMINs cannot be modified in any way
     member.status = User.Status.PENDING
     member.save()
     return redirect("exec_panel:roster:roster", active_roster="banned-rejected")
@@ -61,6 +73,7 @@ def renew_application(request, uid):
 @owner_required(redirect_url="organization:home")
 def set_role(request, uid):
     member = get_object_or_404(User, uid=uid)
+    if member.role == User.Role.USERADMIN: raise PermissionDenied  # USERADMINs cannot be modified in any way
     member_role = request.POST.get("role")
     if member_role not in [User.Role.EXEC, User.Role.MEMBER]:
         raise PermissionDenied
@@ -74,6 +87,7 @@ def restore_application(request, uid):
     if request.user.uid != uid or request.user.status == User.Status.BANNED:
         raise PermissionDenied
     member = get_object_or_404(User, uid=uid)
+    if member.role == User.Role.USERADMIN: raise PermissionDenied  # USERADMINs cannot be modified in any way
     member.status = User.Status.PENDING
     member.save()
     return redirect("organization:home")

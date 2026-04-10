@@ -5,37 +5,57 @@
 {% block navbar %}
     <nav class="navbar navbar-expand-lg bg-body-secondary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/"><img height="54" src="{% static 'images/logo-small.png' %}" alt="CIO Central Logo" /></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="/"><img height="54" src="{% static 'images/logo-small.png' %}"
+                                                  alt="CIO Central Logo"/></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                {% if user.status == "APPROVED" %}
-                <li class="nav-item me-2">
-                    <a class="btn btn-outline-primary" href="{% url 'organization:home' %}">Home</a>
-                </li>
-                {% endif %}
-                {% if user.is_exec %}
-                <li class="nav-item">
-                    <a class="btn btn-outline-info me-2" href="{% url 'exec_panel:executive_redirect' %}">Exec Panel</a>
-                </li>
-                {% endif %}
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if user.status == "APPROVED" or user.is_user_admin %}
+                        <li class="nav-item me-2">
+                            {% if not user.is_user_admin %}
+                                <a class="btn btn-outline-primary" href="{% url 'organization:home' %}">Home</a>
+                            {% else %}
+                                <a class="btn btn-outline-primary" href="{% url 'user_admin:user_admin' %}">User Admin
+                                    Panel</a>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                    {% if user.is_exec %}
+                        <li class="nav-item">
+                            <a class="btn btn-outline-info me-2" href="{% url 'exec_panel:executive_redirect' %}">Exec
+                                Panel</a>
+                        </li>
+                    {% endif %}
 
-                {% if user.is_authenticated and user.status == user.Status.APPROVED %}
-                <li class="nav-item">
-                   <a class="btn btn-outline-secondary" href="{% url 'documents:index' %}">Documents</a>
-                </li>
-                {% endif %}
+                    {% if user.is_authenticated and user.status == user.Status.APPROVED and not user.is_user_admin %}
+                        <li class="nav-item">
+                            <a class="btn btn-outline-secondary" href="{% url 'documents:index' %}">Documents</a>
+                        </li>
+                    {% endif %}
 
-            </ul>
-            <form method="post" action="/accounts/logout/">
-                {% csrf_token %}
-                <button class="btn btn-outline-danger" type="submit">
-                    Logout
-                </button>
-            </form>
-        </div>
+                </ul>
+                {% if user.is_authenticated %}
+                    {% if not user.is_user_admin %}
+                        <form method="post" action="/accounts/logout/">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-danger" type="submit">
+                                Logout
+                            </button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{% url "user_admin:logout" %}">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-danger" type="submit">
+                                Logout
+                            </button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
     </nav>
 {% endblock %}

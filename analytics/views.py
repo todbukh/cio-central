@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
@@ -57,7 +58,7 @@ def _build_user_detail_context(user):
 def _build_analytics_context(selected_view):
     now = timezone.now()
     past_events = Event.objects.filter(date__lt=now)
-    approved_users = User.objects.filter(status=User.Status.APPROVED)
+    approved_users = User.objects.filter(status=User.Status.APPROVED).exclude(role=User.Role.USERADMIN)
 
     past_events_with_counts = past_events.annotate(
         attendees=Count("attendance", filter=Q(attendance__status=Attendance.Status.PRESENT)),
@@ -153,5 +154,7 @@ def analytics(request):
 @executive_required(redirect_url="organization:home")
 def user_detail(request, user_uid):
     user = get_object_or_404(User, uid=user_uid, status=User.Status.APPROVED)
+    if user.role == User.Role.USERADMIN:
+        raise Http404
     context = _build_user_detail_context(user)
     return render(request, "analytics/user_detail.html", context)
