@@ -11,6 +11,16 @@ from django.core.files.storage import default_storage
 
 User = get_user_model()
 
+def can_delete(user, profile_user):
+    if profile_user.role != User.Role.USERADMIN:
+        if is_owner(user):
+            return True
+        if is_executive(user) and not is_executive(profile_user):
+            return True
+        if user == profile_user:
+            return True
+    return False
+
 @login_required(login_url="/login/")
 def profile_redirect(request):
     return redirect("profiles:profile", username=request.user.username)
@@ -21,12 +31,11 @@ def profile_view(request, username):
     if profile_user.status != "APPROVED" or profile_user.role == User.Role.USERADMIN:
         raise Http404
     user_is_profile_owner =  request.user == profile_user
-    is_owner =  request.user == profile_user
     context = {
         "profile_user": profile_user,
         "is_executive": is_executive(request.user),
         "user_is_profile_owner": user_is_profile_owner,
-        "can_delete": is_owner(request.user) or (is_executive(request.user) and not is_executive(profile_user)) or user_is_profile_owner,
+        "can_delete": can_delete(request.user, profile_user)
     }
     return render(request, "profiles/profile.html", context)
 
@@ -60,7 +69,7 @@ def profile_edit_view(request, username):
 @login_required
 def delete_user(request, username):
     member = get_object_or_404(User, username=username)
-    if is_owner(request.user) or (is_executive(request.user) and not is_executive(member)) or request.user == member:
+    if can_delete(request.user, member):
         member.delete()
     else:
         return HttpResponseForbidden()
