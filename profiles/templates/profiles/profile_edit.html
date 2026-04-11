@@ -23,23 +23,53 @@
                     </button>
                 {% endif %}
             </div>
-            <h2 class="text-body">{{ profile_user.username }}</h2>
+
+            <!-- show the user's name if they have one and then @username underneath -->
+            {% if profile_user.first_name or profile_user.last_name %}
+                <h2 class="text-body mb-1">
+                    {{ profile_user.first_name }}{% if profile_user.first_name and profile_user.last_name %} {% endif %}{{ profile_user.last_name }}
+                </h2>
+            {% endif %}
+            <p class="text-body-secondary">@{{ profile_user.username }}</p>
         </div>
         <div class="bg-body-secondary rounded p-4 mx-auto" style="max-width: 600px;">
             <h4 class="text-body mb-4">
                 <i class="bi bi-pencil-square me-2"></i>Edit Profile
             </h4>
 
-            <form method="post" enctype="multipart/form-data" action="{% url "profiles:profile_edit" user.username %}">  <!-- Add enctype for file uploads -->
+            <form method="post" enctype="multipart/form-data" action="{% url "profiles:profile_edit" user.username %}">
                 {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="id_first_name" class="form-label text-body">First Name</label>
+                    <input type="text" name="first_name" id="id_first_name"
+                        class="form-control bg-body text-body {% if form.first_name.errors %}is-invalid{% endif %}"
+                        value="{{ form.first_name.value|default:'' }}">
+                    {% if form.first_name.errors %}
+                        <div class="invalid-feedback">{{ form.first_name.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_last_name" class="form-label text-body">Last Name</label>
+                    <input type="text" name="last_name" id="id_last_name"
+                        class="form-control bg-body text-body {% if form.last_name.errors %}is-invalid{% endif %}"
+                        value="{{ form.last_name.value|default:'' }}">
+                    {% if form.last_name.errors %}
+                        <div class="invalid-feedback">{{ form.last_name.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
                 <div class="mb-3">
                     <label for="id_bio" class="form-label text-body">About Me</label>
                     <textarea name="bio" id="id_bio" class="form-control bg-body text-body {% if form.bio.errors %}is-invalid{% endif %}"
-                              rows="4">{{ form.bio.value|default:'' }}</textarea>
+                            rows="4">{{ form.bio.value|default:'' }}</textarea>
                     {% if form.bio.errors %}
                         <div class="invalid-feedback">{{ form.bio.errors|join:", " }}</div>
                     {% endif %}
                 </div>
+
+
                 <div class="mb-3">
                     <label for="id_profile_picture" class="form-label text-body">Profile Picture</label>
                     <div class="d-flex gap-2 align-items-center">
