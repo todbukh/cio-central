@@ -1,7 +1,7 @@
 from django.http import HttpResponseForbidden, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
 from django.views.decorators.http import require_POST
 
 from core.permissions import is_executive, is_owner
@@ -83,8 +83,16 @@ def profile_edit_view(request, username):
 @login_required
 def delete_user(request, username):
     member = get_object_or_404(User, username=username)
-    if can_delete(request.user, member):
-        member.delete()
-    else:
+
+    if not can_delete(request.user, member):
         return HttpResponseForbidden()
+
+    member.is_active = False
+    member.save()
+
+    if request.user == member:
+        logout(request)
+        return redirect("/login/")
+
+    member.delete()
     return redirect("/")
