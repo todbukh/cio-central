@@ -87,9 +87,6 @@ def delete_user(request, username):
     if not can_delete(request.user, member):
         return HttpResponseForbidden()
 
-    member.is_active = False
-    member.save()
-
     if request.user == member:
         logout(request)
 
