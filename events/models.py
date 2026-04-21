@@ -3,14 +3,16 @@ import uuid
 from django.db import models
 from django.conf import settings
 
-# NOTE: this needs to be refactoctored eventually to properly handle when users is deleted, but for now we can just cascade delete the events when the user is deleted.
+from core.models import get_deleted_user
+
+
 class Event(models.Model):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=64)
     date = models.DateTimeField()
     location = models.CharField(max_length=100, blank=True)
     description = models.TextField(max_length=2000, blank=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_deleted_user), null=True)
 
     # This Meta class tells Django to always append ORDER BY date ASC to any SQL query on the 
     # Event table. So when the view calls Event.objects.all(), the database 

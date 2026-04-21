@@ -55,12 +55,12 @@
                                     height="56"
                                     alt="{{ member.get_full_name }} avatar">
                             {% else %}
-                                <i class="bi bi-person-circle text-secondary link-info" style="font-size: 51px;"></i>
+                                <i class="bi bi-person-circle text-secondary" style="font-size: 51px;"></i>
                             {% endif %}
 
                             {# Member info #}
                             <div class="flex-grow-1">
-                                <div class="fw-semibold text-body">{{ member.get_full_name }}</div>
+                                <a {% if active_roster == 'members' %}href="{% url 'profiles:profile' username=member.username %}"{% endif %} class="fw-semibold text-body text-decoration-none">{{ member.get_full_name }}</a>
                                 <div class="text-body-secondary small">{{ member.email }}</div>
                                 <div class="mt-1">
                                     {% if active_roster == 'members' %}

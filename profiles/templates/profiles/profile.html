@@ -6,14 +6,22 @@
     <div class="container py-5">
 
         <!-- Top bar -->
-        {% if is_owner %}
-        <div class="d-flex justify-content-end align-items-center mb-4">
-            <a href="{% url 'profiles:profile_edit' username=profile_user.username %}" class="btn btn-outline-info"
-               title="Edit Profile">
-                <i class="bi bi-pencil-square"></i> Edit Profile
-            </a>
+        <div class="d-flex justify-content-end align-items-center gap-2 mb-4">
+            {% if user_is_profile_owner %}
+                <a href="{% url 'profiles:profile_edit' username=profile_user.username %}" class="btn btn-outline-info"
+                   title="Edit Profile">
+                    <i class="bi bi-pencil-square"></i> Edit Profile
+                </a>
+            {% endif %}
+            {% if can_delete %}
+                <button type="button"
+                        class="btn btn-outline-danger"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteUserModal">
+                    <i class="bi bi-person-x"></i> Delete Account
+                </button>
+            {% endif %}
         </div>
-        {% endif %}
 
         <!-- Profile picture and username -->
         <div class="text-center mb-4">
@@ -41,6 +49,30 @@
             </h5>
             <p class="text-body-secondary mb-0" style="overflow-wrap: break-word; word-break: break-word;">{{ profile_user.profile.bio }}</p>
         </div>
-
     </div>
+
+    {% if can_delete %}
+        <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteUserModalLabel">Delete Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete <strong>{{ profile_user.username }}</strong>'s account? This action cannot be undone.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form method="post" action="{% url 'profiles:delete_user' username=profile_user.username %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                Delete Account
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

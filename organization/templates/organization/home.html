@@ -120,7 +120,11 @@
                             <div class="d-flex flex-column align-items-start gap-2 p-3 hover-bg-secondary">
                                 <div class="d-flex flex-row w-100 justify-content-between align-items-center">
                                     <div class="d-flex flex-row align-items-center gap-2">
-                                        <a href="{% url 'profiles:profile' message.user.username %}" class="text-decoration-none d-flex flex-row align-items-center gap-2">
+                                        <a
+                                                {% if message.user.status != 'DELETED' %}
+                                                    href="{% url 'profiles:profile' message.user.username %}"
+                                                {% endif %}
+                                                class="text-decoration-none d-flex flex-row align-items-center gap-2">
                                             {% if message.user.profile.profile_picture %}
                                             <img src="{{ message.user.profile.profile_picture.url }}" alt="Profile picture" class="rounded-circle" width="40px" height="40px">
                                             {% else %}

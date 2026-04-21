@@ -2,6 +2,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
+from project_a_17.settings import DELETED_USER_UID
 from .forms import UserAdminLoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
@@ -52,7 +53,7 @@ def user_admin(request):
     if not request.user.is_authenticated or not request.user.is_user_admin(): return redirect("user_admin:login")
 
     context = {
-        "members": User.objects.select_related("profile").order_by("first_name", "last_name"),
+        "members": User.objects.select_related("profile").order_by("first_name", "last_name").exclude(uid=DELETED_USER_UID),
         "role_choices": User.Role.choices,  # Claude Opus 4.6 Extended showed me how to access these choices tuples
         "status_choices": User.Status.choices,
     }
