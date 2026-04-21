@@ -59,11 +59,23 @@ def profile_edit_view(request, username):
 
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            if profile_picture_file_name: default_storage.delete(profile_picture_file_name)
-            form.save()
+            if profile_picture_file_name:
+                default_storage.delete(profile_picture_file_name)
+
+            profile = form.save()
+
+            request.user.first_name = form.cleaned_data["first_name"]
+            request.user.last_name = form.cleaned_data["last_name"]
+            request.user.save()
+
             return redirect("profiles:profile", username=username)
+
     else:                       # user just wants to view the edit page
-        form = ProfileEditForm(instance=profile)
+
+        # prefill the form with the user's current name because first and last name live on User
+        form = ProfileEditForm(instance=profile,
+            initial={"first_name": request.user.first_name, "last_name": request.user.last_name,}
+        )
 
     return render(request, "profiles/profile_edit.html", {"form": form, "profile_user": request.user})
 
