@@ -61,6 +61,6 @@ class Vote(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["poll", "user"], condition=~Q(user_uid=DELETED_USER_UID), name="unique_vote_per_poll_user"),
+            models.UniqueConstraint(fields=["poll", "user"], condition=~Q(user__uid=DELETED_USER_UID), name="unique_vote_per_poll_user"),
             # FIXME: we should talk about this. See also attendance model line 18
         ]

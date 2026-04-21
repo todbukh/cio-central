@@ -15,7 +15,7 @@ class Attendance(models.Model):
         UNSET = "UNSET"
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['member', 'event'], condition=~Q(user_uid=DELETED_USER_UID), name='unique_attendance')
+            models.UniqueConstraint(fields=['member', 'event'], condition=~Q(member__uid=DELETED_USER_UID), name='unique_attendance')
         #   # FIXME: We should talk about this. See also polls model line 64.
         ]
     member = models.ForeignKey(User, on_delete=models.CASCADE)
