@@ -3,11 +3,9 @@ import uuid
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Q
 from django.utils import timezone
 
 from core.models import get_deleted_user
-from project_a_17.settings import DELETED_USER_UID
 
 
 class Poll(models.Model):
@@ -56,11 +54,11 @@ class PollOption(models.Model):
 class Vote(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="votes")
     option = models.ForeignKey(PollOption, on_delete=models.CASCADE, related_name="votes")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_deleted_user), related_name="poll_votes")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="poll_votes")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["poll", "user"], condition=~Q(user__uid=DELETED_USER_UID), name="unique_vote_per_poll_user"),
+            models.UniqueConstraint(fields=["poll", "user"], name="unique_vote_per_poll_user"),
             # FIXME: we should talk about this. See also attendance model line 18
         ]

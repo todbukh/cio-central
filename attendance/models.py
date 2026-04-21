@@ -1,9 +1,7 @@
 from django.db import models
-from django.db.models import Q
 
-from core.models import User, get_deleted_user
+from core.models import User
 from events.models import Event
-from project_a_17.settings import DELETED_USER_UID
 
 
 # Create your models here.
@@ -15,8 +13,8 @@ class Attendance(models.Model):
         UNSET = "UNSET"
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['member', 'event'], condition=~Q(member__uid=DELETED_USER_UID), name='unique_attendance')
-        #   # FIXME: We should talk about this. See also polls model line 64.
+            models.UniqueConstraint(fields=['member', 'event'], name='unique_attendance')
+          # FIXME: We should talk about this. See also polls model line 64.
         ]
     member = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
