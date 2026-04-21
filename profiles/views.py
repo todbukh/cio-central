@@ -92,7 +92,6 @@ def delete_user(request, username):
 
     if request.user == member:
         logout(request)
-        return redirect("/login/")
 
     member.delete()
     return redirect("/")

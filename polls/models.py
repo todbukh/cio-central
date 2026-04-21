@@ -3,9 +3,11 @@ import uuid
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 
 from core.models import get_deleted_user
+from project_a_17.settings import DELETED_USER_UID
 
 
 class Poll(models.Model):
@@ -59,5 +61,6 @@ class Vote(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["poll", "user"], name="unique_vote_per_poll_user"),
+            models.UniqueConstraint(fields=["poll", "user"], condition=~Q(user_uid=DELETED_USER_UID), name="unique_vote_per_poll_user"),
+            # FIXME: we should talk about this. See also attendance model line 18
         ]
