@@ -13,7 +13,7 @@ class Poll(models.Model):
     question = models.CharField(max_length=200)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.SET(get_deleted_user()),
+        on_delete=models.SET(get_deleted_user),
         null=True,
         related_name="created_polls",
     )
@@ -54,7 +54,7 @@ class PollOption(models.Model):
 class Vote(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="votes")
     option = models.ForeignKey(PollOption, on_delete=models.CASCADE, related_name="votes")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_deleted_user()), related_name="poll_votes")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_deleted_user), related_name="poll_votes")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
