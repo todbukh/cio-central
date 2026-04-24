@@ -30,15 +30,17 @@
 
                     <td class="ps-3 py-3">
                       <div class="d-flex align-items-center gap-2">
-                        {% if record.member.profile.profile_picture %}
-                          <img src="{{ record.member.profile.profile_picture.url }}"
-                               class="rounded-circle"
-                               width="32"
-                               height="32"
-                               alt="{{ record.member.get_full_name }}">
-                        {% else %}
-                          <i class="bi bi-person-circle text-body-secondary"></i>
-                        {% endif %}
+                        <a href="{% url 'profiles:profile' username=record.member.username %}" class="text-decoration-none">
+                          {% if record.member.profile.profile_picture %}
+                            <img src="{{ record.member.profile.profile_picture.url }}"
+                                 class="rounded-circle"
+                                 width="32"
+                                 height="32"
+                                 alt="{{ record.member.get_full_name }}">
+                          {% else %}
+                            <i class="bi bi-person-circle text-body-secondary"></i>
+                          {% endif %}
+                        </a>
                         <span class="text-body">
                           {{ record.member.last_name }}, {{ record.member.first_name }}
                         </span>
