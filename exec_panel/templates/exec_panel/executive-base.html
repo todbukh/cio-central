@@ -14,6 +14,7 @@
             <a href="{% url 'exec_panel:attendance:attendance' %}" class="btn {% if active_tab == 'attendance' %}bg-body shadow-sm text-body{% else %}text-body-secondary{% endif %} border-0 px-4 px-lg-5 py-2 fs-5 fw-medium rounded-3">Attendance</a>
             <a href="{% url 'exec_panel:analytics:analytics' %}" class="btn {% if active_tab == 'analytics' %}bg-body shadow-sm text-body{% else %}text-body-secondary{% endif %} border-0 px-4 px-lg-5 py-2 fs-5 fw-medium rounded-3">Analytics</a>
             <a href="{% url 'exec_panel:roster:roster' %}" class="btn {% if active_tab == 'roster' %}bg-body shadow-sm text-body{% else %}text-body-secondary{% endif %} border-0 px-4 px-lg-5 py-2 fs-5 fw-medium rounded-3">Roster</a>
+            <a href="{% url 'exec_panel:organization-edit:index' %}" class="btn {% if active_tab == 'organization-edit' %}bg-body shadow-sm text-body{% else %}text-body-secondary{% endif %} border-0 px-4 px-lg-5 py-2 fs-5 fw-medium rounded-3">Organization</a>
         </nav>
 
         {% block tab %}

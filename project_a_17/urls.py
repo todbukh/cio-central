@@ -28,5 +28,4 @@ urlpatterns = [
     # allauth urls:
     path('accounts/', include('allauth.urls')),
     path("", include("organization.urls")),
-    path("s3demo/", include("s3_demo.urls")),  # TODO: remove this when done previewing demo
 ]
