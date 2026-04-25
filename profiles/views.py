@@ -9,6 +9,8 @@ from core.permissions import is_executive, is_owner
 from .forms import ProfileEditForm
 from django.core.files.storage import default_storage
 
+from .models import Profile
+
 User = get_user_model()
 
 def can_delete(user, profile_user):
@@ -89,6 +91,8 @@ def delete_user(request, username):
 
     if request.user == member:
         logout(request)
+    if member.profile.profile_picture:
+        member.profile.profile_picture.delete()
 
     member.delete()
     return redirect("/")
