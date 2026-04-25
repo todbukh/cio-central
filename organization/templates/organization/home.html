@@ -124,7 +124,7 @@
                                                 {% if message.user.status != 'DELETED' %}
                                                     href="{% url 'profiles:profile' message.user.username %}"
                                                 {% endif %}
-                                                class="text-decoration-none d-flex flex-row align-items-center gap-2">
+                                                class="text-decoration-none d-flex flex-row align-items-center gap-2 {% if message.user.status == 'DELETED' %} pe-none text-muted {% else %} link-info text-secondary {% endif %}">
                                             {% if message.user.profile.profile_picture %}
                                             <img src="{{ message.user.profile.profile_picture.url }}" alt="Profile picture" class="rounded-circle" width="40px" height="40px">
                                             {% else %}
