@@ -58,7 +58,7 @@
                         <td>
                     <!-- filename -> file.id  -->
     
-                            <a href="{% url 'documents:view_document' file.uid %}" target="_blank" rel="noopener noreferrer">
+                            <a href="{% url 'documents:view_document' file.uid %}">
                         <!-- file is a Document object now so we access file.file.name -->
                                 {{ file.file.name|cut:"documents/" }}
                             </a>
