@@ -134,7 +134,7 @@
                                             {% else %}
                                             <i class="bi bi-person-circle text-secondary link-info" style="font-size: 35px;"></i>
                                             {% endif %}
-                                            <p class="mb-0 fw-bold text-secondary link-info">{{ message.user.username }}</p>
+                                            <p class="mb-0 fw-bold text-secondary link-info text-break">{{ message.user.username }}</p>
                                         </a>
                                         <p class="mb-0 text-secondary">-</p>
                                         <p class="mb-0 text-secondary"><small>{{ message.sent_at|localtime|date:"m/d/Y, h:iA" }}</small></p>
