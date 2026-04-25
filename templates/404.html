@@ -1,0 +1,614 @@
+{# 404 page generated ENTIRELY with Claude Opus 4.6 #}
+{% extends 'base-no-nav.html' %}
+
+{% block title %}404{% endblock %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+    .space-void {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        cursor: default;
+    }
+
+    /* ── stars ── */
+    .star {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: twinkle ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkle {
+        0%   { opacity: 0.1; transform: scale(0.7); }
+        100% { opacity: 0.6; transform: scale(1.3); }
+    }
+
+    /* ── background floating digits ── */
+    .bg-digit {
+        position: absolute;
+        font-family: 'Space Mono', monospace;
+        font-weight: 700;
+        opacity: 0.05;
+        pointer-events: none;
+        user-select: none;
+        animation: drift linear infinite;
+    }
+
+    @keyframes drift {
+        0%   { transform: translateY(0)    rotate(0deg)   scale(1);    }
+        25%  { transform: translateY(-28px) rotate(4deg)   scale(1.03); }
+        50%  { transform: translateY(-10px) rotate(-3deg)  scale(0.97); }
+        75%  { transform: translateY(-36px) rotate(3deg)   scale(1.02); }
+        100% { transform: translateY(0)    rotate(0deg)   scale(1);    }
+    }
+
+    /* ── draggable floaters ── */
+    .floater {
+        position: absolute;
+        cursor: grab;
+        user-select: none;
+        touch-action: none;
+        z-index: 20;
+        transition: filter 0.2s ease;
+    }
+
+    .floater:hover { filter: brightness(1.25); }
+
+    .floater.dragging {
+        cursor: grabbing;
+        filter: brightness(1.4);
+    }
+
+    .floater-digit {
+        font-family: 'Space Mono', monospace;
+        font-weight: 700;
+        font-size: clamp(5rem, 14vw, 11rem);
+        line-height: 1;
+    }
+
+    .floater-btn { white-space: nowrap; }
+
+    /* ── sarcastic message ── */
+    .floater-msg {
+        font-family: 'Space Mono', monospace;
+        font-size: clamp(0.65rem, 1.4vw, 0.85rem);
+        max-width: 280px;
+        text-align: center;
+        line-height: 1.7;
+        letter-spacing: 0.02em;
+        padding: 0.9rem 1.1rem;
+        border-radius: 0.75rem;
+        border: 1px solid;
+    }
+
+    /* ── basketball ── */
+    .floater-ball {
+        width: 56px;
+        height: 56px;
+        font-size: 48px;
+        line-height: 56px;
+        text-align: center;
+        z-index: 25;
+        filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+    }
+
+    .floater-ball.dragging {
+        filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) brightness(1.1);
+    }
+
+    /* ── hoop ── */
+    .floater-hoop {
+        z-index: 22;
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .hoop-assembly {
+        position: relative;
+        width: 140px;
+        height: 170px;
+    }
+
+    /* backboard */
+    .hoop-backboard {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 68px;
+        border: 3px solid;
+        border-radius: 4px;
+    }
+
+    /* backboard inner square target */
+    .hoop-backboard-inner {
+        position: absolute;
+        top: 22px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 30px;
+        border: 2px solid;
+        border-radius: 2px;
+        opacity: 0.5;
+    }
+
+    /* bracket connecting backboard to rim */
+    .hoop-bracket {
+        position: absolute;
+        top: 68px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 8px;
+    }
+
+    /* rim — oval ring */
+    .hoop-rim {
+        position: absolute;
+        top: 72px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 16px;
+        border: 4px solid;
+        border-radius: 50%;
+    }
+
+    /* net — layered trapezoid lines */
+    .hoop-net {
+        position: absolute;
+        top: 86px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .hoop-net-line {
+        border-bottom: 2px dashed;
+        opacity: 0.3;
+        position: absolute;
+    }
+
+    .hoop-net-line:nth-child(1) { width: 72px; left: -36px; top: 0; }
+    .hoop-net-line:nth-child(2) { width: 62px; left: -31px; top: 12px; }
+    .hoop-net-line:nth-child(3) { width: 50px; left: -25px; top: 24px; }
+    .hoop-net-line:nth-child(4) { width: 36px; left: -18px; top: 36px; }
+    .hoop-net-line:nth-child(5) { width: 22px; left: -11px; top: 48px; }
+
+    .hoop-net-side {
+        position: absolute;
+        top: 0;
+        height: 55px;
+        border-left: 2px dashed;
+        opacity: 0.25;
+    }
+
+    .hoop-net-side.left-side  { left: -36px; transform: rotate(8deg);  transform-origin: top center; }
+    .hoop-net-side.right-side { left: 34px;  transform: rotate(-8deg); transform-origin: top center; }
+    .hoop-net-side.left-inner  { left: -18px; transform: rotate(4deg);  transform-origin: top center; }
+    .hoop-net-side.right-inner { left: 16px;  transform: rotate(-4deg); transform-origin: top center; }
+
+    /* ── scoreboard ── */
+    .scoreboard {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 100;
+        font-family: 'Space Mono', monospace;
+        text-align: center;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.75rem;
+        border: 1px solid;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.6s ease;
+    }
+
+    .scoreboard.visible { opacity: 1; }
+
+    .scoreboard .score-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+    }
+
+    .scoreboard .score-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    /* ── score flash ── */
+    .score-flash {
+        position: fixed;
+        z-index: 200;
+        font-family: 'Space Mono', monospace;
+        font-weight: 700;
+        font-size: 2.2rem;
+        pointer-events: none;
+        animation: flashUp 1s ease-out forwards;
+    }
+
+    @keyframes flashUp {
+        0%   { opacity: 1; transform: translateY(0) scale(1); }
+        100% { opacity: 0; transform: translateY(-70px) scale(1.5); }
+    }
+</style>
+
+<div class="space-void bg-body" id="void">
+
+    <!-- ═══ STARS ═══ -->
+    <span class="star bg-info-subtle" style="width:2px;height:2px;top:8%;left:12%;animation-duration:2.4s;"></span>
+    <span class="star bg-info-subtle" style="width:3px;height:3px;top:22%;left:75%;animation-duration:3.1s;"></span>
+    <span class="star bg-info-subtle" style="width:2px;height:2px;top:45%;left:30%;animation-duration:2.8s;"></span>
+    <span class="star bg-info-subtle" style="width:1px;height:1px;top:60%;left:85%;animation-duration:2.0s;"></span>
+    <span class="star bg-info-subtle" style="width:3px;height:3px;top:15%;left:50%;animation-duration:3.5s;"></span>
+    <span class="star bg-info-subtle" style="width:2px;height:2px;top:70%;left:18%;animation-duration:2.6s;"></span>
+    <span class="star bg-info-subtle" style="width:1px;height:1px;top:35%;left:92%;animation-duration:2.2s;"></span>
+    <span class="star bg-info-subtle" style="width:2px;height:2px;top:80%;left:55%;animation-duration:3.0s;"></span>
+    <span class="star bg-info-subtle" style="width:3px;height:3px;top:5%;left:35%;animation-duration:2.9s;"></span>
+    <span class="star bg-info-subtle" style="width:2px;height:2px;top:50%;left:65%;animation-duration:3.3s;"></span>
+    <span class="star bg-info-subtle" style="width:1px;height:1px;top:90%;left:40%;animation-duration:2.1s;"></span>
+    <span class="star bg-info-subtle" style="width:2px;height:2px;top:28%;left:8%;animation-duration:3.7s;"></span>
+
+    <!-- ═══ BACKGROUND FLOATING 404s ═══ -->
+    <span class="bg-digit text-primary" style="font-size:8rem;top:5%;left:3%;animation-duration:24s;" aria-hidden="true">4</span>
+    <span class="bg-digit text-info" style="font-size:5rem;top:12%;right:8%;animation-duration:19s;animation-delay:-3s;" aria-hidden="true">0</span>
+    <span class="bg-digit text-primary" style="font-size:11rem;bottom:10%;left:10%;animation-duration:28s;animation-delay:-7s;" aria-hidden="true">4</span>
+    <span class="bg-digit text-info" style="font-size:4rem;top:40%;left:70%;animation-duration:22s;animation-delay:-2s;" aria-hidden="true">4</span>
+    <span class="bg-digit text-primary" style="font-size:6rem;top:65%;left:5%;animation-duration:26s;animation-delay:-10s;" aria-hidden="true">0</span>
+    <span class="bg-digit text-info" style="font-size:9rem;top:20%;left:40%;animation-duration:30s;animation-delay:-5s;" aria-hidden="true">4</span>
+    <span class="bg-digit text-primary" style="font-size:3.5rem;top:75%;right:15%;animation-duration:20s;animation-delay:-8s;" aria-hidden="true">0</span>
+    <span class="bg-digit text-info" style="font-size:7rem;top:50%;left:25%;animation-duration:25s;animation-delay:-12s;" aria-hidden="true">4</span>
+    <span class="bg-digit text-primary" style="font-size:5.5rem;bottom:5%;right:30%;animation-duration:21s;animation-delay:-4s;" aria-hidden="true">4</span>
+    <span class="bg-digit text-info" style="font-size:10rem;top:8%;left:60%;animation-duration:32s;animation-delay:-15s;" aria-hidden="true">0</span>
+    <span class="bg-digit text-primary" style="font-size:4.5rem;top:55%;right:5%;animation-duration:18s;animation-delay:-6s;" aria-hidden="true">4</span>
+    <span class="bg-digit text-info" style="font-size:6.5rem;bottom:25%;left:50%;animation-duration:27s;animation-delay:-9s;" aria-hidden="true">0</span>
+
+    <!-- ═══ DRAGGABLE MAIN PIECES ═══ -->
+    <div class="floater floater-digit text-danger" data-floater="true">4</div>
+    <div class="floater floater-digit text-danger" data-floater="true">0</div>
+    <div class="floater floater-digit text-danger" data-floater="true">4</div>
+
+    <!-- ═══ SARCASTIC MESSAGE ═══ -->
+    <div class="floater floater-msg text-info-emphasis bg-body-secondary border-info-subtle" data-floater="true">
+        <i class="bi bi-rocket-takeoff me-1"></i>
+        Page not found. It's gone.<br>
+        Vaporized. Floating among the stars.<br>
+        Shoot some hoops while you grieve.
+        <i class="bi bi-dribbble ms-1"></i>
+    </div>
+
+    <!-- ═══ GO HOME BUTTON ═══ -->
+    <a href="{% url 'organization:home' %}" class="floater floater-btn btn btn-outline-info btn-lg rounded-pill px-4" data-floater="true">
+        <i class="bi bi-house-door me-2"></i>Go Home
+    </a>
+
+    <!-- ═══ BASKETBALL HOOP ═══ -->
+    <div class="floater floater-hoop" data-floater="true" data-hoop="true">
+        <div class="hoop-assembly">
+            <div class="hoop-backboard bg-body-tertiary border-info"></div>
+            <div class="hoop-backboard-inner border-info"></div>
+            <div class="hoop-bracket bg-danger"></div>
+            <div class="hoop-rim border-danger"></div>
+            <div class="hoop-net">
+                <div class="hoop-net-line border-danger-subtle"></div>
+                <div class="hoop-net-line border-danger-subtle"></div>
+                <div class="hoop-net-line border-danger-subtle"></div>
+                <div class="hoop-net-line border-danger-subtle"></div>
+                <div class="hoop-net-line border-danger-subtle"></div>
+                <div class="hoop-net-side left-side border-danger-subtle"></div>
+                <div class="hoop-net-side right-side border-danger-subtle"></div>
+                <div class="hoop-net-side left-inner border-danger-subtle"></div>
+                <div class="hoop-net-side right-inner border-danger-subtle"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ BASKETBALL ═══ -->
+    <div class="floater floater-ball" data-floater="true" data-ball="true">🏀</div>
+
+</div>
+
+<!-- ═══ SCOREBOARD ═══ -->
+<div class="scoreboard bg-body-secondary text-warning border-warning-subtle" id="scoreboard">
+    <div class="score-label text-warning-emphasis">Buckets</div>
+    <div class="score-value" id="score-value">0</div>
+</div>
+
+<script>
+(function () {
+    var arena = document.getElementById('void');
+    var floaters = Array.from(arena.querySelectorAll('[data-floater]'));
+    var scoreboard = document.getElementById('scoreboard');
+    var scoreDisplay = document.getElementById('score-value');
+
+    /* identify special floaters by index */
+    var ballIndex = -1;
+    var hoopIndex = -1;
+    floaters.forEach(function (el, i) {
+        if (el.hasAttribute('data-ball')) ballIndex = i;
+        if (el.hasAttribute('data-hoop')) hoopIndex = i;
+    });
+
+    var score = 0;
+    var scoreCooldown = false;
+
+    /* ── physics state ── */
+    var state = floaters.map(function (el) {
+        var isHoop = el.hasAttribute('data-hoop');
+        var isBall = el.hasAttribute('data-ball');
+        return {
+            x: 0, y: 0,
+            vx: (Math.random() - 0.5) * (isHoop ? 0.2 : isBall ? 0 : 0.6),
+            vy: isBall ? 0 : (Math.random() - 0.5) * (isHoop ? 0.2 : 0.6),
+            dragging: false,
+            dragOffsetX: 0, dragOffsetY: 0,
+            lastMouse: { x: 0, y: 0 },
+            prevMouse: { x: 0, y: 0 },
+            isHoop: isHoop,
+            isBall: isBall
+        };
+    });
+
+    /* ── placement slots ── */
+    function initPositions() {
+        var aw = arena.clientWidth;
+        var ah = arena.clientHeight;
+        var slots = [
+            { xr: 0.15, yr: 0.34 },   /* 4           */
+            { xr: 0.38, yr: 0.31 },   /* 0           */
+            { xr: 0.61, yr: 0.34 },   /* 4           */
+            { xr: 0.40, yr: 0.55 },   /* message     */
+            { xr: 0.30, yr: 0.80 },   /* go home btn */
+            { xr: 0.72, yr: 0.22 },   /* hoop        */
+            { xr: 0.72, yr: 0.60 },   /* ball        */
+        ];
+        floaters.forEach(function (el, i) {
+            if (i < slots.length) {
+                state[i].x = slots[i].xr * aw - el.offsetWidth / 2;
+                state[i].y = slots[i].yr * ah - el.offsetHeight / 2;
+            }
+        });
+    }
+
+    initPositions();
+
+    /* ── pointer helpers ── */
+    function getPointer(e) {
+        if (e.touches) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        return { x: e.clientX, y: e.clientY };
+    }
+
+    function onDown(e, i) {
+        if (floaters[i].hasAttribute('data-hoop')) return;
+        if (e.type === 'mousedown') e.preventDefault();
+
+        var p = getPointer(e);
+        var rect = arena.getBoundingClientRect();
+        var s = state[i];
+
+        s.dragging = true;
+        s.dragOffsetX = p.x - rect.left - s.x;
+        s.dragOffsetY = p.y - rect.top - s.y;
+        s.lastMouse = { x: p.x, y: p.y };
+        s.prevMouse = { x: p.x, y: p.y };
+        s.vx = 0;
+        s.vy = 0;
+
+        floaters[i].classList.add('dragging');
+    }
+
+    function onMove(e) {
+        var p = getPointer(e);
+        var rect = arena.getBoundingClientRect();
+
+        state.forEach(function (s) {
+            if (!s.dragging) return;
+            s.prevMouse = { x: s.lastMouse.x, y: s.lastMouse.y };
+            s.lastMouse = { x: p.x, y: p.y };
+            s.x = p.x - rect.left - s.dragOffsetX;
+            s.y = p.y - rect.top - s.dragOffsetY;
+        });
+    }
+
+    function onUp() {
+        state.forEach(function (s, i) {
+            if (!s.dragging) return;
+            s.dragging = false;
+            floaters[i].classList.remove('dragging');
+            s.vx = (s.lastMouse.x - s.prevMouse.x) * 0.35;
+            s.vy = (s.lastMouse.y - s.prevMouse.y) * 0.35;
+        });
+    }
+
+    floaters.forEach(function (el, i) {
+        el.addEventListener('mousedown', function (e) { onDown(e, i); });
+        el.addEventListener('touchstart', function (e) { onDown(e, i); }, { passive: true });
+    });
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('touchmove', onMove, { passive: true });
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchend', onUp);
+
+    /* prevent anchor click when dragging */
+    floaters.forEach(function (el) {
+        if (el.tagName === 'A') {
+            var sx = 0, sy = 0;
+            el.addEventListener('mousedown', function (e) { sx = e.clientX; sy = e.clientY; });
+            el.addEventListener('click', function (e) {
+                if (Math.hypot(e.clientX - sx, e.clientY - sy) > 6) e.preventDefault();
+            });
+        }
+    });
+
+    /* ── score flash ── */
+    function showScoreFlash(x, y) {
+        var el = document.createElement('div');
+        el.className = 'score-flash text-success';
+        el.textContent = '+1';
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        document.body.appendChild(el);
+        setTimeout(function () { el.remove(); }, 1000);
+    }
+
+    /* ── hoop scoring ── */
+    /* ball must cross the rim plane moving downward, within the rim width */
+    var ballWasAboveRim = false;
+
+    function checkScore() {
+        if (ballIndex < 0 || hoopIndex < 0 || scoreCooldown) return;
+
+        var bs = state[ballIndex];
+        var hs = state[hoopIndex];
+        var ball = floaters[ballIndex];
+        var hoop = floaters[hoopIndex];
+
+        if (bs.dragging) { ballWasAboveRim = false; return; }
+
+        var bcx = bs.x + ball.offsetWidth / 2;
+        var bcy = bs.y + ball.offsetHeight / 2;
+
+        /* rim center — matches the .hoop-rim position in the assembly */
+        var rimCx = hs.x + hoop.offsetWidth / 2;
+        var rimY  = hs.y + 80;
+        var rimHalfW = 36;
+
+        var inRimX = Math.abs(bcx - rimCx) < rimHalfW;
+        var aboveRim = bcy < rimY - 5;
+        var belowRim = bcy > rimY + 5;
+        var movingDown = bs.vy > 1;
+
+        if (inRimX && aboveRim) {
+            ballWasAboveRim = true;
+        }
+
+        if (ballWasAboveRim && inRimX && belowRim && movingDown) {
+            score++;
+            scoreDisplay.textContent = score;
+            scoreboard.classList.add('visible');
+            scoreCooldown = true;
+            ballWasAboveRim = false;
+
+            showScoreFlash(
+                hs.x + hoop.offsetWidth / 2 - 15,
+                hs.y - 10
+            );
+
+            setTimeout(function () { scoreCooldown = false; }, 1000);
+        }
+
+        /* reset if ball leaves rim X zone */
+        if (!inRimX) ballWasAboveRim = false;
+    }
+
+    /* ── animation constants ── */
+    var FRICTION      = 0.985;
+    var BOUNCE        = -0.5;
+    var IDLE_DRIFT    = 0.008;
+    var HOOP_DRIFT    = 0.002;
+    var BALL_GRAVITY  = 0.28;
+    var BALL_FRICTION = 0.992;
+    var BALL_BOUNCE_Y = -0.62;
+    var BALL_BOUNCE_X = -0.45;
+    var FLOOR_DRAG    = 0.96;
+
+    function tick() {
+        var aw = arena.clientWidth;
+        var ah = arena.clientHeight;
+
+        state.forEach(function (s, i) {
+            var el = floaters[i];
+            var ew = el.offsetWidth;
+            var eh = el.offsetHeight;
+
+            if (s.dragging) {
+                el.style.left = s.x + 'px';
+                el.style.top  = s.y + 'px';
+                return;
+            }
+
+            /* ─── BASKETBALL: real gravity physics ─── */
+            if (s.isBall) {
+                s.vy += BALL_GRAVITY;
+                s.vx *= BALL_FRICTION;
+                s.vy *= BALL_FRICTION;
+                s.x += s.vx;
+                s.y += s.vy;
+
+                /* floor */
+                if (s.y + eh > ah) {
+                    s.y = ah - eh;
+                    s.vy *= BALL_BOUNCE_Y;
+                    s.vx *= FLOOR_DRAG;
+                    /* kill tiny bounces */
+                    if (Math.abs(s.vy) < 1) s.vy = 0;
+                }
+                /* ceiling */
+                if (s.y < 0) {
+                    s.y = 0;
+                    s.vy *= BALL_BOUNCE_Y;
+                }
+                /* walls */
+                if (s.x < 0)       { s.x = 0;       s.vx *= BALL_BOUNCE_X; }
+                if (s.x + ew > aw) { s.x = aw - ew; s.vx *= BALL_BOUNCE_X; }
+
+            /* ─── HOOP: very slow drift ─── */
+            } else if (s.isHoop) {
+                var speed = Math.hypot(s.vx, s.vy);
+                if (speed < 0.06) {
+                    s.vx += (Math.random() - 0.5) * HOOP_DRIFT;
+                    s.vy += (Math.random() - 0.5) * HOOP_DRIFT;
+                }
+                if (speed > 0.3) { s.vx *= 0.92; s.vy *= 0.92; }
+
+                s.vx *= FRICTION;
+                s.vy *= FRICTION;
+                s.x += s.vx;
+                s.y += s.vy;
+
+                if (s.x < 0)       { s.x = 0;       s.vx *= BOUNCE; }
+                if (s.x + ew > aw) { s.x = aw - ew; s.vx *= BOUNCE; }
+                if (s.y < 0)       { s.y = 0;        s.vy *= BOUNCE; }
+                if (s.y + eh > ah) { s.y = ah - eh;  s.vy *= BOUNCE; }
+
+            /* ─── EVERYTHING ELSE: space float ─── */
+            } else {
+                var spd = Math.hypot(s.vx, s.vy);
+                if (spd < 0.15) {
+                    s.vx += (Math.random() - 0.5) * IDLE_DRIFT;
+                    s.vy += (Math.random() - 0.5) * IDLE_DRIFT;
+                }
+
+                s.vx *= FRICTION;
+                s.vy *= FRICTION;
+                s.x += s.vx;
+                s.y += s.vy;
+
+                if (s.x < 0)       { s.x = 0;       s.vx *= BOUNCE; }
+                if (s.x + ew > aw) { s.x = aw - ew; s.vx *= BOUNCE; }
+                if (s.y < 0)       { s.y = 0;        s.vy *= BOUNCE; }
+                if (s.y + eh > ah) { s.y = ah - eh;  s.vy *= BOUNCE; }
+            }
+
+            el.style.left = s.x + 'px';
+            el.style.top  = s.y + 'px';
+        });
+
+        checkScore();
+        requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+    window.addEventListener('resize', initPositions);
+})();
+</script>
+{% endblock %}

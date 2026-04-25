@@ -5,7 +5,20 @@ document.addEventListener("DOMContentLoaded", (_event) => {
     scrollMessagesToBottom();
     addDeleteMessageButtonOnClicks();
     addMessageComposerEventListener();
+    addInterceptEnterButtonEventListener();
 });
+
+// Credit to Claude Opus 4.6 Extended for partial generation of this method
+function addInterceptEnterButtonEventListener(){
+    const messageTextBox = document.getElementById("messageTextBox");
+
+    messageTextBox.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            document.getElementById("messageForm").requestSubmit();
+        }
+    });
+}
 
 // Claude Opus 4.6 suggested this pattern for passing the message id into the modal for deletion
 // Related docs: https://getbootstrap.com/docs/5.3/components/modal/#events
