@@ -47,20 +47,22 @@
                         <div class="card-body d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3">
 
                             {# Avatar #}
-                            {% if member.profile.profile_picture %}
-                                <img
-                                    src="{{ member.profile.profile_picture.url }}"
-                                    class="rounded-circle flex-shrink-0"
-                                    width="56"
-                                    height="56"
-                                    alt="{{ member.get_full_name }} avatar">
-                            {% else %}
-                                <i class="bi bi-person-circle text-secondary link-info" style="font-size: 51px;"></i>
-                            {% endif %}
+                            <a {% if active_roster == 'members' %}href="{% url 'profiles:profile' username=member.username %}"{% endif %} class="text-decoration-none flex-shrink-0">
+                                {% if member.profile.profile_picture %}
+                                    <img
+                                        src="{{ member.profile.profile_picture.url }}"
+                                        class="rounded-circle"
+                                        width="56"
+                                        height="56"
+                                        alt="{{ member.get_full_name }} avatar">
+                                {% else %}
+                                    <i class="bi bi-person-circle text-secondary" style="font-size: 51px;"></i>
+                                {% endif %}
+                            </a>
 
                             {# Member info #}
                             <div class="flex-grow-1">
-                                <div class="fw-semibold text-body">{{ member.get_full_name }}</div>
+                                <a {% if active_roster == 'members' %}href="{% url 'profiles:profile' username=member.username %}"{% endif %} class="fw-semibold text-body text-decoration-none">{{ member.get_full_name }}</a>
                                 <div class="text-body-secondary small">{{ member.email }}</div>
                                 <div class="mt-1">
                                     {% if active_roster == 'members' %}

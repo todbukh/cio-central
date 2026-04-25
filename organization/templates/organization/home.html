@@ -124,7 +124,11 @@
                             <div class="d-flex flex-column align-items-start gap-2 p-3 hover-bg-secondary">
                                 <div class="d-flex flex-row w-100 justify-content-between align-items-center">
                                     <div class="d-flex flex-row align-items-center gap-2">
-                                        <a href="{% url 'profiles:profile' message.user.username %}" class="text-decoration-none d-flex flex-row align-items-center gap-2">
+                                        <a
+                                                {% if message.user.status != 'DELETED' %}
+                                                    href="{% url 'profiles:profile' message.user.username %}"
+                                                {% endif %}
+                                                class="text-decoration-none d-flex flex-row align-items-center gap-2 {% if message.user.status == 'DELETED' %} pe-none text-muted {% else %} link-info text-secondary {% endif %}">
                                             {% if message.user.profile.profile_picture %}
                                             <img src="{{ message.user.profile.profile_picture.url }}" alt="Profile picture" class="rounded-circle" width="40px" height="40px">
                                             {% else %}
@@ -147,9 +151,33 @@
                                     {% endif %}
                                 </div>
 
-                                <p class="mb-0 text-secondary text-break">
-                                    {{ message.text|linebreaksbr }}
-                                </p>
+                                {% if message.poll_url %}
+                                    <div class="d-flex flex-column align-items-start gap-2">
+                                        <p class="mb-0 text-secondary fw-semibold text-break">{{ message.poll_question }}</p>
+                                        <a href="{{ message.poll_url }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-bar-chart-steps me-1"></i>Open Poll
+                                        </a>
+                                    </div>
+                                {% elif message.event_name %}
+                                    <div class="d-flex flex-column align-items-start gap-2">
+                                        <p class="mb-0 text-secondary fw-semibold text-break">{{ message.event_name }}</p>
+                                        {% if message.event_url %}
+                                            {% if user.is_exec %}
+                                                <a href="{{ message.exec_event_url }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-calendar-event me-1"></i>View Event
+                                                </a>
+                                            {% else %}
+                                                <a href="{{ message.event_url }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-calendar-event me-1"></i>View Event
+                                                </a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <p class="mb-0 text-secondary text-break">
+                                        {{ message.text|linebreaksbr }}
+                                    </p>
+                                {% endif %}
                             </div>
                         {% empty %}
                             <div class="d-flex align-items-center justify-content-center h-100">
@@ -237,7 +265,7 @@
 
                 {# Events panel — desktop, xl+ #}
                 <aside class="events-w d-none d-xl-flex flex-column flex-shrink-0 bg-body-secondary border-start overflow-hidden"
-                       aria-label="Upcoming events">
+                       aria-label="Upcoming Events">
 
                     {# Events header #}
                     <header class="px-4 py-3 border-bottom d-flex align-items-center gap-2 flex-shrink-0">

@@ -1,14 +1,55 @@
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponseForbidden, Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+import re
 
 from core.decorators import executive_required
 from events.models import Event
 from organization_edit.models import Organization
 from .forms import MessageForm, ChannelForm
 from .models import Channel, Message
+
+
+POLL_ANNOUNCEMENT_PATTERN = re.compile(
+    r"^Poll: (?P<question>.+)\nVote here: (?P<url>/polls/[0-9a-f-]+/)$"
+)
+
+EVENT_ANNOUNCEMENT_PATTERN = re.compile(
+    r"^Event: (?P<name>.+)\nView details: (?P<url>/events/[0-9a-f-]+/)$"
+)
+
+
+def enrich_poll_announcements(messages):
+    for message in messages:
+        match = POLL_ANNOUNCEMENT_PATTERN.match(message.text)
+        message.poll_url = None
+        message.poll_question = None
+
+        if match:
+            message.poll_url = match.group("url")
+            message.poll_question = match.group("question")
+
+    return messages
+
+
+def enrich_event_announcements(messages):
+    for message in messages:
+        match = EVENT_ANNOUNCEMENT_PATTERN.match(message.text)
+        message.event_url = None
+        message.event_name = None
+        message.exec_event_url = None
+
+        if match:
+            message.event_name = match.group("name")
+            uid = match.group("url").strip("/").split("/")[-1]
+            if Event.objects.filter(uid=uid).exists():
+                message.event_url = match.group("url")
+                message.exec_event_url = reverse("exec_panel:events:event_detail", args=[uid])
+
+    return messages
 
 
 @login_required(login_url="/login/")
@@ -42,6 +83,8 @@ def messages(request, channel):
             .select_related("user__profile")
             .order_by("sent_at")
     )
+    enrich_poll_announcements(message_list)
+    enrich_event_announcements(message_list)
 
     today = timezone.localdate()
     today_events = list(Event.objects.filter(date__date=today))

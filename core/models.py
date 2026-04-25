@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from project_a_17.settings import DELETED_USER_UID
 from core.permissions import is_executive, is_user_admin as check_is_user_admin, is_owner as check_is_owner
 
 # Create your models here.
@@ -17,6 +18,7 @@ class User(AbstractUser):
         APPROVED = "APPROVED"
         REJECTED = "REJECTED"
         BANNED = "BANNED"
+        DELETED = "DELETED"
 
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.MEMBER)
@@ -33,3 +35,17 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+def get_deleted_user():
+    return User.objects.get_or_create(
+        uid=DELETED_USER_UID,
+        defaults={
+            "username": "deleted_user",
+            "email": "deleted_user@ciocentral.com",
+            "password": "!",
+            "first_name": "Deleted",
+            "last_name": "User",
+            "is_active": False,
+            "status": "DELETED",
+            "role": "MEMBER",
+        })[0]
