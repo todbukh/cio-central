@@ -11,4 +11,5 @@ urlpatterns = [
     path("attendance/", include("attendance.urls")),
     path("analytics/", include("analytics.urls")),
     path("roster/", include("roster.urls")),
+    path("manage-organization/", include("organization_edit.urls")),
 ]

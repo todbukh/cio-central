@@ -8,6 +8,7 @@ import re
 
 from core.decorators import executive_required
 from events.models import Event
+from organization_edit.models import Organization
 from .forms import MessageForm, ChannelForm
 from .models import Channel, Message
 
@@ -60,6 +61,10 @@ def home_redirect(request):
 def messages(request, channel):
     active_channel = get_object_or_404(Channel, name=channel)
 
+    organization, created = Organization.objects.get_or_create(
+        id=0
+    )
+
     if request.method == "POST":
         # redirect if user does not have permission to post in channel
         if active_channel.exec_only and not request.user.is_exec():
@@ -84,11 +89,16 @@ def messages(request, channel):
     today = timezone.localdate()
     today_events = list(Event.objects.filter(date__date=today))
 
+    org_img_url = None
+    if organization.organization_picture: org_img_url = organization.organization_picture.url
+
     context = {
         "active_channel": active_channel,
         "channels": list(Channel.objects.all()),
         "messages": message_list,
         "today_events": today_events,
+        "org_name": organization.name,
+        "org_img_url": org_img_url,
     }
 
     return render(request, 'organization/home.html', context)
