@@ -11,9 +11,9 @@
 
         <div class="bg-body-secondary rounded p-4">
             <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
-                <div>
+                <div class="overflow-hidden" style="min-width: 0;">
                     <p class="text-body-secondary text-uppercase small mb-2">Poll</p>
-                    <h2 class="mb-0">{{ poll.question }}</h2>
+                    <h2 class="mb-0 text-truncate">{{ poll.question }}</h2>
                 </div>
                 <span class="badge {% if poll.is_closed %}text-bg-secondary{% else %}text-bg-success{% endif %}">
                     {% if poll.is_closed %}Closed{% else %}Open{% endif %}

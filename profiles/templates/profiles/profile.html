@@ -35,11 +35,11 @@
             <!-- changed this so the profiles shows the user's name if they have one and always the username with @ -->
              <!-- And if they don't have names, just use the username as the main name -->
             {% if profile_user.first_name or profile_user.last_name %}
-                <h2 class="text-body mb-1">
+                <h2 class="text-body mb-1 text-break">
                     {{ profile_user.first_name }}{% if profile_user.first_name and profile_user.last_name %} {% endif %}{{ profile_user.last_name }}
                 </h2>
             {% endif %}
-            <p class="text-body-secondary mb-0">@{{ profile_user.username }}</p>
+            <p class="text-body-secondary mb-0 text-break">@{{ profile_user.username }}</p>
         </div>
 
         <!-- Bio section -->

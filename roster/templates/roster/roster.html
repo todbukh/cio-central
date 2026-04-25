@@ -62,7 +62,7 @@
 
                             {# Member info #}
                             <div class="flex-grow-1">
-                                <a {% if active_roster == 'members' %}href="{% url 'profiles:profile' username=member.username %}"{% endif %} class="fw-semibold text-body text-decoration-none">{{ member.get_full_name }}</a>
+                                <a {% if active_roster == 'members' %}href="{% url 'profiles:profile' username=member.username %}"{% endif %} class="fw-semibold text-body text-decoration-none text-break">{{ member.get_full_name }}</a>
                                 <div class="text-body-secondary small">{{ member.email }}</div>
                                 <div class="mt-1">
                                     {% if active_roster == 'members' %}

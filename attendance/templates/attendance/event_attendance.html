@@ -28,9 +28,9 @@
               {% for record in attendees %}
                   <tr class="border-top">
 
-                    <td class="ps-3 py-3">
-                      <div class="d-flex align-items-center gap-2">
-                        <a href="{% url 'profiles:profile' username=record.member.username %}" class="text-decoration-none">
+                    <td class="ps-3 py-3" style="max-width: 0; width: 70%;">
+                      <div class="d-flex align-items-center gap-2 overflow-hidden">
+                        <a href="{% url 'profiles:profile' username=record.member.username %}" class="text-decoration-none flex-shrink-0">
                           {% if record.member.profile.profile_picture %}
                             <img src="{{ record.member.profile.profile_picture.url }}"
                                  class="rounded-circle"
@@ -41,7 +41,7 @@
                             <i class="bi bi-person-circle text-body-secondary"></i>
                           {% endif %}
                         </a>
-                        <span class="text-body">
+                        <span class="text-body text-truncate" style="min-width: 0;">
                           {{ record.member.last_name }}, {{ record.member.first_name }}
                         </span>
                       </div>

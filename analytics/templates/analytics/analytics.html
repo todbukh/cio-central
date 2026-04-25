@@ -100,7 +100,7 @@
                     <tbody>
                         {% for row in table_rows %}
                             <tr>
-                                <td>
+                                <td style="max-width: 0; width: 50%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                     {% if selected_view == "events" %}
                                         <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'exec_panel:attendance:event_attendance' row.event_uid %}">{{ row.name }}</a>
                                     {% else %}
