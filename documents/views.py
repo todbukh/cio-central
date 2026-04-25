@@ -104,6 +104,7 @@ def view_document(request, file_uid):
         "file_url": file_url,
         "file_name": file_name,
         "is_image": any(lower_file_name.endswith(ext) for ext in image_extensions),
+        "can_upload": is_executive(request.user),
     }
     return render(request, "documents/view_document.html", context)
 

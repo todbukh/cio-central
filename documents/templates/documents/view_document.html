@@ -12,6 +12,11 @@
             <a href="{% url 'documents:index' %}" class="btn btn-outline-secondary">
                 Back
             </a>
+            {% if can_upload %}
+            <a href="{% url 'documents:delete_file' document.uid %}" class="btn btn-outline-danger">
+                Delete
+            </a>
+            {% endif %}
             <a href="{{ file_url }}" target="_blank" class="btn btn-primary">
                 Open in New Tab
             </a>

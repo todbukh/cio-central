@@ -20,7 +20,7 @@
             {% csrf_token %}
             <!-- changed name to file -->
             <input type="file" name="file" class="form-control" required>
-            <button type="submit" class="btn btn-primary">Upload</button>
+            <button type="submit" class="btn btn-outline-primary">Upload</button>
         </form>
 
         {% if form.file.errors %}
