@@ -1,5 +1,11 @@
+{# Generated with assistance from Claude Sonnet 4.6 #}
+
 {# generated with Claude Sonnet 4.6 Extended #}
 {% extends 'exec_panel/executive-base.html' %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+{% endblock %}
 
 {% block title %}Create Event - CIO Central{% endblock %}
 
@@ -72,4 +78,13 @@
         </form>
     </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr("#{{ form.date.id_for_label }}", {
+            enableTime: true,
+            dateFormat: "Y-m-dTH:i",
+            altInput: true,
+            altFormat: "F j, Y h:i K",
+        });
+    </script>
 {% endblock %}
