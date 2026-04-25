@@ -225,38 +225,32 @@
                                     class="form-control form-control-sm border-0 bg-transparent text-body shadow-none"
                                     placeholder="Message #{{ active_channel.name }}"
                                     aria-label="Message input"
-                                    style="resize: none;"
-                                    {# disable the text area for users who are not exec in an exec only channel #}
                                     {% if active_channel.exec_only and not user.is_exec %}
+                                        style="resize: none; cursor: not-allowed;"
                                         disabled
+                                    {% else %}
+                                        style="resize: none;"
                                     {% endif %}
                                 ></textarea>
+                                {% if not active_channel.exec_only or user.is_exec %}
                                 <button
                                         id="messageSubmitButton"
                                         type="submit"
                                         class="btn btn-primary btn-sm"
-
-                                        {# pass custom exec_only status to script #}
                                         {% if active_channel.exec_only %}
                                             data-exec-only="true"
                                         {% else %}
                                             data-exec-only="false"
                                         {% endif %}
-
-                                        {# pass user exec status data to script #}
                                         {% if user.is_exec %}
                                             data-user-is-exec="true"
                                         {% else %}
                                             data-user-is-exec="false"
                                         {% endif %}
-
-                                        {# disable the button for users who are not exec in an exec only channel #}
-                                        {% if active_channel.exec_only and not user.is_exec %}
-                                            disabled
-                                        {% endif %}
                                 >
                                     <i class="bi bi-send-fill"></i>
                                 </button>
+                                {% endif %}
                             </div>
                             <p id="inputErrorMessageElement" class="text-danger d-none" style="margin-bottom: 6px"><small>Messages must be 2000 characters or fewer</small></p>
                         </form>
