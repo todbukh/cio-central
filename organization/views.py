@@ -86,8 +86,8 @@ def messages(request, channel):
     enrich_poll_announcements(message_list)
     enrich_event_announcements(message_list)
 
-    today = timezone.localdate()
-    today_events = list(Event.objects.filter(date__date=today))
+    now = timezone.now()
+    future_events = list(Event.objects.filter(date__gte=now).order_by("date"))
 
     org_img_url = None
     if organization.organization_picture: org_img_url = organization.organization_picture.url
@@ -96,7 +96,7 @@ def messages(request, channel):
         "active_channel": active_channel,
         "channels": list(Channel.objects.all()),
         "messages": message_list,
-        "today_events": today_events,
+        "future_events": future_events,
         "org_name": organization.name,
         "org_img_url": org_img_url,
     }
