@@ -1,7 +1,7 @@
 {# generated with Claude Opus 4.6 Extended #}
 {# Events panel body: event cards — shared by desktop aside & offcanvas #}
 {% load tz %}
-{% for event in today_events %}
+{% for event in future_events %}
     {% if user.is_exec %}
         {% url 'exec_panel:events:event_detail' event.uid as event_card_url %}
     {% else %}
@@ -26,7 +26,7 @@
     <div class="d-flex align-items-center justify-content-center h-100">
         <div class="text-center">
             <i class="bi bi-calendar-x fs-1 text-body-secondary d-block mb-3"></i>
-            <p class="text-body-secondary small mb-0">No events today.</p>
+            <p class="text-body-secondary small mb-0">No events coming up.</p>
         </div>
     </div>
 {% endfor %}
