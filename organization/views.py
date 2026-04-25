@@ -87,7 +87,7 @@ def messages(request, channel):
     enrich_event_announcements(message_list)
 
     now = timezone.now()
-    future_events = list(Event.objects.filter(date__gte=now).order_by("date"))
+    future_events = list(Event.objects.filter(date__gte=now).order_by("date")[:10])
 
     org_img_url = None
     if organization.organization_picture: org_img_url = organization.organization_picture.url
