@@ -13,7 +13,7 @@
                 <div class="d-flex flex-row gap-3 align-items-center">
                     <h3 class="my-0">Edit Channel</h3><i class="bi bi-pencil"></i>
                 </div>
-                <form method="post" action="{% url "organization:edit_channel" channel.name %}" autocomplete="off">
+                <form method="post" action="{% url "organization:edit_channel" original_name %}" autocomplete="off">
                     {% csrf_token %}
                     {% bootstrap_form form %}
                     <div class="d-flex flex-row gap-2 align-items-center">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <form method="post" action="{% url "organization:delete_channel" channel.name %}">
+                    <form method="post" action="{% url "organization:delete_channel" original_name %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">
                             Delete Channel
