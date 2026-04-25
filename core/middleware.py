@@ -54,6 +54,12 @@ class ApprovalStatusMiddleware:
             if request.path == status_path:
                 return render(request, self.STATUS_PAGES[status_path])
             return redirect(status_path)
+
+        # User is approved — if they're on a status page (e.g. refreshed after
+        # being approved), send them to the home page since no view owns those paths.
+        if request.path in self.STATUS_PAGES:
+            return redirect("organization:home")
+
         return self.get_response(request)
 
     # --- helper functions ---

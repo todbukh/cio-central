@@ -51,10 +51,10 @@
                                 <span class="fw-medium">{{ row.label }}</span>
                                 <span class="text-body-secondary">{{ row.value }}</span>
                             </div>
-                            <div class="progress" role="img" aria-label="{{ row.label }} value {{ row.value }}">
+                            <div class="progress" style="height: 0.65rem;" role="img" aria-label="{{ row.label }} value {{ row.value }}">
                                 <div
                                     class="progress-bar bg-info"
-                                    style="height: 0.65rem; width: {{ row.percent }}%;"
+                                    style="width: {{ row.percent }}%;"
                                     aria-hidden="true"
                                 ></div>
                             </div>

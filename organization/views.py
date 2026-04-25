@@ -147,8 +147,11 @@ def edit_channel(request, channel):
 
     if channel_model.builtin: return HttpResponseForbidden()
 
+    original_name = channel_model.name
+
     context = {
         "channel": channel_model,
+        "original_name": original_name,
         "form": ChannelForm(instance=channel_model)
     }
 

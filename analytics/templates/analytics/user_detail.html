@@ -77,13 +77,13 @@
                                 <td>{{ row.event.date|date:"M j, Y g:i A" }}</td>
                                 <td>
                                     {% if row.status == "PRESENT" %}
-                                        <span class="badge text-bg-primary rounded-pill px-3 py-2">{{ row.status }}</span>
+                                        <span class="badge text-bg-success rounded-pill px-3 py-2">{{ row.status }}</span>
                                     {% elif row.status == "ABSENT" %}
-                                        <span class="badge text-bg-secondary rounded-pill px-3 py-2">{{ row.status }}</span>
+                                        <span class="badge text-bg-danger rounded-pill px-3 py-2">{{ row.status }}</span>
                                     {% elif row.status == "EXCUSED" %}
-                                        <span class="badge text-bg-info rounded-pill px-3 py-2">{{ row.status }}</span>
+                                        <span class="badge text-bg-warning rounded-pill px-3 py-2">{{ row.status }}</span>
                                     {% else %}
-                                        <span class="badge text-bg-light rounded-pill px-3 py-2">{{ row.status }}</span>
+                                        <span class="badge text-bg-secondary rounded-pill px-3 py-2">{{ row.status }}</span>
                                     {% endif %}
                                 </td>
                             </tr>
