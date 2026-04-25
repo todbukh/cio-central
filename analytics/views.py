@@ -72,13 +72,14 @@ def _build_analytics_context(selected_view):
     chart_rows = []
     for event in recent_past_events:
         tracked_count = event.tracked_attendance
-        attendance_rate = _format_rate(event.attendees, tracked_count)
+        attendance_rate_num = round((event.attendees / tracked_count) * 100) if tracked_count else 0
         chart_rows.append(
             {
                 "name": event.name,
                 "event_uid": event.uid,
                 "attendees": event.attendees,
-                "attendance_rate": attendance_rate,
+                "attendance_rate": f"{attendance_rate_num}%",
+                "attendance_rate_num": attendance_rate_num,
             }
         )
 
@@ -129,7 +130,14 @@ def _build_analytics_context(selected_view):
         {"label": "Avg attendance", "value": avg_attendance},
     ]
     normalized_view = selected_view if selected_view in {"users", "events"} else "users"
-    chart_rows = _build_chart_rows(chart_rows, "attendees") if normalized_view == "events" else []
+    chart_rows = [
+        {
+            "label": row["name"],
+            "value": f"{row['attendees']} present ({row['attendance_rate']})",
+            "percent": row["attendance_rate_num"],
+        }
+        for row in chart_rows
+    ] if normalized_view == "events" else []
 
     return {
         "active_tab": "analytics",
