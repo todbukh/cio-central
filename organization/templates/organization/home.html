@@ -214,7 +214,7 @@
 
                     {# Message composer #}
                     <footer id="messageComposerContainer" class="px-3 px-md-4 border-top bg-body flex-shrink-0" style="padding-top: 30px; padding-bottom: 30px">
-                        <form method="post" action="{% url "organization:messages" active_channel.name %}" autocomplete="off">
+                        <form id="messageForm" method="post" action="{% url "organization:messages" active_channel.name %}" autocomplete="off">
                             {% csrf_token %}
                             <div class="d-flex align-items-end gap-2 p-2 rounded border bg-body-secondary">
                                 <textarea
