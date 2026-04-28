@@ -15,6 +15,7 @@ class ApprovalStatusMiddleware:
     EXEMPT_PATHS = [
         "/accounts/",       # allauth login, logout, signup routes
         "/admin/",          # Django admin
+        "/admin",
         "/executive/roster/restore-application/"
     ]
 
@@ -43,7 +44,7 @@ class ApprovalStatusMiddleware:
 
         # added to handle redirecting the user admin away from most other pages
         if request.user.is_user_admin():
-            if not request.path.startswith("/user-admin/") and not request.path.startswith("/admin/"):
+            if not request.path.startswith("/user-admin/") and not request.path.startswith("/admin"):
                 return redirect("user_admin:user_admin")
             # short-circuit middleware here because status checks don't apply to USERADMINs
             return self.get_response(request)
