@@ -54,7 +54,9 @@ The project is organized as a collection of Django apps, each owning a specific 
 
 ## My Contributions
 
-I served as **Requirements Lead**, responsible for stakeholder interviews, requirements elicitation, and backlog management in GitHub Issues. Beyond that role, I was one of the primary backend and frontend contributors:
+I served as **Requirements Lead**, responsible for stakeholder interviews, requirements elicitation, and backlog management in GitHub Issues. You can see the results of the requirements elicitation process [here](https://docs.google.com/document/d/1HgAqRqKNzDxtxvj-1WTxY3jIGjC8BJbroECBOESJKpk/edit?usp=sharing) as well as a [Change Impact Report](https://docs.google.com/document/d/1mIpiJqFtgGFH2_hsbgJMJP7pBYkuGl-zF2NvH5xFvfA/edit?usp=sharing) that was compiled in response to a major requirements change (a new "site administrator" role was added) during development.
+
+Beyond that role, I was one of the primary backend and frontend contributors:
 
 - **Attendance system** — built end-to-end: models, migrations, and views including lazy bulk creation of attendance records on event open, status updates (Present/Absent/Excused/Unset), and executive-only access guards
 - **Roster** — built the three-tab roster view (active members, pending applications, banned/rejected) and all associated actions: approve, reject, ban, role promotion, and application restore
